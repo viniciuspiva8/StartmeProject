@@ -1,0 +1,61 @@
+const express = require('express');
+const mysql = require('mysql2/promise');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Configuração do pool de conexões
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '',      // Altere conforme sua senha do MySQL
+  database: 'mydb'
+});
+
+// -------------------------
+// Rotas para Usuarios
+// -------------------------
+
+// Criar um novo usuário
+app.post('/usuarios', async (req, res) => {
+  const { nome, telefone, email, tipo } = req.body;
+
+  try {
+    const [result] = await pool.query(
+      'INSERT INTO Usuarios (Nome, Telefone, Email, Tipo) VALUES (?, ?, ?, ?)',
+      [nome, telefone, email, tipo]
+    );
+    res.status(201).json({ id: result.insertId });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Listar todos os usuários
+app.get('/usuarios', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM Usuarios');
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// -------------------------
+// Outras rotas: Empresas, Instituições, Cursos, Vagas, Inscrições
+// -------------------------
+
+// Exemplo: Rota de saúde
+app.get('/', (req, res) => {
+  res.send('API rodando!');
+});
+
+// -------------------------
+// Inicialização do servidor
+// -------------------------
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`API rodando na porta ${PORT}`);
+});

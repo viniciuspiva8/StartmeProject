@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Informações do Aluno</title>
+    <link rel="stylesheet" href="estilo-aluno.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<div class="overlay"></div>
+<div class="container">
+    <h1>Cadastro de Aluno</h1>
+    <form id="form-aluno">
+        <div>
+            <label for="nome">Nome Completo:</label>
+            <input type="text" id="nome" name="nome" required>
+        </div>    
+        <div>
+            <label for="cpf">CPF:</label>
+            <input type="text" id="cpf" required>
+        </div>
+        <div>
+            <label for="rg">RG:</label>
+            <input type="text" id="rg" required>
+        </div>
+        <div>
+            <label for="idade">Idade:</label>
+            <input type="number" id="idade" required>
+        </div>
+        <div>
+            <label for="dataNascimento">Data de Nascimento:</label>
+            <input type="date" id="dataNascimento" required>
+        </div>
+        <div>
+            <label for="curso">Curso:</label>
+            <select id="curso" name="curso" required>
+                <option value="">Carregando cursos...</option>
+            </select>
+        </div>
+        <div>
+            <label for="semestre">Semestre:</label>
+            <input type="number" id="semestre" required>
+        </div>
+        <button type="submit" id="btn-submit">Cadastrar Aluno</button>
+        <button type="button" id="btn-cancelar" style="display: none;">Cancelar</button>
+    </form>
+
+    <h2>Alunos Cadastrados</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>RG</th>
+                <th>Idade</th>
+                <th>Data de Nascimento</th>
+                <th>Curso</th>
+                <th>Semestre</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-alunos">
+            </tbody>
+    </table>
+</div>
+<button class="home-button" onclick="window.location.href='Home.html'">
+    <i class="fas fa-home"></i>
+</button>
+<script src="script-aluno.js"></script>
+</body>
+</html>

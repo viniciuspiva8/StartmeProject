@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cadastro de Entidades</title>
+    <link rel="stylesheet" href="estilo.css" />
+    <style>
+        /* Estilo CSS para ocultar as opções */
+        .hidden {
+            display: none;
+        }
+        .option-hidden {
+            display: none !important; /* !important para garantir que sobrescreve */
+        }
+        /* Algum estilo básico para os novos campos dinâmicos, se necessário */
+        .vaga-item, .curso-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .vaga-item input, .curso-item input {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h2>Cadastros Empresas e Instituições</h2>
+
+        <label for="tipoCadastro">Tipo de Cadastro:</label>
+        <select id="tipoCadastro" class="form-control">
+            <option value="">Selecione...</option>
+            <option value="empresa">Empresa</option>
+            <option value="instituicao">Instituição</option>
+        </select>
+
+        <div id="formEmpresa" class="hidden form-section">
+            <input id="nomeEmpresa" class="form-control" placeholder="Nome da Empresa" required>
+            <input id="cnpjEmpresa" class="form-control" placeholder="CNPJ" required>
+            <input id="telefoneEmpresa" class="form-control" placeholder="Telefone">
+            <input id="emailEmpresa" class="form-control" placeholder="E-mail">
+            <input id="enderecoEmpresa" class="form-control" placeholder="Endereço">
+            <input id="areaEmpresa" class="form-control" placeholder="Área de Atuação">
+        </div>
+
+        <div id="formInstituicao" class="hidden form-section">
+            <input id="nomeInstituicao" class="form-control" placeholder="Nome da Instituição" required>
+            <input id="cnpjInstituicao" class="form-control" placeholder="CNPJ" required>
+            <input id="telefoneInstituicao" class="form-control" placeholder="Telefone">
+            <input id="emailInstituicao" class="form-control" placeholder="E-mail">
+            <input id="tipoInstituicao" class="form-control" placeholder="Tipo de Instituição">
+            <input id="areaInstituicao" class="form-control" placeholder="Área de Ensino">
+            <input id="paisInstituicao" class="form-control" placeholder="País">
+            <input id="estadoInstituicao" class="form-control" placeholder="Estado">
+            <input id="cidadeInstituicao" class="form-control" placeholder="Cidade">
+            <input id="enderecoInstituicao" class="form-control" placeholder="Endereço">
+        </div>
+
+        <br>
+
+        <label for="oferece">O que oferece?</label>
+        <select id="oferece" class="form-control">
+            <option value="">Selecione...</option>
+            <option value="vaga">Vaga</option>
+            <option value="curso">Curso</option>
+            <option value="ambos">Ambos</option>
+        </select>
+
+        <div id="campoVaga" class="hidden">
+            <h4>Vagas</h4>
+            <div id="vagasContainer"></div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="adicionarVaga()">+ Adicionar Vaga</button>
+        </div>
+
+        <div id="campoCurso" class="hidden">
+            <h4>Cursos</h4>
+            <div id="cursosContainer"></div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="adicionarCurso()">+ Adicionar Curso</button>
+        </div>
+
+        <br>
+        <button class="btn btn-success" onclick="salvar()">Salvar Cadastro Principal</button>
+
+        <hr>
+
+        <h2>Adicionar Vagas/Cursos a Entidades Existentes</h2>
+        <div class="form-group">
+            <label for="tipoConteudoAdicional">Adicionar o quê?</label>
+            <select id="tipoConteudoAdicional" class="form-control">
+                <option value="">Selecione...</option>
+                <option value="novaVaga">Nova Vaga</option>
+                <option value="novoCurso">Novo Curso</option>
+            </select>
+        </div>
+
+        <div id="secaoAdicionarVaga" class="hidden form-section">
+            <h3>Adicionar Nova Vaga</h3>
+            <div class="form-group">
+                <label for="empresaSelectVaga">Selecionar Empresa:</label>
+                <select id="empresaSelectVaga" class="form-control"></select>
+            </div>
+            <div id="novaVagaContainer">
+                </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="adicionarCamposNovaVaga()">Adicionar Campos da Vaga</button>
+            <button type="button" class="btn btn-success" onclick="salvarNovaVaga()">Salvar Nova Vaga(s)</button>
+        </div>
+
+        <div id="secaoAdicionarCurso" class="hidden form-section">
+            <h3>Adicionar Novo Curso</h3>
+            <div class="form-group">
+                <label for="entidadeSelectCurso">Selecionar Entidade (Empresa/Instituição):</label>
+                <select id="entidadeSelectCurso" class="form-control"></select>
+            </div>
+            <div id="novoCursoContainer">
+                </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="adicionarCamposNovoCurso()">Adicionar Campos do Curso</button>
+            <button type="button" class="btn btn-success" onclick="salvarNovoCurso()">Salvar Novo Curso(s)</button>
+        </div>
+        <hr>
+
+        <h2>Empresas Cadastradas</h2>
+        <table id="tabelaEmpresas" border="1" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th> <th>Nome</th>
+                    <th>CNPJ</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Endereço</th>
+                    <th>Área de Atuação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>Instituições Cadastradas</h2>
+        <table id="tabelaInstituicoes" border="1" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th> <th>Nome</th>
+                    <th>CNPJ</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Tipo de Instituição</th>
+                    <th>Área</th>
+                    <th>País</th>
+                    <th>Estado</th>
+                    <th>Cidade</th>
+                    <th>Endereço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <br>
+
+        <h2>Tabela de Cursos e Vagas</h2>
+        <table id="tabelaCursosVagas" border="1" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th> <th>Entidade</th>
+                    <th>Tipo</th>
+                    <th>Título / Nome</th>
+                    <th>Detalhes</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <button class="home-button" onclick="window.location.href='Home.html'">
+        <i class="fas fa-home"></i>
+    </button>
+    <script src="script_final.js"></script>
+</body>
+</html>

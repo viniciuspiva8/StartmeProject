@@ -1,0 +1,167 @@
+const express = require('express');
+const mysql = require('mysql2/promise');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '',  // Altere conforme sua senha
+  database: 'mydb'
+});
+
+// Função utilitária
+async function executeQuery(query, params, res) {
+  try {
+    const [result] = await pool.query(query, params);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// --------- CRUD Usuarios ---------
+app.post('/usuarios', (req, res) => {
+  const { nome, telefone, email, tipo } = req.body;
+  executeQuery('INSERT INTO Usuarios (Nome, Telefone, Email, Tipo) VALUES (?, ?, ?, ?)',
+    [nome, telefone, email, tipo], res);
+});
+
+app.get('/usuarios', (req, res) => {
+  executeQuery('SELECT * FROM Usuarios', [], res);
+});
+
+app.put('/usuarios/:id', (req, res) => {
+  const { nome, telefone, email, tipo } = req.body;
+  const { id } = req.params;
+  executeQuery('UPDATE Usuarios SET Nome=?, Telefone=?, Email=?, Tipo=? WHERE Id_Usuario=?',
+    [nome, telefone, email, tipo, id], res);
+});
+
+app.delete('/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+  executeQuery('DELETE FROM Usuarios WHERE Id_Usuario=?', [id], res);
+});
+
+// --------- CRUD Empresas ---------
+app.post('/empresas', (req, res) => {
+  const { id_usuario, area, cnpj, endereco } = req.body;
+  executeQuery('INSERT INTO Empresa (Id_Usuario, Area, CNPJ, Endereço, Usuarios_Id_Usuario) VALUES (?, ?, ?, ?, ?)',
+    [id_usuario, area, cnpj, endereco, id_usuario], res);
+});
+
+app.get('/empresas', (req, res) => {
+  executeQuery('SELECT * FROM Empresa', [], res);
+});
+
+app.put('/empresas/:id', (req, res) => {
+  const { area, cnpj, endereco } = req.body;
+  const { id } = req.params;
+  executeQuery('UPDATE Empresa SET Area=?, CNPJ=?, Endereço=? WHERE Id_Usuario=?',
+    [area, cnpj, endereco, id], res);
+});
+
+app.delete('/empresas/:id', (req, res) => {
+  const { id } = req.params;
+  executeQuery('DELETE FROM Empresa WHERE Id_Usuario=?', [id], res);
+});
+
+// --------- CRUD Instituicoes ---------
+app.post('/instituicoes', (req, res) => {
+  const { id_usuario, tipo, cnpj, area_atuacao, pais, estado, cidade } = req.body;
+  executeQuery('INSERT INTO Instituicao (Id_Usuario, Tipo, CNPJ, Area_Atuacao, Pais, Estado, Cidade, Usuarios_Id_Usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    [id_usuario, tipo, cnpj, area_atuacao, pais, estado, cidade, id_usuario], res);
+});
+
+app.get('/instituicoes', (req, res) => {
+  executeQuery('SELECT * FROM Instituicao', [], res);
+});
+
+app.put('/instituicoes/:id', (req, res) => {
+  const { tipo, cnpj, area_atuacao, pais, estado, cidade } = req.body;
+  const { id } = req.params;
+  executeQuery('UPDATE Instituicao SET Tipo=?, CNPJ=?, Area_Atuacao=?, Pais=?, Estado=?, Cidade=? WHERE Id_Usuario=?',
+    [tipo, cnpj, area_atuacao, pais, estado, cidade, id], res);
+});
+
+app.delete('/instituicoes/:id', (req, res) => {
+  const { id } = req.params;
+  executeQuery('DELETE FROM Instituicao WHERE Id_Usuario=?', [id], res);
+});
+
+// --------- CRUD Cursos ---------
+app.post('/cursos', (req, res) => {
+  const { id_curso, carga_horaria, descricao, instituicao_id } = req.body;
+  executeQuery('INSERT INTO Curso (Id_Curso, Carga_Horaria, Descricao, Instituicao_Id_Usuario, Instituicao_Usuarios_Id_Usuario) VALUES (?, ?, ?, ?, ?)',
+    [id_curso, carga_horaria, descricao, instituicao_id, instituicao_id], res);
+});
+
+app.get('/cursos', (req, res) => {
+  executeQuery('SELECT * FROM Curso', [], res);
+});
+
+app.put('/cursos/:id', (req, res) => {
+  const { carga_horaria, descricao } = req.body;
+  const { id } = req.params;
+  executeQuery('UPDATE Curso SET Carga_Horaria=?, Descricao=? WHERE Id_Curso=?',
+    [carga_horaria, descricao, id], res);
+});
+
+app.delete('/cursos/:id', (req, res) => {
+  const { id } = req.params;
+  executeQuery('DELETE FROM Curso WHERE Id_Curso=?', [id], res);
+});
+
+// --------- CRUD Vagas ---------
+app.post('/vagas', (req, res) => {
+  const { id_vaga, titulo, descricao, salario, empresa_id } = req.body;
+  executeQuery('INSERT INTO Vagas (Id_Vaga, Titulo, Descrição, Salario, Empresa_ID_Empresa) VALUES (?, ?, ?, ?, ?)',
+    [id_vaga, titulo, descricao, salario, empresa_id], res);
+});
+
+app.get('/vagas', (req, res) => {
+  executeQuery('SELECT * FROM Vagas', [], res);
+});
+
+app.put('/vagas/:id', (req, res) => {
+  const { titulo, descricao, salario } = req.body;
+  const { id } = req.params;
+  executeQuery('UPDATE Vagas SET Titulo=?, Descrição=?, Salario=? WHERE Id_Vaga=?',
+    [titulo, descricao, salario, id], res);
+});
+
+app.delete('/vagas/:id', (req, res) => {
+  const { id } = req.params;
+  executeQuery('DELETE FROM Vagas WHERE Id_Vaga=?', [id], res);
+});
+
+// --------- CRUD InscricaoVagas ---------
+app.post('/inscricoes', (req, res) => {
+  const { id_aluno, id_vaga, data_inscricao, status } = req.body;
+  executeQuery('INSERT INTO InscricaoVagas (Id_Aluno, Id_Vaga, Data_inscricao, Status) VALUES (?, ?, ?, ?)',
+    [id_aluno, id_vaga, data_inscricao, status], res);
+});
+
+app.get('/inscricoes', (req, res) => {
+  executeQuery('SELECT * FROM InscricaoVagas', [], res);
+});
+
+app.put('/inscricoes', (req, res) => {
+  const { id_aluno, id_vaga, status } = req.body;
+  executeQuery('UPDATE InscricaoVagas SET Status=? WHERE Id_Aluno=? AND Id_Vaga=?',
+    [status, id_aluno, id_vaga], res);
+});
+
+app.delete('/inscricoes', (req, res) => {
+  const { id_aluno, id_vaga } = req.body;
+  executeQuery('DELETE FROM InscricaoVagas WHERE Id_Aluno=? AND Id_Vaga=?',
+    [id_aluno, id_vaga], res);
+});
+
+// Iniciar servidor
+app.listen(3000, () => {
+  console.log('API rodando na porta 3000');
+});

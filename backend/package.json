@@ -1,0 +1,17 @@
+{
+  "name": "startme-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "API do StartMe (Empresas, Instituições, Cursos, Vagas, Alunos)",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.1"
+  }
+}
