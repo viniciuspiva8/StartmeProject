@@ -1,19 +1,49 @@
+require('dotenv').config();
+
 const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000; // Define a porta uma vez
+const PORT = Number(process.env.PORT) || 3000;
 
-app.use(cors());
+// Origens autorizadas vêm do ambiente. Sem curinga "*".
+const ORIGENS = (process.env.ALLOWED_ORIGINS || 'http://127.0.0.1:5500,http://localhost:5500')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+app.use(cors({ origin: ORIGENS }));
 app.use(express.json());
 
-// Conexão com o banco de dados
+// Conexão com o banco. Credenciais no .env — nada de senha no código.
+const OBRIGATORIAS = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
+const faltando = OBRIGATORIAS.filter((v) => !process.env[v]);
+if (faltando.length) {
+    console.error(
+        `Variáveis de ambiente ausentes: ${faltando.join(', ')}. ` +
+        'Copie .env.example para .env e preencha antes de subir a API.'
+    );
+    process.exit(1);
+}
+
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'DB12'
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT) || 3306,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: Number(process.env.DB_POOL) || 10,
+});
+
+app.get('/health', async (req, res) => {
+    try {
+        await db.query('SELECT 1');
+        res.json({ status: 'ok', banco: process.env.DB_NAME });
+    } catch (error) {
+        res.status(503).json({ status: 'indisponivel', erro: error.message });
+    }
 });
 
 // Middleware de tratamento de erros global (para capturar erros que chegam aqui)
