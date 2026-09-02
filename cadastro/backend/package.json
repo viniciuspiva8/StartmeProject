@@ -1,5 +1,5 @@
 {
-  "name": "startme-backend",
+  "name": "startme-cadastro",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -8,9 +8,10 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "API do StartMe (Empresas, Instituições, Cursos, Vagas, Alunos)",
+  "description": "API de cadastro do StartMe (Instituicoes, Cursos, Alunos, Empresas, Vagas)",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^5.1.0",
     "mysql2": "^3.14.1"
   }

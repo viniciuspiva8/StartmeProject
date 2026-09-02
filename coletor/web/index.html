@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>StartMe - Vagas de Estagio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="estilo.css" />
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1>StartMe</h1>
+            <p class="lead">Portal de Vagas de Estagio em Tecnologia</p>
+        </div>
+
+        <table id="tabelaVagas" class="table table-striped table-hover table-bordered bg-white shadow-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Titulo da Vaga</th>
+                    <th>Empresa</th>
+                    <th>Descricao</th>
+                    <th>Salario</th>
+                    <th class="text-center">Acao</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Endereco da API por ambiente. Trocar aqui, nao no script.js. -->
+    <script>window.STARTME_API_URL = "http://localhost:8000";</script>
+    <script src="script.js"></script>
+</body>
+
+</html>

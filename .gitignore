@@ -1,2 +1,19 @@
+# Dependências
 node_modules/
+__pycache__/
+*.pyc
+
+# Segredos — nunca versionar
 .env
+.env.*
+!.env.example
+credenciais.json
+*serviceaccount*.json
+*.pem
+*.key
+
+# Artefatos locais
+.venv/
+venv/
+*.log
+.DS_Store
