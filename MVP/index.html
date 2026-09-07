@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>StartMe - Vagas de Estágio</title>
+    <!-- Importando o Bootstrap para estilos rápidos e padronizados -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="estilo.css" />
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1>StartMe</h1>
+            <p class="lead">Portal de Vagas de Estágio em Tecnologia</p>
+        </div>
+
+        <!-- Tabela onde as vagas serão exibidas -->
+        <table id="tabelaVagas" class="table table-striped table-hover table-bordered bg-white shadow-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Título da Vaga</th>
+                    <th>Empresa</th>
+                    <th>Descrição</th>
+                    <th>Salário</th>
+                    <th class="text-center">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- O JavaScript vai injetar as linhas das vagas aqui -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Importando o nosso script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
