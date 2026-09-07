@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body { font-family: "Montserrat", system-ui, sans-serif; background: #F1F5FA; color: #0E2138; -webkit-font-smoothing: antialiased; text-wrap: pretty; }
+  * { box-sizing: border-box; }
+  h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 700; }
+  a { color: #042D5C; text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { color: #0A4A8F; }
+  button { font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#F1F5FA;display:flex">
+
+<aside style="flex:none;width:{{ navLargura }};background:#fff;color:#0E2138;padding:14px 8px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh;overflow-y:auto;overflow-x:hidden;z-index:40;border-right:1px solid #E4EBF4;transition:width .15s ease">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 4px">
+    <sc-if value="{{ navExpandida }}" hint-placeholder-val="{{ true }}">
+      <div style="font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#64768F;white-space:nowrap;overflow:hidden">StartMe · TCC 15</div>
+    </sc-if>
+    <button type="button" onClick="{{ toggleNav }}" aria-label="{{ navRotuloToggle }}" style="flex:none;width:28px;height:28px;border-radius:7px;border:1px solid #D5E0EE;background:#fff;color:#465A73;font-size:12px;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+      <sc-if value="{{ navExpandida }}" hint-placeholder-val="{{ true }}">‹</sc-if>
+      <sc-if value="{{ navRecolhida }}" hint-placeholder-val="{{ false }}">›</sc-if>
+    </button>
+  </div>
+  <sc-for list="{{ navGrupos }}" as="g" hint-placeholder-count="4">
+    <div style="display:flex;flex-direction:column;gap:3px">
+      <sc-if value="{{ navExpandida }}" hint-placeholder-val="{{ true }}">
+        <span style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#94A5BB;padding:6px 6px 0;white-space:nowrap;overflow:hidden">{{ g.rotulo }}</span>
+      </sc-if>
+      <sc-for list="{{ g.itens }}" as="it" hint-placeholder-count="3">
+        <sc-if value="{{ it.ativo }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ it.ir }}" aria-current="true" title="{{ it.label }}" style="text-align:left;min-height:36px;padding:0 8px;border-radius:7px;border:none;border-left:3px solid #042D5C;background:#F1F5FA;color:#042D5C;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+            <span style="flex:none;width:18px;text-align:center;font-variant-numeric:tabular-nums">{{ it.numero }}</span>
+            <sc-if value="{{ navExpandida }}" hint-placeholder-val="{{ true }}"><span>{{ it.titulo }}</span></sc-if>
+          </button>
+        </sc-if>
+        <sc-if value="{{ it.inativo }}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{ it.ir }}" title="{{ it.label }}" style="text-align:left;min-height:36px;padding:0 8px;border-radius:7px;border:none;border-left:3px solid transparent;background:transparent;color:#465A73;font-size:12.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+            <span style="flex:none;width:18px;text-align:center;color:#94A5BB;font-variant-numeric:tabular-nums">{{ it.numero }}</span>
+            <sc-if value="{{ navExpandida }}" hint-placeholder-val="{{ true }}"><span>{{ it.titulo }}</span></sc-if>
+          </button>
+        </sc-if>
+      </sc-for>
+    </div>
+  </sc-for>
+  <button type="button" onClick="{{ toggleNotas }}" title="Notas de design" style="margin-top:auto;text-align:left;min-height:36px;padding:0 8px;border-radius:7px;border:1px solid #D5E0EE;background:#fff;color:#465A73;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;overflow:hidden" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+    <sc-if value="{{ navExpandida }}" hint-placeholder-val="{{ true }}">Notas de design</sc-if>
+    <sc-if value="{{ navRecolhida }}" hint-placeholder-val="{{ false }}">i</sc-if>
+  </button>
+</aside>
+
+<div style="flex:1;min-width:0">
+
+<sc-if value="{{ mostrarApp }}" hint-placeholder-val="{{ true }}">
+<header style="background:#fff;border-bottom:1px solid #D5E0EE;position:sticky;top:0;z-index:30">
+  <div style="max-width:1440px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+    <button type="button" onClick="{{ irLista }}" style="display:flex;align-items:center;gap:10px;background:none;border:none;padding:4px;cursor:pointer;border-radius:8px" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+      <div style="width:34px;height:34px;border-radius:9px;background:linear-gradient(140deg,#042D5C,#0A4A8F);color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px">S</div>
+      <div style="text-align:left">
+        <div style="font-size:16px;font-weight:700;letter-spacing:-.01em;color:#0E2138">StartMe</div>
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#64768F;font-weight:600">Módulo institucional</div>
+      </div>
+    </button>
+    <div style="flex:999 1 280px;min-width:200px;display:flex;align-items:center;gap:8px;background:#F6F9FC;border:1px solid #D5E0EE;border-radius:10px;padding:0 12px;min-height:44px" style-focus="border-color:#042D5C">
+      <span aria-hidden="true" style="color:#64768F;font-size:15px">⌕</span>
+      <input type="text" value="{{ q }}" onChange="{{ setQ }}" placeholder="Buscar vaga, empresa ou tecnologia" aria-label="Buscar vagas" style="flex:1;min-width:0;border:none;background:none;outline:none;font-size:14px;color:#0E2138;min-height:42px">
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:38px;height:38px;border-radius:999px;background:#DCE7F3;color:#0A4A8F;display:grid;place-items:center;font-weight:700;font-size:14px">VP</div>
+      <div style="display:none">.</div>
+      <button type="button" onClick="{{ toggleMenu }}" aria-haspopup="true" style="min-height:44px;display:flex;align-items:center;gap:6px;background:none;border:1px solid #D5E0EE;border-radius:10px;padding:0 12px;cursor:pointer;font-size:14px;font-weight:600;color:#0E2138" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Vinicius P. <span aria-hidden="true" style="color:#64768F;font-size:11px">▾</span></button>
+    </div>
+  </div>
+  <sc-if value="{{ menuAberto }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1440px;margin:0 auto;padding:0 20px 12px;display:flex;justify-content:flex-end">
+      <div style="border:1px solid #D5E0EE;background:#fff;border-radius:12px;box-shadow:0 12px 28px -12px rgba(4,45,92,.28);padding:6px;min-width:220px;display:flex;flex-direction:column;gap:2px">
+        <button type="button" onClick="{{ irPerfil }}" style="text-align:left;min-height:44px;padding:0 12px;border:none;background:none;border-radius:8px;font-size:14px;color:#0E2138;cursor:pointer" style-hover="background:#F6F9FC">Meu perfil <span style="color:#64768F;font-size:12px">· Prancha 9</span></button>
+        <button type="button" onClick="{{ irCandidaturas }}" style="text-align:left;min-height:44px;padding:0 12px;border:none;background:none;border-radius:8px;font-size:14px;color:#0E2138;cursor:pointer" style-hover="background:#F6F9FC">Minhas candidaturas <span style="color:#64768F;font-size:12px">· Prancha 8</span></button>
+        <button type="button" onClick="{{ irCurriculo }}" style="text-align:left;min-height:44px;padding:0 12px;border:none;background:none;border-radius:8px;font-size:14px;color:#0E2138;cursor:pointer" style-hover="background:#F6F9FC">Meu currículo <span style="color:#64768F;font-size:12px">· Prancha 12</span></button>
+        <button type="button" onClick="{{ irCertificados }}" style="text-align:left;min-height:44px;padding:0 12px;border:none;background:none;border-radius:8px;font-size:14px;color:#0E2138;cursor:pointer" style-hover="background:#F6F9FC">Certificados <span style="color:#64768F;font-size:12px">· Prancha 13</span></button>
+        <button type="button" onClick="{{ irPortal }}" style="text-align:left;min-height:44px;padding:0 12px;border:none;background:none;border-radius:8px;font-size:14px;color:#B42318;cursor:pointer" style-hover="background:#FDECEA">Sair</button>
+      </div>
+    </div>
+  </sc-if>
+</header>
+
+<div style="max-width:1440px;margin:0 auto;padding:14px 20px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13px;color:#465A73">
+  <span style="display:inline-flex;align-items:center;gap:6px;background:#DCE7F3;color:#0A4A8F;border-radius:999px;padding:5px 11px;font-weight:600">Vindo do Portal Acadêmico</span>
+  <span>Olá, <strong style="color:#0E2138">Vinicius</strong> — Engenharia de Computação, 7º semestre</span>
+</div>
+</sc-if>
+
+<sc-if value="{{ aviso }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1440px;margin:12px auto 0;padding:0 20px">
+    <div role="status" style="display:flex;gap:10px;align-items:flex-start;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:12px;padding:12px 14px;color:#0A4A8F;font-size:14px">
+      <span aria-hidden="true">ⓘ</span>
+      <div style="flex:1">{{ aviso }}</div>
+      <button type="button" onClick="{{ fecharAviso }}" aria-label="Fechar aviso" style="min-width:44px;min-height:24px;border:none;background:none;color:#0A4A8F;cursor:pointer;font-size:16px">✕</button>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ vLista }}" hint-placeholder-val="{{ true }}">
+<main style="max-width:1440px;margin:0 auto;padding:20px">
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+
+    <aside style="flex:1 1 280px;max-width:320px;min-width:264px;background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:18px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:16px">
+        <h2 style="margin:0;font-size:15px;font-weight:700;color:#0E2138">Filtros</h2>
+        <button type="button" onClick="{{ limparFiltros }}" style="background:none;border:none;padding:6px 2px;color:#042D5C;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Limpar filtros</button>
+      </div>
+
+      <div style="border-top:1px solid #E4EBF4;padding-top:14px;margin-bottom:14px">
+        <label for="f-compat" style="display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer">
+          <span style="font-size:14px;font-weight:600;color:#0E2138">Só vagas compatíveis com o meu semestre</span>
+          <input id="f-compat" type="checkbox" checked="{{ compatOnly }}" onChange="{{ toggleCompat }}" style="width:20px;height:20px;accent-color:#042D5C;cursor:pointer;flex:none">
+        </label>
+        <p style="margin:6px 0 0;font-size:12px;color:#64768F">Usa curso e semestre do Portal Acadêmico. Nenhum formulário de perfil.</p>
+      </div>
+
+      <div style="border-top:1px solid #E4EBF4;padding-top:14px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:#0E2138;margin-bottom:8px">Faixa salarial declarada</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ faixas }}" as="op" hint-placeholder-count="4">
+            <label style="display:flex;align-items:center;gap:9px;min-height:36px;font-size:14px;color:#465A73;cursor:pointer">
+              <input type="radio" name="faixa" checked="{{ op.on }}" onChange="{{ op.set }}" style="width:18px;height:18px;accent-color:#042D5C;cursor:pointer">
+              {{ op.label }}
+            </label>
+          </sc-for>
+        </div>
+        <p style="margin:6px 0 0;font-size:12px;color:#64768F">O campo <code style="font-family:ui-monospace,monospace;background:#EDF3F9;padding:1px 4px;border-radius:4px">salario</code> é texto livre. Vagas sem valor só aparecem em “Qualquer” e “Não informado”.</p>
+      </div>
+
+      <div style="border-top:1px solid #E4EBF4;padding-top:14px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:700;color:#0E2138">Modalidade</div>
+          <sc-if value="{{ pendencias }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#B54708;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:999px;padding:2px 7px">Requer novo campo na coleta</span>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <sc-for list="{{ modalidades }}" as="op" hint-placeholder-count="3">
+            <button type="button" onClick="{{ op.toggle }}" aria-pressed="{{ op.on }}" style="min-height:36px;padding:0 12px;border-radius:999px;border:1px solid #D5E0EE;background:#fff;color:#465A73;font-size:13px;font-weight:600;cursor:pointer" style-hover="border-color:#B4C5DA;background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+              <sc-if value="{{ op.on }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="color:#042D5C">✓ </span></sc-if>{{ op.label }}
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #E4EBF4;padding-top:14px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:700;color:#0E2138">Área</div>
+          <sc-if value="{{ pendencias }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#B54708;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:999px;padding:2px 7px">Derivado do título</span>
+          </sc-if>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ areas }}" as="op" hint-placeholder-count="5">
+            <label style="display:flex;align-items:center;justify-content:space-between;gap:9px;min-height:36px;font-size:14px;color:#465A73;cursor:pointer">
+              <span style="display:flex;align-items:center;gap:9px"><input type="checkbox" checked="{{ op.on }}" onChange="{{ op.toggle }}" style="width:18px;height:18px;accent-color:#042D5C;cursor:pointer">{{ op.label }}</span>
+              <span style="font-size:12px;color:#64768F;font-variant-numeric:tabular-nums">{{ op.n }}</span>
+            </label>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #E4EBF4;padding-top:14px">
+        <div style="font-size:13px;font-weight:700;color:#0E2138;margin-bottom:8px">Data de coleta</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <sc-for list="{{ janelas }}" as="op" hint-placeholder-count="3">
+            <button type="button" onClick="{{ op.set }}" aria-pressed="{{ op.on }}" style="min-height:36px;padding:0 12px;border-radius:8px;border:1px solid #D5E0EE;background:#fff;color:#465A73;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+              <sc-if value="{{ op.on }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="color:#042D5C">✓ </span></sc-if>{{ op.label }}
+            </button>
+          </sc-for>
+        </div>
+        <p style="margin:8px 0 0;font-size:12px;color:#64768F">“Coletada em”, nunca “publicada em”: <code style="font-family:ui-monospace,monospace;background:#EDF3F9;padding:1px 4px;border-radius:4px">data_coleta</code> é a data da nossa captura.</p>
+      </div>
+    </aside>
+
+    <section style="flex:999 1 480px;min-width:300px">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <h1 style="margin:0;font-size:24px;font-weight:700;letter-spacing:-.02em;color:#0E2138">Vagas coletadas</h1>
+          <p style="margin:4px 0 0;font-size:14px;color:#465A73">{{ resultados }} · Última coleta automática: hoje às 06:00</p>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#465A73">
+          Ordenar por
+          <select value="{{ ord }}" onChange="{{ setOrd }}" style="min-height:44px;border:1px solid #D5E0EE;border-radius:10px;background:#fff;padding:0 10px;font-size:14px;color:#0E2138;cursor:pointer" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+            <option value="compat">Maior compatibilidade</option>
+            <option value="recentes">Mais recentes</option>
+            <option value="salario">Maior salário declarado</option>
+          </select>
+        </label>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <sc-for list="{{ vagas }}" as="v" hint-placeholder-count="4">
+          <article style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 1px 2px rgba(4,45,92,.05)" style-hover="border-color:#B4C5DA;box-shadow:0 8px 22px -14px rgba(4,45,92,.25)">
+            <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
+              <div style="width:46px;height:46px;flex:none;border-radius:11px;background:#DCE7F3;color:#0A4A8F;display:grid;place-items:center;font-weight:700;font-size:17px" aria-hidden="true">{{ v.monograma }}</div>
+              <div style="flex:1 1 220px;min-width:0">
+                <h3 style="margin:0;font-size:17px;font-weight:700;line-height:1.3;color:#0E2138">{{ v.titulo }}</h3>
+                <div style="margin-top:3px;font-size:14px;color:#465A73">{{ v.empresa }}</div>
+              </div>
+              <sc-if value="{{ v.compatAlta }}" hint-placeholder-val="{{ true }}">
+                <div style="flex:none;text-align:right;background:#E3F6F4;border:1px solid #A6E1DC;border-radius:10px;padding:7px 11px">
+                  <div style="display:flex;align-items:center;justify-content:flex-end;font-size:16px;font-weight:700;color:#067A73"><span aria-hidden="true" style="margin-right:5px">◆</span><span>{{ v.rotuloCompat }}</span></div>
+                  <div style="font-size:12px;color:#067A73;max-width:210px">{{ v.razao }}</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ v.compatMedia }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;text-align:right;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:10px;padding:7px 11px">
+                  <div style="display:flex;align-items:center;justify-content:flex-end;font-size:16px;font-weight:700;color:#93370D"><span aria-hidden="true" style="margin-right:5px">◐</span><span>{{ v.rotuloCompat }}</span></div>
+                  <div style="font-size:12px;color:#93370D;max-width:210px">{{ v.razao }}</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ v.compatBaixa }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;text-align:right;background:#EDF3F9;border:1px solid #D5E0EE;border-radius:10px;padding:7px 11px">
+                  <div style="display:flex;align-items:center;justify-content:flex-end;font-size:16px;font-weight:700;color:#465A73"><span aria-hidden="true" style="margin-right:5px">○</span><span>{{ v.rotuloCompat }}</span></div>
+                  <div style="font-size:12px;color:#465A73;max-width:210px">{{ v.razao }}</div>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:7px;align-items:center">
+              <sc-if value="{{ v.temSalario }}" hint-placeholder-val="{{ true }}">
+                <span style="font-size:14px;font-weight:700;color:#0E2138">{{ v.salario }}</span>
+              </sc-if>
+              <sc-if value="{{ v.semSalario }}" hint-placeholder-val="{{ false }}">
+                <span style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#64768F;border:1px dashed #B4C5DA;border-radius:8px;padding:3px 8px"><span aria-hidden="true">—</span>Salário não informado na origem</span>
+              </sc-if>
+              <span style="width:1px;height:16px;background:#D5E0EE"></span>
+              <span style="font-size:12px;font-weight:600;color:#465A73;background:#F6F9FC;border:1px solid #E1E9F3;border-radius:999px;padding:4px 10px">{{ v.modalidade }}</span>
+              <span style="font-size:12px;font-weight:600;color:#465A73;background:#F6F9FC;border:1px solid #E1E9F3;border-radius:999px;padding:4px 10px">{{ v.area }}</span>
+              <span style="font-size:12px;color:#64768F">Coletada {{ v.quando }}</span>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px solid #E4EBF4;padding-top:14px">
+              <sc-if value="{{ v.aplicada }}" hint-placeholder-val="{{ false }}">
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#05603A;background:#E7F6EE;border:1px solid #A9DDC1;border-radius:999px;padding:6px 12px"><span aria-hidden="true">✓</span>Já me candidatei</span>
+              </sc-if>
+              <button type="button" onClick="{{ v.abrir }}" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Ver detalhes</button>
+              <button type="button" onClick="{{ v.salvar }}" style="min-height:44px;min-width:44px;padding:0 14px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#465A73;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px" style-hover="background:#F6F9FC;color:#0E2138" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+                <sc-if value="{{ v.salva }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="color:#042D5C">★</span>Salva</sc-if>
+                <sc-if value="{{ v.naoSalva }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true">☆</span>Salvar</sc-if>
+              </button>
+              <a href="{{ v.link }}" target="_blank" rel="noopener" style="margin-left:auto;font-size:13px;color:#465A73">Ver anúncio original ↗</a>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ vazioPorFiltro }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border:1px dashed #B4C5DA;border-radius:14px;padding:40px 24px;text-align:center">
+          <div style="font-size:17px;font-weight:700;color:#0E2138">Nenhuma vaga encontrada com esses filtros</div>
+          <p style="margin:6px auto 16px;max-width:420px;font-size:14px;color:#465A73">A coleta de hoje trouxe {{ totalBruto }} vagas ativas. Afrouxe um critério para voltar a vê-las.</p>
+          <button type="button" onClick="{{ limparFiltros }}" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Limpar filtros</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ temPaginacao }}" hint-placeholder-val="{{ true }}">
+        <nav aria-label="Paginação de resultados" style="margin-top:18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center">
+          <button type="button" onClick="{{ paginaAnterior }}" style="min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">← Anterior</button>
+          <sc-for list="{{ paginas }}" as="p" hint-placeholder-count="2">
+            <button type="button" onClick="{{ p.ir }}" aria-current="{{ p.atual }}" style="min-height:44px;min-width:44px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+              <sc-if value="{{ p.atual }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;padding:0 3px;color:#042D5C;text-decoration:underline;text-underline-offset:4px">{{ p.n }}</span></sc-if>
+              <sc-if value="{{ p.outra }}" hint-placeholder-val="{{ true }}">{{ p.n }}</sc-if>
+            </button>
+          </sc-for>
+          <button type="button" onClick="{{ paginaProxima }}" style="min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Próxima →</button>
+        </nav>
+      </sc-if>
+
+      <sc-if value="{{ temCarregarMais }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:18px;display:flex;justify-content:center">
+          <button type="button" onClick="{{ carregarMais }}" style="min-height:44px;padding:0 20px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Carregar mais vagas</button>
+        </div>
+      </sc-if>
+    </section>
+
+    <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:1 1 300px;max-width:340px;min-width:264px;background:#042D5C;color:#E2EDF7;border-radius:14px;padding:20px">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 5 · Decisões e por quê</div>
+        <h2 style="margin:8px 0 4px;font-size:18px;font-weight:700;color:#fff">Listagem e busca</h2>
+        <p style="margin:0 0 16px;font-size:13px;line-height:1.55;color:#BDD4EA">Responde “esta vaga serve para mim?” sem abrir o detalhe.</p>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55;color:#E2EDF7">
+          <li><strong style="color:#fff">Paginação, não rolagem infinita.</strong> A contagem de resultados é o dado que orienta o filtro, e rolagem infinita a torna inútil; além disso é navegável por teclado e é um <code style="font-family:ui-monospace,monospace">slice()</code> de array — trivial em React sem biblioteca.</li>
+          <li><strong style="color:#fff">Compatibilidade nunca sozinha.</strong> O percentual sempre carrega a razão em texto ao lado, e ícone + cor + rótulo (“compatível/parcial/distante”) garantem que a informação não dependa de cor.</li>
+          <li><strong style="color:#fff">Monograma no lugar de logotipo.</strong> A coleta não traz logotipo da empresa; o cartão é desenhado para nunca precisar de um.</li>
+          <li><strong style="color:#fff">“Salário não informado” é um estado, não um vazio.</strong> <code style="font-family:ui-monospace,monospace">salario</code> é texto livre e o coletor grava “A combinar” por padrão — a etiqueta tracejada é honesta sobre isso.</li>
+          <li><strong style="color:#fff">Modalidade e área estão marcadas como pendentes.</strong> Nenhum dos dois existe na coleta atual; ficam visíveis com selo de pendência em vez de fingir que o backend já entrega.</li>
+        </ul>
+      </aside>
+    </sc-if>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ vDetalhe }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:20px">
+  <button type="button" onClick="{{ irLista }}" style="min-height:44px;padding:0 4px;background:none;border:none;color:#042D5C;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:10px" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">← Voltar para a listagem</button>
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+
+    <article style="flex:999 1 460px;min-width:300px;display:flex;flex-direction:column;gap:16px">
+      <div style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
+          <div style="width:54px;height:54px;flex:none;border-radius:13px;background:#DCE7F3;color:#0A4A8F;display:grid;place-items:center;font-weight:700;font-size:20px" aria-hidden="true">{{ d.monograma }}</div>
+          <div style="flex:1 1 240px;min-width:0">
+            <h1 style="margin:0;font-size:26px;line-height:1.25;font-weight:700;letter-spacing:-.02em;color:#0E2138">{{ d.titulo }}</h1>
+            <div style="margin-top:5px;font-size:15px;color:#465A73">{{ d.empresa }}</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+          <span style="font-size:12px;font-weight:600;color:#465A73;background:#F6F9FC;border:1px solid #E1E9F3;border-radius:999px;padding:4px 10px">{{ d.modalidade }}</span>
+          <span style="font-size:12px;font-weight:600;color:#465A73;background:#F6F9FC;border:1px solid #E1E9F3;border-radius:999px;padding:4px 10px">{{ d.area }}</span>
+          <span style="font-size:12px;font-weight:600;color:#0A4A8F;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:999px;padding:4px 10px">Coletada {{ d.quando }}</span>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+        <h2 style="margin:0 0 6px;font-size:16px;font-weight:700;color:#0E2138">Compatibilidade com seu perfil</h2>
+        <p style="margin:0 0 14px;font-size:13px;color:#465A73">Calculada com curso e semestre vindos do Portal Acadêmico. Você não preencheu nada.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+          <div style="font-size:40px;font-weight:700;letter-spacing:-.03em;color:#0E2138;line-height:1;font-variant-numeric:tabular-nums">{{ d.pct }}%</div>
+          <div style="flex:1 1 220px;min-width:180px">
+            <div style="height:10px;border-radius:999px;background:#E4EBF4;overflow:hidden">
+              <div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ d.pct }}" style="height:10px;border-radius:999px;background:#042D5C;width:{{ d.largura }}"></div>
+            </div>
+            <div style="margin-top:7px;font-size:13px;font-weight:600;color:#0E2138">{{ d.nivel }}</div>
+          </div>
+        </div>
+        <ul style="margin:16px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ d.criterios }}" as="c" hint-placeholder-count="3">
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;color:#0E2138">
+              <sc-if value="{{ c.positivo }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="color:#05603A;font-weight:700">✓</span></sc-if>
+              <sc-if value="{{ c.negativo }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="color:#93370D;font-weight:700">!</span></sc-if>
+              <span>{{ c.texto }}</span>
+            </li>
+          </sc-for>
+        </ul>
+        <sc-if value="{{ pendencias }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:16px;display:flex;gap:10px;align-items:flex-start;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.5;color:#93370D">
+            <span aria-hidden="true">⚑</span>
+            <div><strong>Regra de cálculo pendente de definição pelo time.</strong> A vaga coletada não tem campo de competências: o percentual precisa de um mapa palavra-chave → disciplina/semestre, ou de inferência de nível pelo título. A interface já está desenhada para exigir a razão em texto, qualquer que seja a regra escolhida.</div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+        <h2 style="margin:0 0 14px;font-size:16px;font-weight:700;color:#0E2138">Descrição da vaga</h2>
+        <sc-if value="{{ d.temDescricao }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:15px;line-height:1.65;color:#22364F;white-space:pre-line;max-width:66ch">{{ d.descricao }}</div>
+          <p style="margin:16px 0 0;font-size:12px;color:#64768F;border-top:1px solid #E4EBF4;padding-top:12px">Texto reproduzido como veio da coleta automática, sem reformatação. Pode conter quebras irregulares.</p>
+        </sc-if>
+        <sc-if value="{{ d.semDescricao }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px dashed #B4C5DA;border-radius:12px;padding:26px 20px;text-align:center;background:#F8FBFD">
+            <div style="font-size:16px;font-weight:700;color:#0E2138">A coleta não trouxe descrição para esta vaga</div>
+            <p style="margin:6px auto 16px;max-width:440px;font-size:14px;line-height:1.55;color:#465A73">O campo <code style="font-family:ui-monospace,monospace;background:#EDF3F9;padding:1px 4px;border-radius:4px">descricao</code> veio vazio do portal de origem. O anúncio original é a fonte completa.</p>
+            <a href="{{ d.link }}" target="_blank" rel="noopener" style="display:inline-flex;min-height:44px;align-items:center;padding:0 18px;border-radius:10px;background:#042D5C;color:#fff;font-size:14px;font-weight:600;text-decoration:none">Abrir anúncio original ↗</a>
+          </div>
+        </sc-if>
+      </div>
+    </article>
+
+    <aside style="flex:1 1 300px;max-width:360px;min-width:264px;position:sticky;top:96px;display:flex;flex-direction:column;gap:16px">
+      <div style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:20px;box-shadow:0 8px 24px -16px rgba(4,45,92,.3)">
+        <sc-if value="{{ d.temSalario }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#64768F">Salário declarado na origem</div>
+          <div style="margin-top:3px;font-size:22px;font-weight:700;color:#0E2138">{{ d.salario }}</div>
+        </sc-if>
+        <sc-if value="{{ d.semSalario }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#64768F">Salário</div>
+          <div style="margin-top:5px;display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#465A73;border:1px dashed #B4C5DA;border-radius:8px;padding:5px 10px">Não informado na origem</div>
+        </sc-if>
+        <dl style="margin:16px 0 0;display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:14px">
+          <dt style="color:#64768F">Modalidade</dt><dd style="margin:0;color:#0E2138;font-weight:600">{{ d.modalidade }}</dd>
+          <dt style="color:#64768F">Coletada em</dt><dd style="margin:0;color:#0E2138;font-weight:600">{{ d.dataColeta }}</dd>
+          <dt style="color:#64768F">Origem</dt><dd style="margin:0;color:#0E2138;font-weight:600">Portal externo</dd>
+        </dl>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:18px">
+          <a href="{{ d.link }}" target="_blank" rel="noopener" onClick="{{ marcarCliqueOrigem }}" style="display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:10px;background:#042D5C;color:#fff;font-size:15px;font-weight:700;text-decoration:none" style-hover="background:#0A4A8F">Ir para a vaga de origem ↗</a>
+          <p style="margin:0;font-size:12px;line-height:1.5;color:#64768F">A candidatura é feita no site da empresa: é lá que você cria seu usuário e envia o currículo. O StartMe não recebe nem envia nenhum dado seu à empresa.</p>
+          <label style="display:flex;align-items:center;gap:9px;min-height:40px;font-size:13.5px;color:#0E2138;cursor:pointer;border-top:1px solid #E4EBF4;margin-top:6px;padding-top:14px">
+            <input type="checkbox" checked="{{ d.aplicada }}" onChange="{{ toggleAplicada }}" style="width:19px;height:19px;accent-color:#042D5C;cursor:pointer;flex:none">
+            Já me candidatei nesse link <span style="color:#64768F">(marcação sua, não confirmada pela empresa)</span>
+          </label>
+          <button type="button" onClick="{{ salvarAtual }}" style="min-height:44px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+            <sc-if value="{{ d.salva }}" hint-placeholder-val="{{ false }}">★ Vaga salva</sc-if>
+            <sc-if value="{{ d.naoSalva }}" hint-placeholder-val="{{ true }}">☆ Salvar vaga</sc-if>
+          </button>
+        </div>
+      </div>
+      <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#042D5C;color:#E2EDF7;border-radius:14px;padding:20px">
+          <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 6 · Decisões e por quê</div>
+          <h2 style="margin:8px 0 12px;font-size:18px;font-weight:700;color:#fff">Detalhe da vaga</h2>
+          <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55">
+            <li><strong style="color:#fff">A descrição vazia é uma tela, não um bug.</strong> O coletor grava um texto genérico por padrão e o campo pode vir vazio: o estado dedicado promove o anúncio original a ação principal.</li>
+            <li><strong style="color:#fff">A candidatura acontece fora do StartMe.</strong> O produto não recebe usuário nem currículo da empresa — o botão primário só leva ao link de origem, onde o RH de fato está.</li>
+            <li><strong style="color:#fff">Cartão lateral fixo.</strong> A descrição raspada pode ser longa e desestruturada; a decisão de ir à origem não deve exigir rolar de volta.</li>
+            <li><strong style="color:#fff">“Já me candidatei” é autodeclarado.</strong> Sem acesso ao sistema da empresa, o StartMe não sabe se você de fato se candidatou — a marcação é sua, e o texto diz isso.</li>
+            <li><strong style="color:#fff">Link para a origem é obrigatório.</strong> Transparência de fonte e respeito ao portal de onde a vaga veio — aparece na listagem e no detalhe.</li>
+            <li><strong style="color:#fff">Percentual + critérios lado a lado.</strong> Nenhuma pontuação opaca: o número nunca aparece sem a lista de razões que o produziu.</li>
+            <li><strong style="color:#fff">“Coletada em”, jamais “publicada em”.</strong> <code style="font-family:ui-monospace,monospace">data_coleta</code> é a data da nossa captura; a banca pode perguntar e a interface responde sozinha.</li>
+          </ul>
+        </div>
+      </sc-if>
+    </aside>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ vSistema }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1180px;margin:0 auto;padding:28px 20px 64px;display:flex;flex-direction:column;gap:20px">
+  <header>
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#64768F">Prancha 11</div>
+    <h1 style="margin:6px 0 6px;font-size:32px;font-weight:700;letter-spacing:-.025em;color:#0E2138">Sistema de design StartMe</h1>
+    <p style="margin:0;max-width:70ch;font-size:15px;line-height:1.6;color:#465A73">Referência única de implementação: tokens semânticos, escalas e componentes em todos os estados. Um desenvolvedor iniciante deve conseguir montar a Prancha 5 lendo só esta página.</p>
+  </header>
+
+  <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+    <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#0E2138">Cor</h2>
+    <p style="margin:0 0 14px;font-size:14px;color:#465A73">Base retirada do <strong>Manual da Marca da Fundação Santo André</strong>: Azul Institucional <code style="font-family:ui-monospace,monospace">#042D5C</code> e Verde-água como cor secundária. Nomes semânticos, nunca literais — é o que torna o modo escuro possível depois sem refazer o design.</p>
+    <div style="display:flex;gap:10px;align-items:flex-start;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.55;color:#0A4A8F;margin-bottom:18px"><span aria-hidden="true">ⓘ</span><div>O manual declara o hexadecimal apenas do Azul Institucional. O Verde-água abaixo (<code style="font-family:ui-monospace,monospace">#00A99D</code>) foi derivado da amostra impressa e <strong>precisa da sua confirmação</strong> — está exposto como tweak para você corrigir sem tocar no código.</div></div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:10px">Ação — Azul Institucional, só para o que é clicável</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px">
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#EAF1F9"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">acao-50</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#EAF1F9</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#7FA8D4"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">acao-300 · anel de foco</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#7FA8D4</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#042D5C"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">acao-600 · padrão</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#042D5C</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#0A4A8F"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">acao-700 · sobre</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#0A4A8F</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#02203F"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">acao-800 · pressionado</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#02203F</div></div></div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:10px">Verde-água — cor secundária do manual, reservada à compatibilidade</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px">
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#E3F6F4"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">agua-50 · superfície</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#E3F6F4</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#A6E1DC"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">agua-200 · borda</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#A6E1DC</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#00A99D"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">agua-500 · só preenchimento</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#00A99D</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#067A73"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">agua-700 · texto 4,8:1</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#067A73</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:linear-gradient(140deg,#0A4A8F,#042D5C)"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">gradiente-entrada</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">140° inst-700→900</div></div></div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:10px">Superfície, texto e borda — neutros azulados</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px">
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#FFFFFF"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">superficie</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#FFFFFF</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#F6F9FC"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">superficie-alt</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#F6F9FC</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#F1F5FA"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">fundo</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#F1F5FA</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#D5E0EE"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">borda</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#D5E0EE</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#B4C5DA"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">borda-forte</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#B4C5DA</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#0E2138"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">texto-primario · 14,8:1</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#0E2138</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#465A73"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">texto-secundario · 7,0:1</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#465A73</div></div></div>
+      <div style="border:1px solid #D5E0EE;border-radius:10px;overflow:hidden"><div style="height:56px;background:#64768F"></div><div style="padding:8px 10px"><div style="font-size:12px;font-weight:700;color:#0E2138">texto-terciario · 3,6:1</div><div style="font-size:12px;color:#64768F;font-family:ui-monospace,monospace">#64768F</div></div></div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:10px">Semânticas — cada uma com par texto/superfície e ícone obrigatório</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
+      <div style="border:1px solid #A9DDC1;border-radius:10px;background:#E7F6EE;padding:12px 14px"><div style="font-size:13px;font-weight:700;color:#05603A">✓ sucesso · candidatura enviada</div><div style="font-size:12px;color:#05603A;font-family:ui-monospace,monospace;margin-top:4px">texto #05603A · fundo #E7F6EE · borda #A9DDC1</div></div>
+      <div style="border:1px solid #F3D3A6;border-radius:10px;background:#FDF3E7;padding:12px 14px"><div style="font-size:13px;font-weight:700;color:#93370D">⚑ atenção · vaga expirando</div><div style="font-size:12px;color:#93370D;font-family:ui-monospace,monospace;margin-top:4px">texto #93370D · fundo #FDF3E7 · borda #F3D3A6</div></div>
+      <div style="border:1px solid #F5C4BF;border-radius:10px;background:#FDECEA;padding:12px 14px"><div style="font-size:13px;font-weight:700;color:#B42318">✕ erro · credencial inválida</div><div style="font-size:12px;color:#B42318;font-family:ui-monospace,monospace;margin-top:4px">texto #B42318 · fundo #FDECEA · borda #F5C4BF</div></div>
+      <div style="border:1px solid #B6D0FA;border-radius:10px;background:#EAF2FE;padding:12px 14px"><div style="font-size:13px;font-weight:700;color:#0A4A8F">ⓘ informação · origem do dado</div><div style="font-size:12px;color:#0A4A8F;font-family:ui-monospace,monospace;margin-top:4px">texto #0A4A8F · fundo #EAF2FE · borda #B6D0FA</div></div>
+    </div>
+  </section>
+
+  <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+    <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#0E2138">Tipografia</h2>
+    <p style="margin:0 0 18px;font-size:14px;color:#465A73">Duas famílias, ambas do manual: <strong>Georgia</strong> nos títulos (a serifa institucional, presente em qualquer sistema — nada para baixar) e <strong>Montserrat</strong> em textos e interface (400/500/600/700). O manual também lista Times New Roman, restrita ao logotipo — não a usamos na aplicação.</p>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;border-bottom:1px solid #E4EBF4;padding-bottom:14px"><div style="flex:999 1 240px;font-size:32px;font-weight:700;letter-spacing:-.025em;line-height:1.2;color:#0E2138">Título de tela</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">display · 32/38 · 700 · -0.025em</code></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;border-bottom:1px solid #E4EBF4;padding-bottom:14px"><div style="flex:999 1 240px;font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.25;color:#0E2138">Título de vaga no detalhe</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">titulo-lg · 26/33 · 700</code></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;border-bottom:1px solid #E4EBF4;padding-bottom:14px"><div style="flex:999 1 240px;font-size:20px;font-weight:700;line-height:1.3;color:#0E2138">Título de seção</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">titulo-md · 20/26 · 700</code></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;border-bottom:1px solid #E4EBF4;padding-bottom:14px"><div style="flex:999 1 240px;font-size:17px;font-weight:700;line-height:1.3;color:#0E2138">Título de cartão de vaga</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">titulo-sm · 17/22 · 700</code></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;border-bottom:1px solid #E4EBF4;padding-bottom:14px"><div style="flex:999 1 240px;font-size:15px;line-height:1.65;color:#22364F">Corpo de texto longo — descrição de vaga, política de dados, ajuda contextual.</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">corpo-lg · 15/25 · 400</code></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;border-bottom:1px solid #E4EBF4;padding-bottom:14px"><div style="flex:999 1 240px;font-size:14px;line-height:1.5;color:#465A73">Corpo de interface — rótulos, itens de filtro, metadados de cartão.</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">corpo · 14/21 · 400–600</code></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;border-bottom:1px solid #E4EBF4;padding-bottom:14px"><div style="flex:999 1 240px;font-size:13px;line-height:1.5;color:#465A73">Apoio — data de coleta, contadores, ajuda de campo.</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">apoio · 13/20 · 400–600</code></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline"><div style="flex:999 1 240px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#64768F">Rótulo estrutural</div><code style="flex:1 1 200px;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">rotulo · 11/16 · 700 · 0.1em · caixa alta</code></div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-wrap:wrap;gap:20px">
+    <div style="flex:1 1 300px;background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+      <h2 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#0E2138">Espaçamento</h2>
+      <p style="margin:0 0 14px;font-size:14px;color:#465A73">Base 4px. Só estes degraus — o mesmo conjunto do Tailwind padrão.</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">1 · 4px</code><div style="height:14px;width:4px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">2 · 8px</code><div style="height:14px;width:8px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">3 · 12px</code><div style="height:14px;width:12px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">4 · 16px</code><div style="height:14px;width:16px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">5 · 20px</code><div style="height:14px;width:20px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">6 · 24px</code><div style="height:14px;width:24px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">8 · 32px</code><div style="height:14px;width:32px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">12 · 48px</code><div style="height:14px;width:48px;background:#042D5C;border-radius:2px"></div></div>
+        <div style="display:flex;align-items:center;gap:12px"><code style="width:74px;flex:none;font-size:12px;color:#64768F;font-family:ui-monospace,monospace">16 · 64px</code><div style="height:14px;width:64px;background:#042D5C;border-radius:2px"></div></div>
+      </div>
+    </div>
+    <div style="flex:1 1 300px;background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+      <h2 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#0E2138">Raio e sombra</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px">
+        <div style="text-align:center"><div style="width:74px;height:52px;background:#DCE7F3;border:1px solid #B4C5DA;border-radius:8px"></div><code style="display:block;margin-top:6px;font-size:11px;color:#64768F;font-family:ui-monospace,monospace">sm · 8px<br>botão, campo</code></div>
+        <div style="text-align:center"><div style="width:74px;height:52px;background:#DCE7F3;border:1px solid #B4C5DA;border-radius:10px"></div><code style="display:block;margin-top:6px;font-size:11px;color:#64768F;font-family:ui-monospace,monospace">md · 10px<br>controle</code></div>
+        <div style="text-align:center"><div style="width:74px;height:52px;background:#DCE7F3;border:1px solid #B4C5DA;border-radius:14px"></div><code style="display:block;margin-top:6px;font-size:11px;color:#64768F;font-family:ui-monospace,monospace">lg · 14px<br>cartão, modal</code></div>
+        <div style="text-align:center"><div style="width:74px;height:52px;background:#DCE7F3;border:1px solid #B4C5DA;border-radius:999px"></div><code style="display:block;margin-top:6px;font-size:11px;color:#64768F;font-family:ui-monospace,monospace">pill · 999px<br>etiqueta</code></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px">
+        <div style="flex:1 1 120px"><div style="height:60px;background:#fff;border:1px solid #D5E0EE;border-radius:12px;box-shadow:0 1px 2px rgba(4,45,92,.05)"></div><code style="display:block;margin-top:8px;font-size:11px;color:#64768F;font-family:ui-monospace,monospace">sombra-1 · cartão em repouso</code></div>
+        <div style="flex:1 1 120px"><div style="height:60px;background:#fff;border:1px solid #B4C5DA;border-radius:12px;box-shadow:0 8px 22px -14px rgba(4,45,92,.25)"></div><code style="display:block;margin-top:8px;font-size:11px;color:#64768F;font-family:ui-monospace,monospace">sombra-2 · cartão sob o cursor</code></div>
+        <div style="flex:1 1 120px"><div style="height:60px;background:#fff;border:1px solid #D5E0EE;border-radius:12px;box-shadow:0 24px 48px -24px rgba(4,45,92,.45)"></div><code style="display:block;margin-top:8px;font-size:11px;color:#64768F;font-family:ui-monospace,monospace">sombra-3 · modal</code></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+    <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#0E2138">Componentes e estados</h2>
+    <p style="margin:0 0 20px;font-size:14px;color:#465A73">Todo elemento interativo tem anel de foco desenhado (<code style="font-family:ui-monospace,monospace">3px acao-300, offset 2px</code>) e altura mínima de 44px.</p>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:12px">Botão primário · BotaoPrimario</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer">Candidatar-se</button><div style="font-size:11px;color:#64768F;margin-top:6px">padrão</div></div>
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#0A4A8F;color:#fff;font-size:14px;font-weight:600;cursor:pointer">Candidatar-se</button><div style="font-size:11px;color:#64768F;margin-top:6px">sobre</div></div>
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#02203F;color:#fff;font-size:14px;font-weight:600;cursor:pointer">Candidatar-se</button><div style="font-size:11px;color:#64768F;margin-top:6px">pressionado</div></div>
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer;outline:3px solid #7FA8D4;outline-offset:2px">Candidatar-se</button><div style="font-size:11px;color:#64768F;margin-top:6px">foco</div></div>
+      <div><button type="button" disabled="true" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid #D5E0EE;background:#F1F5FA;color:#94A5BB;font-size:14px;font-weight:600;cursor:not-allowed">Candidatar-se</button><div style="font-size:11px;color:#64768F;margin-top:6px">desabilitado</div></div>
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#0A4A8F;color:#fff;font-size:14px;font-weight:600;cursor:progress;display:inline-flex;align-items:center;gap:8px"><span aria-hidden="true">◌</span>Enviando…</button><div style="font-size:11px;color:#64768F;margin-top:6px">carregando</div></div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:12px">Botão secundário e de texto · BotaoSecundario · BotaoTexto</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer">Salvar vaga</button><div style="font-size:11px;color:#64768F;margin-top:6px">padrão</div></div>
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid #B4C5DA;background:#F6F9FC;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer">Salvar vaga</button><div style="font-size:11px;color:#64768F;margin-top:6px">sobre</div></div>
+      <div><button type="button" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer;outline:3px solid #7FA8D4;outline-offset:2px">Salvar vaga</button><div style="font-size:11px;color:#64768F;margin-top:6px">foco</div></div>
+      <div><button type="button" disabled="true" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid #E1E9F3;background:#fff;color:#94A5BB;font-size:14px;font-weight:600;cursor:not-allowed">Salvar vaga</button><div style="font-size:11px;color:#64768F;margin-top:6px">desabilitado</div></div>
+      <div><button type="button" style="min-height:44px;padding:0 6px;border:none;background:none;color:#042D5C;font-size:14px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px">Limpar filtros</button><div style="font-size:11px;color:#64768F;margin-top:6px">texto</div></div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:12px">Campo de texto e campo com máscara · CampoTexto · CampoMascara</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-bottom:24px">
+      <div><label style="display:block;font-size:13px;font-weight:600;color:#0E2138;margin-bottom:6px">E-mail de contato</label><div style="min-height:44px;border:1px solid #D5E0EE;border-radius:10px;background:#fff;padding:11px 12px;font-size:14px;color:#94A5BB">seu.nome@aluno.fsa.br</div><div style="font-size:11px;color:#64768F;margin-top:6px">padrão · com dica</div></div>
+      <div><label style="display:block;font-size:13px;font-weight:600;color:#0E2138;margin-bottom:6px">E-mail de contato</label><div style="min-height:44px;border:1px solid #042D5C;border-radius:10px;background:#fff;padding:11px 12px;font-size:14px;color:#0E2138;outline:3px solid #7FA8D4;outline-offset:2px">vinicius.pereira@aluno.fsa.br</div><div style="font-size:11px;color:#64768F;margin-top:6px">foco</div></div>
+      <div><label style="display:block;font-size:13px;font-weight:600;color:#0E2138;margin-bottom:6px">CPF <span style="font-weight:400;color:#64768F">(máscara 000.000.000-00)</span></label><div style="min-height:44px;border:1px solid #B42318;border-radius:10px;background:#fff;padding:11px 12px;font-size:14px;color:#0E2138">123.456.789-0</div><div style="display:flex;gap:6px;align-items:center;font-size:12px;color:#B42318;margin-top:6px"><span aria-hidden="true">✕</span>CPF incompleto — informe os 11 dígitos.</div></div>
+      <div><label style="display:block;font-size:13px;font-weight:600;color:#0E2138;margin-bottom:6px">Nome <span style="font-weight:400;color:#64768F">Portal Acadêmico</span></label><div style="min-height:44px;border:1px solid #E1E9F3;border-radius:10px;background:#F6F9FC;padding:11px 12px;font-size:14px;color:#465A73">Vinicius Pereira</div><div style="font-size:11px;color:#64768F;margin-top:6px">somente leitura</div></div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:12px">Seletor, caixa de seleção e chave · Seletor · CaixaSelecao · Chave</div>
+    <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;margin-bottom:24px">
+      <div><select style="min-height:44px;border:1px solid #D5E0EE;border-radius:10px;background:#fff;padding:0 10px;font-size:14px;color:#0E2138"><option>Maior compatibilidade</option></select><div style="font-size:11px;color:#64768F;margin-top:6px">seletor</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <label style="display:flex;gap:9px;align-items:center;font-size:14px;color:#465A73;min-height:36px"><input type="checkbox" style="width:18px;height:18px;accent-color:#042D5C">Desenvolvimento</label>
+        <label style="display:flex;gap:9px;align-items:center;font-size:14px;color:#0E2138;min-height:36px"><input type="checkbox" checked="{{ true }}" style="width:18px;height:18px;accent-color:#042D5C">Dados</label>
+        <div style="font-size:11px;color:#64768F">caixa de seleção · desmarcada e marcada</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:10px;align-items:center"><div style="width:44px;height:26px;border-radius:999px;background:#BFCEDF;padding:3px"><div style="width:20px;height:20px;border-radius:999px;background:#fff"></div></div><span style="font-size:13px;color:#465A73">desligada</span></div>
+        <div style="display:flex;gap:10px;align-items:center"><div style="width:44px;height:26px;border-radius:999px;background:#042D5C;padding:3px;display:flex;justify-content:flex-end"><div style="width:20px;height:20px;border-radius:999px;background:#fff"></div></div><span style="font-size:13px;color:#465A73">ligada</span></div>
+        <div style="font-size:11px;color:#64768F">chave liga/desliga</div>
+      </div>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:12px">Etiqueta e selo de status · Etiqueta · SeloStatus</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+      <span style="font-size:12px;font-weight:600;color:#465A73;background:#F6F9FC;border:1px solid #E1E9F3;border-radius:999px;padding:5px 11px">Híbrido</span>
+      <span style="font-size:12px;font-weight:600;color:#465A73;background:#F6F9FC;border:1px solid #E1E9F3;border-radius:999px;padding:5px 11px">Desenvolvimento</span>
+      <span style="font-size:12px;font-weight:600;color:#0A4A8F;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:999px;padding:5px 11px">ⓘ Coletada hoje</span>
+      <span style="font-size:12px;font-weight:700;color:#93370D;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:999px;padding:5px 11px">⚑ Requer novo campo na coleta</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+      <span style="font-size:12px;font-weight:700;color:#0A4A8F;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:999px;padding:5px 11px">→ Enviada</span>
+      <span style="font-size:12px;font-weight:700;color:#93370D;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:999px;padding:5px 11px">◐ Em análise</span>
+      <span style="font-size:12px;font-weight:700;color:#067A73;background:#E3F6F4;border:1px solid #A6E1DC;border-radius:999px;padding:5px 11px">◆ Entrevista</span>
+      <span style="font-size:12px;font-weight:700;color:#B42318;background:#FDECEA;border:1px solid #F5C4BF;border-radius:999px;padding:5px 11px">✕ Não selecionado</span>
+      <span style="font-size:12px;font-weight:700;color:#05603A;background:#E7F6EE;border:1px solid #A9DDC1;border-radius:999px;padding:5px 11px">✓ Finalizada</span>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64768F;margin-bottom:12px">Mensagem de alerta · Alerta</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px">
+      <div style="display:flex;gap:10px;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:12px;padding:12px 14px;font-size:14px;color:#0A4A8F"><span aria-hidden="true">ⓘ</span><div>Última coleta automática: hoje às 06:00.</div></div>
+      <div style="display:flex;gap:10px;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:12px;padding:12px 14px;font-size:14px;color:#93370D"><span aria-hidden="true">⚑</span><div>Esta vaga expira em 2 dias na origem.</div></div>
+      <div style="display:flex;gap:10px;background:#FDECEA;border:1px solid #F5C4BF;border-radius:12px;padding:12px 14px;font-size:14px;color:#B42318"><span aria-hidden="true">✕</span><div>Não conseguimos falar com o serviço de vagas.</div></div>
+      <div style="display:flex;gap:10px;background:#E7F6EE;border:1px solid #A9DDC1;border-radius:12px;padding:12px 14px;font-size:14px;color:#05603A"><span aria-hidden="true">✓</span><div>Candidatura enviada. Protocolo SM-2026-0418.</div></div>
+    </div>
+  </section>
+
+  <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+    <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#0E2138">Componentes nomeados</h2>
+    <p style="margin:0 0 16px;font-size:14px;color:#465A73">Os nomes viram arquivos em <code style="font-family:ui-monospace,monospace;background:#EDF3F9;padding:1px 4px;border-radius:4px">src/components/</code>.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;font-size:14px">
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">CabecalhoApp</code><div style="color:#465A73;margin-top:4px">Logotipo, busca global, avatar e menu.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">FaixaContexto</code><div style="color:#465A73;margin-top:4px">Saudação + curso + semestre + origem do dado.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">FiltroLateral</code><div style="color:#465A73;margin-top:4px">Todos os filtros da Prancha 5, com selos de pendência.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">CartaoVaga</code><div style="color:#465A73;margin-top:4px">Monograma, título, empresa, selo, etiquetas, ações.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">SeloCompatibilidade</code><div style="color:#465A73;margin-top:4px">Percentual + ícone + rótulo + razão em texto.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">SeloStatus</code><div style="color:#465A73;margin-top:4px">Cinco status de candidatura, nunca só por cor.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">SalarioTexto</code><div style="color:#465A73;margin-top:4px">Normaliza o texto livre e trata o não informado.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">DataColeta</code><div style="color:#465A73;margin-top:4px">Converte <code style="font-family:ui-monospace,monospace">data_coleta</code> UTC em texto relativo.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">PainelDetalheVaga</code><div style="color:#465A73;margin-top:4px">Cartão lateral fixo com as ações da Prancha 6.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">BotaoIrParaOrigem</code><div style="color:#465A73;margin-top:4px">Link externo primário + toggle “já me candidatei”, autodeclarado.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">Paginacao</code><div style="color:#465A73;margin-top:4px">Navegação por página, acessível por teclado.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px"><code style="font-weight:700;color:#0A4A8F;font-family:ui-monospace,monospace">Alerta</code><div style="color:#465A73;margin-top:4px">Quatro tons semânticos, sempre com ícone.</div></div>
+    </div>
+  </section>
+
+  <section style="background:#042D5C;color:#E2EDF7;border-radius:14px;padding:24px">
+    <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#fff">Tokens para o Tailwind</h2>
+    <p style="margin:0 0 16px;font-size:14px;color:#BDD4EA">Colar em <code style="font-family:ui-monospace,monospace">tailwind.config.js</code>. Nomes semânticos deixam o modo escuro possível depois sem tocar no markup.</p>
+    <pre style="margin:0;overflow-x:auto;background:#021E3F;border:1px solid #0E4577;border-radius:12px;padding:16px;font-family:ui-monospace,SFMono-Regular,monospace;font-size:12.5px;line-height:1.7;color:#C9D6F2">theme: { extend: {
+  colors: {
+    acao:   { 50:'#EAF1F9', 300:'#7FA8D4', 600:'#042D5C', 700:'#0A4A8F', 800:'#02203F' }, // #042D5C = manual
+    agua:   { 50:'#E3F6F4', 200:'#A6E1DC', 500:'#00A99D', 700:'#067A73' },
+    inst:   { 100:'#DCE7F3', 700:'#0A4A8F', 900:'#042D5C' },
+    superficie: { DEFAULT:'#FFFFFF', alt:'#F6F9FC' },
+    fundo:  '#F1F5FA',
+    borda:  { DEFAULT:'#D5E0EE', forte:'#B4C5DA' },
+    texto:  { primario:'#0E2138', secundario:'#465A73', terciario:'#64768F' },
+    sucesso:{ texto:'#05603A', fundo:'#E7F6EE', borda:'#A9DDC1' },
+    atencao:{ texto:'#93370D', fundo:'#FDF3E7', borda:'#F3D3A6' },
+    erro:   { texto:'#B42318', fundo:'#FDECEA', borda:'#F5C4BF' },
+    info:   { texto:'#0A4A8F', fundo:'#EAF2FE', borda:'#B6D0FA' },
+  },
+  fontFamily: {
+    sans:  ['Montserrat', 'system-ui', 'sans-serif'],   // textos e interface
+    serif: ['Georgia', '"Times New Roman"', 'serif'],   // titulos
+  },
+  borderRadius: { sm:'8px', md:'10px', lg:'14px' },
+  boxShadow: {
+    1: '0 1px 2px rgba(4,45,92,.05)',
+    2: '0 8px 22px -14px rgba(4,45,92,.25)',
+    3: '0 24px 48px -24px rgba(4,45,92,.45)',
+  },
+  outlineWidth: { foco: '3px' },
+} }</pre>
+  </section>
+
+  <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+    <h2 style="margin:0 0 4px;font-size:20px;font-weight:700;color:#0E2138">Contratos de API que este design exige</h2>
+    <p style="margin:0 0 16px;font-size:14px;color:#465A73">Já existem: <code style="font-family:ui-monospace,monospace">GET /health</code>, <code style="font-family:ui-monospace,monospace">GET /api/vagas</code>, <code style="font-family:ui-monospace,monospace">POST /api/coleta</code>. O que falta para o Lote 1 rodar:</p>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="border:1px solid #E4EBF4;border-radius:12px;padding:14px 16px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span style="font-size:11px;font-weight:700;background:#EAF1F9;color:#0A4A8F;border-radius:6px;padding:3px 7px;font-family:ui-monospace,monospace">GET</span><code style="font-size:14px;font-weight:700;color:#0E2138;font-family:ui-monospace,monospace">/api/aluno/me</code></div>
+        <div style="margin-top:8px;font-size:13.5px;line-height:1.6;color:#465A73"><strong style="color:#0E2138">Saída:</strong> <code style="font-family:ui-monospace,monospace">{ nome, curso, semestre, qtd_semestre_curso, vinculo_ativo, email_institucional }</code>. <strong style="color:#0E2138">Nunca</strong> CPF, RG, idade ou data de nascimento — o schema DB12 tem esses campos e a API precisa filtrá-los na borda.</div>
+      </div>
+      <div style="border:1px solid #E4EBF4;border-radius:12px;padding:14px 16px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span style="font-size:11px;font-weight:700;background:#EAF1F9;color:#0A4A8F;border-radius:6px;padding:3px 7px;font-family:ui-monospace,monospace">GET</span><code style="font-size:14px;font-weight:700;color:#0E2138;font-family:ui-monospace,monospace">/api/vagas?q&amp;area&amp;modalidade&amp;coleta_desde&amp;ordenar&amp;pagina&amp;por_pagina</code></div>
+        <div style="margin-top:8px;font-size:13.5px;line-height:1.6;color:#465A73"><strong style="color:#0E2138">Saída:</strong> <code style="font-family:ui-monospace,monospace">{ total, pagina, por_pagina, itens: [{ id, titulo, empresa, link, data_coleta, descricao, salario, compatibilidade: { percentual, nivel, razoes[] } }] }</code>. <span style="color:#93370D;font-weight:600">Extensão da rota atual</span>: hoje ela devolve a coleção inteira sem filtro nem paginação, e <code style="font-family:ui-monospace,monospace">area</code>/<code style="font-family:ui-monospace,monospace">modalidade</code> exigem campos novos na coleta.</div>
+      </div>
+      <div style="border:1px solid #E4EBF4;border-radius:12px;padding:14px 16px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span style="font-size:11px;font-weight:700;background:#E7F6EE;color:#05603A;border-radius:6px;padding:3px 7px;font-family:ui-monospace,monospace">POST</span><code style="font-size:14px;font-weight:700;color:#0E2138;font-family:ui-monospace,monospace">/api/candidaturas</code></div>
+        <div style="margin-top:8px;font-size:13.5px;line-height:1.6;color:#465A73"><strong style="color:#0E2138">Entrada:</strong> <code style="font-family:ui-monospace,monospace">{ id_vaga, status_autodeclarado }</code> · <strong style="color:#0E2138">Saída:</strong> <code style="font-family:ui-monospace,monospace">{ id, status, atualizado_em }</code>. Autodeclarado pelo aluno — a empresa não confirma nem recebe nada por aqui.</div>
+      </div>
+      <div style="border:1px solid #E4EBF4;border-radius:12px;padding:14px 16px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span style="font-size:11px;font-weight:700;background:#EAF1F9;color:#0A4A8F;border-radius:6px;padding:3px 7px;font-family:ui-monospace,monospace">POST</span><code style="font-size:14px;font-weight:700;color:#0E2138;font-family:ui-monospace,monospace">/api/auth/login</code></div>
+        <div style="margin-top:8px;font-size:13.5px;line-height:1.6;color:#465A73"><strong style="color:#0E2138">Entrada:</strong> <code style="font-family:ui-monospace,monospace">{ cpf, senha }</code> · <strong style="color:#0E2138">Saída:</strong> <code style="font-family:ui-monospace,monospace">{ token, consentimento_concedido: bool }</code>. O booleano é o que decide se a Prancha 3 aparece. Erro 401 com <code style="font-family:ui-monospace,monospace">{ erro: 'credencial_invalida' }</code> para a mensagem inline.</div>
+      </div>
+      <div style="border:1px solid #E4EBF4;border-radius:12px;padding:14px 16px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><span style="font-size:11px;font-weight:700;background:#FDF3E7;color:#93370D;border-radius:6px;padding:3px 7px;font-family:ui-monospace,monospace">Lote 2</span><code style="font-size:14px;color:#465A73;font-family:ui-monospace,monospace">GET /api/candidaturas · PATCH /api/aluno/me · POST /api/aluno/curriculo · POST /api/consentimento · DELETE /api/consentimento · GET /api/aluno/exportar</code></div>
+        <div style="margin-top:8px;font-size:13.5px;line-height:1.6;color:#465A73">Exigidos pelas Pranchas 3, 8 e 9. Os dois últimos materializam revogação e portabilidade — o capítulo de LGPD depende deles.</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-wrap:wrap;gap:20px">
+    <div style="flex:1 1 340px;background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+      <h2 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#0E2138">Riscos de implementação</h2>
+      <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.6;color:#465A73">
+        <li><strong style="color:#0E2138">Filtro de faixa salarial sobre texto livre.</strong> Fazer parsing de “1500-2000”, “A combinar” e “R$ 1.800,00” no cliente é fonte garantida de bug. <em>Alternativa simples:</em> o coletor grava <code style="font-family:ui-monospace,monospace">salario_min</code> numérico quando conseguir extrair, e o filtro só opera nesse campo; o resto cai em “Não informado”.</li>
+        <li><strong style="color:#0E2138">Cálculo de compatibilidade.</strong> É a regra de negócio mais difícil e ainda não está definida. <em>Alternativa simples:</em> tabela JSON estática de palavra-chave → semestre mínimo, versionada no repositório, rodando no backend. Sem IA, sem serviço novo.</li>
+        <li><strong style="color:#0E2138">Área e modalidade não existem na coleta.</strong> <em>Alternativa simples:</em> derivar por palavra-chave do título no momento da coleta e gravar como campo, em vez de calcular na tela a cada render.</li>
+        <li><strong style="color:#0E2138">Upload de currículo.</strong> Exige armazenamento, limite de tamanho e validação de tipo. <em>Alternativa simples:</em> no MVP, aceitar um link (Drive/GitHub) em vez de arquivo; o desenho do campo já prevê os dois estados.</li>
+        <li><strong style="color:#0E2138">Cabeçalho e lateral fixos em telas pequenas.</strong> Dois <code style="font-family:ui-monospace,monospace">sticky</code> empilhados brigam por espaço em 360px. <em>Alternativa simples:</em> abaixo de 768px o cartão de ações vira uma barra fixa no rodapé com um único botão.</li>
+      </ol>
+    </div>
+    <div style="flex:1 1 300px;background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+      <h2 style="margin:0 0 6px;font-size:20px;font-weight:700;color:#0E2138">Sugestões fora de escopo</h2>
+      <p style="margin:0 0 14px;font-size:13px;color:#64768F">Listadas, não desenhadas — como pedido.</p>
+      <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:11px;font-size:14px;line-height:1.6;color:#465A73">
+        <li><strong style="color:#0E2138">Aviso de expiração na origem.</strong> A coleta já mantém <code style="font-family:ui-monospace,monospace">data_expiracao</code>; mostrar “expira em N dias” custa quase nada e evita candidatura em vaga morta.</li>
+        <li><strong style="color:#0E2138">Vagas salvas como página própria.</strong> A ação de salvar já existe no cartão; hoje não há onde vê-las depois.</li>
+        <li><strong style="color:#0E2138">Painel administrativo da coleta.</strong> <code style="font-family:ui-monospace,monospace">POST /api/coleta</code> só é acionável por linha de comando; uma tela com token protegido ajudaria na demonstração de banca.</li>
+        <li><strong style="color:#0E2138">Registro de acesso a dados acadêmicos.</strong> Um log visível ao aluno de quando o StartMe leu seus dados fortaleceria o capítulo de LGPD.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:24px">
+    <h2 style="margin:0 0 14px;font-size:20px;font-weight:700;color:#0E2138">Cobertura da entrega</h2>
+    <p style="margin:0 0 14px;max-width:70ch;font-size:14px;line-height:1.6;color:#465A73">As 11 pranchas do prompt estão desenhadas e navegáveis pela barra do topo — identidade visual do Manual da Marca da FSA aplicada em toda a aplicação (Azul Institucional #042D5C, Verde-água, Georgia + Montserrat).</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;font-size:14px">
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px;color:#465A73"><strong style="color:#0E2138">Entrada · 1, 2, 3</strong><div style="margin-top:4px">Portal, login simulado e consentimento LGPD.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px;color:#465A73"><strong style="color:#0E2138">Aplicação · 4, 5, 6, 7, 8, 9</strong><div style="margin-top:4px">Painel, listagem, detalhe, candidatura, minhas candidaturas e perfil.</div></div>
+      <div style="border:1px solid #E4EBF4;border-radius:10px;padding:12px 14px;color:#465A73"><strong style="color:#0E2138">Referência · 10, 11</strong><div style="margin-top:4px">Estados de exceção e sistema de design.</div></div>
+    </div>
+  </section>
+</main>
+</sc-if>
+
+<sc-if value="{{ modalOk }}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-modal="true" aria-label="Marcado como candidatado" style="position:fixed;inset:0;z-index:60;background:rgba(4,45,92,.5);display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#fff;border-radius:14px;box-shadow:0 24px 48px -24px rgba(4,45,92,.45);max-width:480px;width:100%;padding:28px;text-align:center">
+    <div style="width:56px;height:56px;margin:0 auto;border-radius:999px;background:#E7F6EE;border:1px solid #A9DDC1;color:#05603A;display:grid;place-items:center;font-size:26px;font-weight:700" aria-hidden="true">✓</div>
+    <h2 style="margin:16px 0 6px;font-size:22px;font-weight:700;letter-spacing:-.02em;color:#0E2138">Marcado como “já me candidatei”</h2>
+    <p style="margin:0 auto 22px;max-width:44ch;font-size:14.5px;line-height:1.6;color:#465A73">{{ d.titulo }} · {{ d.empresa }}. Isso é uma anotação sua — o StartMe não confirma nem envia nada à empresa. Não se esqueça de concluir o cadastro e o envio do currículo no site de origem.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+      <button type="button" onClick="{{ verCandidaturas }}" style="min-height:48px;padding:0 18px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:15px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Ver minhas candidaturas</button>
+      <button type="button" onClick="{{ continuarBuscando }}" style="min-height:48px;padding:0 20px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Continuar buscando vagas</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ vPortal }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FDF3E7;border-bottom:1px solid #F3D3A6;color:#93370D;padding:9px 20px;font-size:12.5px;font-weight:700;letter-spacing:.02em;text-align:center">AMBIENTE SIMULADO — PROTÓTIPO DE TCC, RÉPLICA CONCEITUAL DO PORTAL.FSA.BR. NÃO INSIRA CREDENCIAIS REAIS.</div>
+<main style="background:#F1F5FA;min-height:80vh;padding:0 0 56px">
+  <div style="background:#fff;border-bottom:3px solid #042D5C;padding:22px 20px">
+    <div style="max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px">
+      <div style="width:52px;height:52px;border-radius:8px;background:#042D5C;color:#fff;display:grid;place-items:center;font-family:Georgia,serif;font-size:22px;font-weight:700" aria-hidden="true">FSA</div>
+      <div>
+        <div style="font-family:Georgia,serif;font-size:24px;font-weight:700;color:#042D5C;line-height:1.15">Portal FSA</div>
+        <div style="font-size:12.5px;color:#64768F">Réplica conceitual · Centro Universitário Fundação Santo André — marca real usada só nesta demonstração acadêmica</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1180px;margin:0 auto;padding:32px 20px 0">
+    <h1 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#465A73">Portal do Aluno</h1>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:16px;margin-bottom:36px">
+      <sc-for list="{{ portais }}" as="p" hint-placeholder-count="8">
+        <sc-if value="{{ p.destaque }}" hint-placeholder-val="{{ false }}">
+          <article style="background:#fff;border:2px solid #00A99D;border-radius:6px;padding:22px 20px;display:flex;flex-direction:column;gap:12px;text-align:center;box-shadow:0 10px 26px -18px rgba(4,45,92,.4)">
+            <span style="align-self:center;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#00A99D;border-radius:999px;padding:4px 10px">Novo</span>
+            <h3 style="margin:0;font-size:15px;font-variant-caps:small-caps;letter-spacing:.04em;color:#042D5C;line-height:1.3">{{ p.nome }}</h3>
+            <p style="margin:0;flex:1;font-size:12.5px;line-height:1.5;color:#465A73">{{ p.desc }}</p>
+            <button type="button" onClick="{{ p.ir }}" style="min-height:40px;border-radius:5px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;letter-spacing:.02em" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Acessar</button>
+          </article>
+        </sc-if>
+        <sc-if value="{{ p.comum }}" hint-placeholder-val="{{ true }}">
+          <article style="background:#fff;border:1px solid #D5E0EE;border-radius:6px;padding:22px 20px;display:flex;flex-direction:column;gap:12px;text-align:center">
+            <h3 style="margin:0;font-size:15px;font-variant-caps:small-caps;letter-spacing:.04em;color:#042D5C;line-height:1.3">{{ p.nome }}</h3>
+            <p style="margin:0;flex:1;font-size:12.5px;line-height:1.5;color:#465A73">{{ p.desc }}</p>
+            <button type="button" onClick="{{ p.ir }}" style="min-height:40px;border-radius:5px;border:1px solid #042D5C;background:#fff;color:#042D5C;font-size:13.5px;font-weight:700;cursor:pointer;letter-spacing:.02em" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Acessar</button>
+          </article>
+        </sc-if>
+      </sc-for>
+    </div>
+
+    <h2 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#465A73">Ferramentas</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:16px">
+      <sc-for list="{{ ferramentas }}" as="f" hint-placeholder-count="4">
+        <article style="background:#fff;border:1px solid #D5E0EE;border-radius:6px;padding:22px 20px;display:flex;flex-direction:column;gap:12px;text-align:center">
+          <h3 style="margin:0;font-size:15px;font-variant-caps:small-caps;letter-spacing:.04em;color:#042D5C;line-height:1.3">{{ f.nome }}</h3>
+          <button type="button" onClick="{{ nadaAinda }}" style="margin-top:auto;min-height:40px;border-radius:5px;border:1px solid #042D5C;background:#fff;color:#042D5C;font-size:13.5px;font-weight:700;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Acessar</button>
+        </article>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+      <aside style="margin-top:32px;background:#042D5C;border-radius:14px;padding:20px;max-width:760px">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 1 · Decisões e por quê</div>
+        <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Portal acadêmico (réplica do portal.fsa.br)</h2>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.55;color:#E2EDF7">
+          <li><strong style="color:#fff">Layout, textos e ordem dos sete cartões e das quatro ferramentas replicam o portal.fsa.br real.</strong> Fundo branco, cartão com borda fina e botão contornado — nada de gradiente decorativo, que o portal real não tem.</li>
+          <li><strong style="color:#fff">O oitavo cartão é nativo, não banner.</strong> Mesma caixa, mesmo botão “Acessar” — só o selo “Novo” e a borda verde-água o distinguem, exatamente como o portal real destaca lançamentos.</li>
+          <li><strong style="color:#fff">Nenhuma marca de terceiros nem logotipo real da FSA usado como elemento de UI.</strong> O monograma “FSA” é tipográfico, não a logo oficial — a faixa declara que é réplica conceitual para demonstração acadêmica.</li>
+          <li><strong style="color:#fff">A faixa de simulação começa aqui.</strong> A banca vê o aviso antes de qualquer campo de credencial, não só na tela de login.</li>
+        </ul>
+      </aside>
+    </sc-if>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ vLogin }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FDF3E7;border-bottom:1px solid #F3D3A6;color:#93370D;padding:9px 20px;font-size:12.5px;font-weight:700;text-align:center">AMBIENTE SIMULADO — PROTÓTIPO DE TCC. NÃO INSIRA CREDENCIAIS REAIS.</div>
+<main style="background:linear-gradient(155deg,#042D5C,#0A4A8F 60%,#063E7E);min-height:80vh;padding:36px 20px 56px">
+  <div style="max-width:1080px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 28px 56px -28px rgba(2,32,63,.7);display:flex;flex-wrap:wrap">
+    <section style="flex:1 1 380px;min-width:300px;padding:34px 32px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:26px">
+        <div style="width:40px;height:40px;border-radius:11px;border:2px solid #042D5C;color:#042D5C;display:grid;place-items:center;font-family:Georgia,serif;font-size:17px;font-weight:700" aria-hidden="true">PA</div>
+        <div style="font-family:Georgia,serif;font-size:18px;font-weight:700;color:#042D5C">Portal Acadêmico</div>
+      </div>
+      <h1 style="margin:0 0 6px;font-size:26px;color:#0E2138;letter-spacing:-.01em">Entrar</h1>
+      <p style="margin:0 0 22px;font-size:14px;line-height:1.55;color:#465A73">Use o CPF cadastrado na secretaria acadêmica.</p>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div>
+          <label for="cpf" style="display:block;font-size:13px;font-weight:600;color:#0E2138;margin-bottom:6px">CPF</label>
+          <div style="display:flex;align-items:center;gap:9px;border:1px solid #D5E0EE;border-radius:10px;background:#fff;padding:0 12px;min-height:48px" style-focus="border-color:#042D5C">
+            <input id="cpf" type="text" inputmode="numeric" value="{{ cpf }}" onChange="{{ setCpf }}" placeholder="000.000.000-00" autoComplete="off" style="flex:1;min-width:0;border:none;outline:none;background:none;font-size:15px;color:#0E2138;min-height:46px;letter-spacing:.02em">
+          </div>
+        </div>
+        <div>
+          <label for="senha" style="display:block;font-size:13px;font-weight:600;color:#0E2138;margin-bottom:6px">Senha</label>
+          <div style="display:flex;align-items:center;gap:9px;border:1px solid #D5E0EE;border-radius:10px;background:#fff;padding:0 6px 0 12px;min-height:48px" style-focus="border-color:#042D5C">
+            <input id="senha" type="{{ tipoSenha }}" value="{{ senha }}" onChange="{{ setSenha }}" placeholder="Sua senha" style="flex:1;min-width:0;border:none;outline:none;background:none;font-size:15px;color:#0E2138;min-height:46px">
+            <button type="button" onClick="{{ toggleSenha }}" aria-label="{{ rotuloSenha }}" style="min-width:44px;min-height:44px;border:none;background:none;color:#465A73;font-size:12px;font-weight:700;cursor:pointer;border-radius:8px" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">{{ rotuloSenha }}</button>
+          </div>
+        </div>
+
+        <sc-if value="{{ erroLogin }}" hint-placeholder-val="{{ false }}">
+          <div role="alert" style="display:flex;gap:9px;align-items:flex-start;background:#FDECEA;border:1px solid #F5C4BF;border-radius:10px;padding:11px 13px;font-size:13.5px;line-height:1.5;color:#B42318">
+            <span aria-hidden="true">✕</span>
+            <div>CPF ou senha inválidos. Use as credenciais de demonstração abaixo — nenhuma credencial real é aceita.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ podeEntrar }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ entrar }}" style="min-height:50px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:16px;font-weight:700;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Entrar</button>
+        </sc-if>
+        <sc-if value="{{ naoPodeEntrar }}" hint-placeholder-val="{{ true }}">
+          <button type="button" disabled="true" aria-disabled="true" style="min-height:50px;border-radius:10px;border:1px solid #D5E0EE;background:#F1F5FA;color:#94A5BB;font-size:16px;font-weight:700;cursor:not-allowed">Entrar</button>
+        </sc-if>
+        <a href="#" style="align-self:flex-start;font-size:13.5px">Esqueceu sua senha?</a>
+
+        <div style="border:1px dashed #B4C5DA;background:#F8FBFD;border-radius:10px;padding:13px 15px">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#64768F;margin-bottom:6px">Credenciais fixas de demonstração</div>
+          <div style="font-size:14px;color:#0E2138;font-family:ui-monospace,monospace">CPF 123.456.789-00 · senha demo2026</div>
+          <button type="button" onClick="{{ preencherDemo }}" style="margin-top:10px;min-height:40px;padding:0 12px;border-radius:8px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Preencher automaticamente</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="flex:1 1 320px;min-width:280px;background:linear-gradient(165deg,#042D5C,#063E7E);color:#E2EDF7;padding:34px 32px;display:flex;flex-direction:column;justify-content:center;gap:18px">
+      <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Missão institucional</div>
+      <p style="margin:0;font-family:Georgia,serif;font-size:19px;line-height:1.5;color:#fff">Produzir, disseminar e aplicar o conhecimento tecnológico e acadêmico, para formação cidadã, por meio do ensino, da pesquisa e da extensão.</p>
+      <div style="height:1px;background:#14507F"></div>
+      <ul style="margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px">
+        <li style="font-size:12px;font-weight:600;color:#E3F6F4;border:1px solid #14507F;border-radius:999px;padding:5px 11px">Cidadania</li>
+        <li style="font-size:12px;font-weight:600;color:#E3F6F4;border:1px solid #14507F;border-radius:999px;padding:5px 11px">Ética</li>
+        <li style="font-size:12px;font-weight:600;color:#E3F6F4;border:1px solid #14507F;border-radius:999px;padding:5px 11px">Inovação</li>
+        <li style="font-size:12px;font-weight:600;color:#E3F6F4;border:1px solid #14507F;border-radius:999px;padding:5px 11px">Transparência</li>
+      </ul>
+      <p style="margin:0;font-size:12px;line-height:1.55;color:#BDD4EA">Texto e valores citados do Manual da Marca da instituição. Nenhum logotipo, marca ou nome de fornecedor de ERP é reproduzido nesta simulação.</p>
+    </section>
+  </div>
+
+  <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+    <aside style="max-width:1080px;margin:22px auto 0;background:rgba(2,32,63,.55);border:1px solid #14507F;border-radius:14px;padding:20px">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 2 · Decisões e por quê</div>
+      <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Autenticação institucional (mockada)</h2>
+      <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.55;color:#E2EDF7">
+        <li><strong style="color:#fff">Ordem de tabulação declarada:</strong> CPF → Senha → revelar senha → Entrar → Esqueceu sua senha → Preencher automaticamente. Nenhum <code style="font-family:ui-monospace,monospace">tabindex</code> positivo: a ordem do DOM já é a ordem correta.</li>
+        <li><strong style="color:#fff">“Entrar” desabilitado é honesto, não hostil.</strong> Só habilita com 11 dígitos de CPF e senha preenchida; o motivo fica visível no próprio formato do campo (<code style="font-family:ui-monospace,monospace">000.000.000-00</code>).</li>
+        <li><strong style="color:#fff">Erro inline, sem recarregar.</strong> A mensagem entra como <code style="font-family:ui-monospace,monospace">role="alert"</code> acima do botão, mantendo o que foi digitado.</li>
+        <li><strong style="color:#fff">A coluna direita não é ilustração decorativa.</strong> É a missão institucional citada do manual — comunica continuidade sem clonar sistema de terceiros nem inventar imagem.</li>
+        <li><strong style="color:#fff">CPF entra, mas não fica.</strong> Ele autentica e é descartado: nenhuma tela do StartMe volta a exibi-lo, nem completo nem parcial.</li>
+      </ul>
+    </aside>
+  </sc-if>
+</main>
+</sc-if>
+
+<sc-if value="{{ vConsent }}" hint-placeholder-val="{{ false }}">
+<main style="background:linear-gradient(155deg,#042D5C,#0A4A8F 60%,#063E7E);min-height:80vh;padding:36px 20px 56px">
+  <div style="max-width:660px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 28px 56px -28px rgba(2,32,63,.7);padding:30px 28px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:22px">
+      <div style="width:44px;height:44px;border-radius:12px;border:2px solid #042D5C;color:#042D5C;display:grid;place-items:center;font-family:Georgia,serif;font-size:16px;font-weight:700" aria-hidden="true">PA</div>
+      <span aria-hidden="true" style="color:#64768F;font-size:18px">→</span>
+      <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(140deg,#042D5C,#0A4A8F);color:#fff;display:grid;place-items:center;font-size:21px;font-weight:700" aria-hidden="true">S</div>
+    </div>
+    <h1 style="margin:0 0 8px;font-size:23px;line-height:1.3;color:#0E2138;text-align:center">O Portal Acadêmico deseja compartilhar seus dados com o StartMe</h1>
+    <p style="margin:0 auto 24px;max-width:52ch;font-size:14px;line-height:1.6;color:#465A73;text-align:center">Esta autorização é pedida uma única vez, no primeiro acesso, e pode ser revogada depois no seu perfil.</p>
+
+    <div style="border:1px solid #A6E1DC;background:#E3F6F4;border-radius:12px;padding:18px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:#067A73;margin-bottom:12px">✓ Dados que serão compartilhados</div>
+      <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px">
+        <sc-for list="{{ dadosSim }}" as="i" hint-placeholder-count="4">
+          <li style="display:flex;gap:11px;align-items:flex-start">
+            <span aria-hidden="true" style="color:#067A73;font-weight:700;font-size:14px">·</span>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#0E2138">{{ i.nome }}</div>
+              <div style="font-size:12.5px;line-height:1.5;color:#465A73">{{ i.para }}</div>
+            </div>
+          </li>
+        </sc-for>
+      </ul>
+    </div>
+
+    <div style="border:1px solid #D5E0EE;background:#F6F9FC;border-radius:12px;padding:18px;margin-bottom:22px">
+      <div style="font-size:13px;font-weight:700;color:#465A73;margin-bottom:10px">✕ Dados que o StartMe <span style="text-decoration:underline;text-underline-offset:2px">nunca</span> acessa</div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px">
+        <sc-for list="{{ dadosNao }}" as="n" hint-placeholder-count="6">
+          <span style="font-size:12.5px;font-weight:600;color:#465A73;background:#fff;border:1px solid #D5E0EE;border-radius:999px;padding:5px 11px;text-decoration:line-through;text-decoration-color:#B4C5DA">{{ n }}</span>
+        </sc-for>
+      </div>
+      <p style="margin:12px 0 0;font-size:12.5px;line-height:1.55;color:#64768F">O StartMe é um microsserviço satélite: recebe do portal apenas os quatro dados acima, pelo tempo da sessão, e não replica o histórico acadêmico.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:9px">
+      <button type="button" onClick="{{ autorizar }}" style="min-height:50px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:16px;font-weight:700;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Autorizar e continuar</button>
+      <button type="button" onClick="{{ naoAutorizar }}" style="min-height:44px;border-radius:10px;border:none;background:none;color:#465A73;font-size:14px;font-weight:600;cursor:pointer" style-hover="color:#0E2138" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Não autorizar</button>
+      <a href="#" style="text-align:center;font-size:13px;padding:4px 0">Como tratamos seus dados</a>
+    </div>
+  </div>
+
+  <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+    <aside style="max-width:660px;margin:22px auto 0;background:rgba(2,32,63,.55);border:1px solid #14507F;border-radius:14px;padding:20px">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 3 · Decisões e por quê</div>
+      <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Consentimento e transferência de dados</h2>
+      <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.55;color:#E2EDF7">
+        <li><strong style="color:#fff">É esta a prancha que a banca vai apontar.</strong> Minimização de dados deixa de ser texto na monografia e passa a ser uma tela: quatro dados concedidos, seis explicitamente negados.</li>
+        <li><strong style="color:#fff">O bloco negativo é visualmente mais frio.</strong> Cinza-azulado e texto riscado contra o verde-água do bloco concedido — a diferença é lida antes da leitura.</li>
+        <li><strong style="color:#fff">Cada dado declara a finalidade.</strong> Exigência do princípio de finalidade: nenhum item aparece sem dizer para que serve.</li>
+        <li><strong style="color:#fff">“Não autorizar” é botão de texto, não botão desabilitado.</strong> Recusar é um caminho legítimo e leva ao estado 6 da Prancha 10, não a um beco sem saída.</li>
+        <li><strong style="color:#fff">Uma vez só, mas reversível.</strong> Aparece no primeiro acesso e a revogação vive na Prancha 9 — sem isso a conformidade seria apenas de entrada.</li>
+      </ul>
+    </aside>
+  </sc-if>
+</main>
+</sc-if>
+
+<sc-if value="{{ vHome }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:20px">
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+    <div style="flex:999 1 480px;min-width:300px;display:flex;flex-direction:column;gap:22px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px">
+        <sc-for list="{{ indicadores }}" as="k" hint-placeholder-count="3">
+          <div style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:18px">
+            <div style="font-size:12px;font-weight:600;line-height:1.4;color:#465A73">{{ k.rotulo }}</div>
+            <div style="margin-top:8px;font-family:Georgia,serif;font-size:34px;font-weight:700;color:#042D5C;line-height:1;font-variant-numeric:tabular-nums">{{ k.valor }}</div>
+            <div style="margin-top:6px;font-size:12px;color:#64768F">{{ k.nota }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <section>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+          <h2 style="margin:0;font-size:20px;color:#0E2138">Recomendadas para você</h2>
+          <button type="button" onClick="{{ irLista }}" style="min-height:40px;padding:0 6px;border:none;background:none;color:#0A4A8F;font-size:13.5px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Ver todas as vagas</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+          <sc-for list="{{ recomendadas }}" as="v" hint-placeholder-count="3">
+            <article style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:11px;align-items:flex-start">
+                <div style="width:40px;height:40px;flex:none;border-radius:10px;background:#DCE7F3;color:#042D5C;display:grid;place-items:center;font-weight:700;font-size:15px" aria-hidden="true">{{ v.monograma }}</div>
+                <div style="min-width:0">
+                  <h3 style="margin:0;font-size:15px;line-height:1.35;color:#0E2138">{{ v.titulo }}</h3>
+                  <div style="margin-top:2px;font-size:13px;color:#465A73">{{ v.empresa }}</div>
+                </div>
+              </div>
+              <div style="display:inline-flex;flex-direction:column;gap:2px;background:#E3F6F4;border:1px solid #A6E1DC;border-radius:10px;padding:8px 10px">
+                <div style="font-size:13.5px;font-weight:700;color:#067A73">◆ {{ v.rotuloCompat }}</div>
+                <div style="font-size:12px;line-height:1.45;color:#067A73">{{ v.razao }}</div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12.5px;color:#465A73">
+                <sc-if value="{{ v.temSalario }}" hint-placeholder-val="{{ true }}"><strong style="color:#0E2138;font-size:13.5px">{{ v.salario }}</strong></sc-if>
+                <sc-if value="{{ v.semSalario }}" hint-placeholder-val="{{ false }}"><span style="border:1px dashed #B4C5DA;border-radius:8px;padding:2px 7px;color:#64768F;font-weight:600">Salário não informado</span></sc-if>
+                <span>Coletada {{ v.quando }}</span>
+              </div>
+              <button type="button" onClick="{{ v.abrir }}" style="min-height:44px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Ver detalhes</button>
+            </article>
+          </sc-for>
+        </div>
+      </section>
+
+      <section>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+          <h2 style="margin:0;font-size:20px;color:#0E2138">Coletadas recentemente</h2>
+          <span style="font-size:12.5px;color:#64768F">Última atualização: hoje às 06:00</span>
+        </div>
+        <div style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;overflow:hidden">
+          <sc-for list="{{ recentes }}" as="v" hint-placeholder-count="4">
+            <button type="button" onClick="{{ v.abrir }}" style="width:100%;display:flex;flex-wrap:wrap;gap:12px;align-items:center;text-align:left;background:none;border:none;border-bottom:1px solid #E4EBF4;padding:14px 16px;cursor:pointer;min-height:44px" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:-3px">
+              <div style="width:34px;height:34px;flex:none;border-radius:9px;background:#DCE7F3;color:#042D5C;display:grid;place-items:center;font-weight:700;font-size:13px" aria-hidden="true">{{ v.monograma }}</div>
+              <div style="flex:999 1 200px;min-width:0">
+                <div style="font-size:14.5px;font-weight:600;color:#0E2138">{{ v.titulo }}</div>
+                <div style="font-size:12.5px;color:#465A73">{{ v.empresa }} · {{ v.modalidade }}</div>
+              </div>
+              <div style="flex:none;font-size:12.5px;color:#64768F">Coletada {{ v.quando }}</div>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+
+    <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:1 1 300px;max-width:340px;min-width:264px;background:#042D5C;color:#E2EDF7;border-radius:14px;padding:20px">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 4 · Decisões e por quê</div>
+        <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Painel inicial do aluno</h2>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55">
+          <li><strong style="color:#fff">A faixa de contexto é a prova da integração.</strong> Nome, curso e semestre no topo, com o selo “Vindo do Portal Acadêmico” — o argumento central do produto na primeira linha da primeira tela.</li>
+          <li><strong style="color:#fff">Três contagens, nada de gráfico.</strong> São <code style="font-family:ui-monospace,monospace">count()</code> que o backend já sabe fazer; qualquer painel além disso seria dado que não existe.</li>
+          <li><strong style="color:#fff">O horário da coleta é discreto, mas está lá.</strong> Explica por que a lista não muda a cada minuto e prepara o estado 3 da Prancha 10.</li>
+          <li><strong style="color:#fff">Recomendadas usam o mesmo componente da Prancha 5.</strong> <code style="font-family:ui-monospace,monospace">CartaoVaga</code> em variante compacta — um componente, não dois.</li>
+        </ul>
+      </aside>
+    </sc-if>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ vCand }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:20px">
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+    <section style="flex:999 1 480px;min-width:300px">
+      <h1 style="margin:0 0 4px;font-size:24px;letter-spacing:-.01em;color:#0E2138">Minhas candidaturas</h1>
+      <p style="margin:0 0 16px;font-size:14px;color:#465A73">{{ totalCand }} · o status é atualizado pela empresa; o StartMe não altera nada por conta própria.</p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px">
+        <sc-for list="{{ statusFiltros }}" as="s" hint-placeholder-count="6">
+          <sc-if value="{{ s.on }}" hint-placeholder-val="{{ false }}">
+            <button type="button" onClick="{{ s.set }}" aria-pressed="true" style="min-height:40px;padding:0 13px;border-radius:999px;border:1px solid #042D5C;background:#042D5C;color:#fff;font-size:13px;font-weight:700;cursor:pointer" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">{{ s.label }}</button>
+          </sc-if>
+          <sc-if value="{{ s.off }}" hint-placeholder-val="{{ true }}">
+            <button type="button" onClick="{{ s.set }}" aria-pressed="false" style="min-height:40px;padding:0 13px;border-radius:999px;border:1px solid #D5E0EE;background:#fff;color:#465A73;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">{{ s.label }}</button>
+          </sc-if>
+        </sc-for>
+      </div>
+
+      <div style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;overflow:hidden">
+        <div style="display:flex;gap:12px;background:#F6F9FC;border-bottom:1px solid #D5E0EE;padding:11px 16px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#64768F">
+          <div style="flex:999 1 220px">Vaga e empresa</div>
+          <div style="flex:0 0 120px">Enviada em</div>
+          <div style="flex:0 0 150px">Status</div>
+          <div style="flex:0 0 44px"></div>
+        </div>
+        <sc-for list="{{ candidaturas }}" as="c" hint-placeholder-count="4">
+          <div style="border-bottom:1px solid #E4EBF4">
+            <button type="button" onClick="{{ c.toggle }}" aria-expanded="{{ c.aberta }}" style="width:100%;display:flex;flex-wrap:wrap;gap:12px;align-items:center;text-align:left;background:none;border:none;padding:14px 16px;cursor:pointer;min-height:56px" style-hover="background:#F8FBFD" style-focus="outline:3px solid #7FA8D4;outline-offset:-3px">
+              <div style="flex:999 1 220px;min-width:0;display:flex;gap:11px;align-items:center">
+                <div style="width:34px;height:34px;flex:none;border-radius:9px;background:#DCE7F3;color:#042D5C;display:grid;place-items:center;font-weight:700;font-size:13px" aria-hidden="true">{{ c.monograma }}</div>
+                <div style="min-width:0">
+                  <div style="font-size:14.5px;font-weight:600;color:#0E2138">{{ c.titulo }}</div>
+                  <div style="font-size:12.5px;color:#465A73">{{ c.empresa }} · protocolo {{ c.protocolo }}</div>
+                </div>
+              </div>
+              <div style="flex:0 0 120px;font-size:13px;color:#465A73;font-variant-numeric:tabular-nums">{{ c.data }}</div>
+              <div style="flex:0 0 150px">
+                <sc-if value="{{ c.stEnviada }}" hint-placeholder-val="{{ true }}"><span style="display:inline-flex;font-size:12px;font-weight:700;color:#0A4A8F;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:999px;padding:5px 11px">→ Enviada</span></sc-if>
+                <sc-if value="{{ c.stAnalise }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;font-size:12px;font-weight:700;color:#93370D;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:999px;padding:5px 11px">◐ Em análise</span></sc-if>
+                <sc-if value="{{ c.stEntrevista }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;font-size:12px;font-weight:700;color:#067A73;background:#E3F6F4;border:1px solid #A6E1DC;border-radius:999px;padding:5px 11px">◆ Entrevista</span></sc-if>
+                <sc-if value="{{ c.stRecusada }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;font-size:12px;font-weight:700;color:#B42318;background:#FDECEA;border:1px solid #F5C4BF;border-radius:999px;padding:5px 11px">✕ Não selecionado</span></sc-if>
+                <sc-if value="{{ c.stFinalizada }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;font-size:12px;font-weight:700;color:#05603A;background:#E7F6EE;border:1px solid #A9DDC1;border-radius:999px;padding:5px 11px">✓ Finalizada</span></sc-if>
+              </div>
+              <div style="flex:0 0 44px;text-align:right;color:#64768F;font-size:12px">
+                <sc-if value="{{ c.aberta }}" hint-placeholder-val="{{ false }}">▲ fechar</sc-if>
+                <sc-if value="{{ c.fechada }}" hint-placeholder-val="{{ true }}">▼ abrir</sc-if>
+              </div>
+            </button>
+            <sc-if value="{{ c.aberta }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#F8FBFD;border-top:1px solid #E4EBF4;padding:18px 16px 18px 62px">
+                <div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#64768F;margin-bottom:12px">Linha do tempo</div>
+                <ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px">
+                  <sc-for list="{{ c.etapas }}" as="e" hint-placeholder-count="3">
+                    <li style="display:flex;gap:12px;align-items:flex-start">
+                      <sc-if value="{{ e.feita }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="flex:none;width:20px;height:20px;border-radius:999px;background:#042D5C;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700">✓</span></sc-if>
+                      <sc-if value="{{ e.pendente }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="flex:none;width:20px;height:20px;border-radius:999px;border:2px dashed #B4C5DA;background:#fff"></span></sc-if>
+                      <div>
+                        <div style="font-size:14px;font-weight:600;color:#0E2138">{{ e.nome }}</div>
+                        <div style="font-size:12.5px;color:#465A73">{{ e.quando }}</div>
+                      </div>
+                    </li>
+                  </sc-for>
+                </ol>
+                <a href="{{ c.link }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:14px;font-size:13px">Ver anúncio original ↗</a>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ candVazia }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:36px 20px;text-align:center">
+            <div style="font-size:16px;font-weight:700;color:#0E2138">Nenhuma candidatura com esse status</div>
+            <button type="button" onClick="{{ limparStatus }}" style="margin-top:12px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Ver todas</button>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+
+    <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:1 1 300px;max-width:340px;min-width:264px;background:#042D5C;color:#E2EDF7;border-radius:14px;padding:20px">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 8 · Decisões e por quê</div>
+        <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Minhas candidaturas</h2>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55">
+          <li><strong style="color:#fff">Nunca só cor.</strong> Cada um dos cinco status tem ícone, texto e cor própria — quem não distingue verde de vermelho lê “Não selecionado” do mesmo jeito.</li>
+          <li><strong style="color:#fff">Lista, não tabela.</strong> Em 360px uma tabela de quatro colunas quebra; a linha vira cartão empilhado com os mesmos dados e sem rolagem horizontal.</li>
+          <li><strong style="color:#fff">A linha expande no lugar.</strong> Abrir a linha do tempo não é outra rota nem modal — é <code style="font-family:ui-monospace,monospace">aria-expanded</code> em um botão, o padrão mais simples de implementar e o mais acessível.</li>
+          <li><strong style="color:#fff">Protocolo visível na linha.</strong> É o número que o aluno leva para a empresa; escondê-lo dentro do detalhe seria esconder a única prova do envio.</li>
+          <li><strong style="color:#fff">Etapas futuras aparecem tracejadas.</strong> A linha do tempo mostra o que falta sem prometer prazo que o StartMe não controla.</li>
+        </ul>
+      </aside>
+    </sc-if>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ vPerfil }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:20px">
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+    <div style="flex:999 1 480px;min-width:300px;display:flex;flex-direction:column;gap:16px">
+      <h1 style="margin:0;font-size:24px;letter-spacing:-.01em;color:#0E2138">Meu perfil</h1>
+
+      <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:22px">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:6px">
+          <h2 style="margin:0;font-size:18px;color:#0E2138">Dados acadêmicos</h2>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#042D5C;background:#DCE7F3;border-radius:999px;padding:4px 9px">Somente leitura</span>
+        </div>
+        <p style="margin:0 0 16px;font-size:13.5px;line-height:1.55;color:#465A73">Estes campos vêm do Portal Acadêmico e não podem ser alterados aqui. Correções são feitas na <strong>secretaria acadêmica</strong>; na próxima sessão o StartMe já lê o valor novo.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px">
+          <sc-for list="{{ camposAcademicos }}" as="c" hint-placeholder-count="4">
+            <div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#64768F;margin-bottom:5px">{{ c.rotulo }} · Vindo do Portal Acadêmico</div>
+              <div style="min-height:44px;display:flex;align-items:center;border:1px solid #E1E9F3;border-radius:10px;background:#F6F9FC;padding:10px 12px;font-size:14.5px;font-weight:600;color:#22364F">{{ c.valor }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:22px">
+        <h2 style="margin:0 0 6px;font-size:18px;color:#0E2138">Dados de empregabilidade</h2>
+        <p style="margin:0 0 16px;font-size:13.5px;line-height:1.55;color:#465A73">Você controla estes campos. Eles são usados apenas para montar sua candidatura e são enviados só quando você confirma um envio.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px">
+          <sc-for list="{{ camposEditaveis }}" as="c" hint-placeholder-count="6">
+            <div>
+              <label style="display:block;font-size:12.5px;font-weight:600;color:#0E2138;margin-bottom:5px">{{ c.rotulo }}</label>
+              <input type="text" value="{{ c.valor }}" onChange="{{ c.set }}" placeholder="{{ c.dica }}" style="width:100%;min-height:44px;border:1px solid #D5E0EE;border-radius:10px;background:#fff;padding:10px 12px;font-size:14px;color:#0E2138" style-focus="border-color:#042D5C;outline:3px solid #7FA8D4;outline-offset:2px">
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="margin-top:18px">
+          <div style="font-size:12.5px;font-weight:600;color:#0E2138;margin-bottom:6px">Áreas de interesse</div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px">
+            <sc-for list="{{ interesses }}" as="i" hint-placeholder-count="5">
+              <button type="button" onClick="{{ i.toggle }}" aria-pressed="{{ i.on }}" style="min-height:40px;padding:0 13px;border-radius:999px;border:1px solid #D5E0EE;background:#fff;color:#465A73;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+                <sc-if value="{{ i.on }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="color:#067A73">✓ </span></sc-if>{{ i.label }}
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="margin-top:18px">
+          <div style="font-size:12.5px;font-weight:600;color:#0E2138;margin-bottom:6px">Currículo anexado</div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;border:1px solid #A9DDC1;background:#E7F6EE;border-radius:12px;padding:13px 15px">
+            <div style="flex:1 1 160px;min-width:0">
+              <div style="font-size:14px;font-weight:700;color:#05603A">curriculo_vinicius.pdf</div>
+              <div style="font-size:12px;color:#05603A">240 KB · atualizado em 28/08/2026</div>
+            </div>
+            <button type="button" onClick="{{ nadaAinda }}" style="min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #A9DDC1;background:#fff;color:#05603A;font-size:13px;font-weight:600;cursor:pointer" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Substituir</button>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:20px;border-top:1px solid #E4EBF4;padding-top:18px">
+          <button type="button" onClick="{{ nadaAinda }}" style="min-height:48px;padding:0 20px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:15px;font-weight:700;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Salvar alterações</button>
+          <button type="button" onClick="{{ nadaAinda }}" style="min-height:48px;padding:0 16px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:15px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Descartar</button>
+        </div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #B6D0FA;border-radius:14px;padding:22px">
+        <h2 style="margin:0 0 6px;font-size:18px;color:#0E2138">Privacidade e seus direitos</h2>
+        <p style="margin:0 0 16px;max-width:70ch;font-size:13.5px;line-height:1.55;color:#465A73">Você autorizou o compartilhamento de vínculo, nome, curso e semestre em <strong>28/08/2026</strong>. Pode exportar ou revogar a qualquer momento.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <button type="button" onClick="{{ nadaAinda }}" style="min-height:48px;padding:0 18px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Baixar meus dados</button>
+          <button type="button" onClick="{{ revogar }}" style="min-height:48px;padding:0 18px;border-radius:10px;border:1px solid #F5C4BF;background:#fff;color:#B42318;font-size:14.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px" style-hover="background:#FDECEA" style-focus="outline:3px solid #7FA8D4;outline-offset:2px"><span aria-hidden="true">⚑</span>Revogar autorização de dados acadêmicos</button>
+        </div>
+        <p style="margin:12px 0 0;font-size:12.5px;line-height:1.55;color:#64768F">Revogar mantém sua conta e suas candidaturas já enviadas, mas desliga a ordenação por compatibilidade até você autorizar de novo.</p>
+      </section>
+    </div>
+
+    <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:1 1 300px;max-width:340px;min-width:264px;background:#042D5C;color:#E2EDF7;border-radius:14px;padding:20px">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 9 · Decisões e por quê</div>
+        <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Perfil do aluno</h2>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55">
+          <li><strong style="color:#fff">Duas seções que não se confundem.</strong> O que vem do portal tem fundo cinza, cadeado e rótulo de origem; o que é seu tem campo branco e editável — a diferença é estrutural, não textual.</li>
+          <li><strong style="color:#fff">Somente leitura com saída.</strong> Bloquear sem dizer o que fazer é um beco: o texto manda para a secretaria acadêmica e avisa que o valor novo entra na próxima sessão.</li>
+          <li><strong style="color:#fff">Sem CPF, sem matrícula, sem idade.</strong> Nada além dos quatro dados autorizados aparece — nem “últimos dígitos”, porque aqui nenhum identificador é necessário.</li>
+          <li><strong style="color:#fff">Exportar e revogar são botões reais.</strong> Portabilidade e reversibilidade da LGPD viram dois cliques, e a revogação declara sua consequência antes de acontecer.</li>
+        </ul>
+      </aside>
+    </sc-if>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ vExcecoes }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:28px 20px 64px">
+  <header style="margin-bottom:20px">
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#64768F">Prancha 10</div>
+    <h1 style="margin:6px 0 6px;font-size:30px;letter-spacing:-.02em;color:#0E2138">Estados de exceção</h1>
+    <p style="margin:0;max-width:70ch;font-size:15px;line-height:1.6;color:#465A73">Os seis estados que a Prancha 5 pode assumir quando nada corre bem. Todos com saída — nenhum termina em tela morta.</p>
+  </header>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px">
+
+    <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;overflow:hidden">
+      <div style="background:#F6F9FC;border-bottom:1px solid #D5E0EE;padding:11px 16px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#64768F">1 · Carregando</div><div style="font-size:13px;color:#465A73;margin-top:2px">Esqueleto da lista, não spinner central</div></div>
+      <div style="padding:16px;display:flex;flex-direction:column;gap:12px" aria-busy="true">
+        <div style="border:1px solid #E4EBF4;border-radius:12px;padding:14px;display:flex;gap:12px">
+          <div style="width:44px;height:44px;flex:none;border-radius:11px;background:#E4EBF4"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <div style="height:14px;width:74%;border-radius:6px;background:#E4EBF4"></div>
+            <div style="height:11px;width:42%;border-radius:6px;background:#EDF3F9"></div>
+            <div style="height:11px;width:58%;border-radius:6px;background:#EDF3F9"></div>
+          </div>
+        </div>
+        <div style="border:1px solid #E4EBF4;border-radius:12px;padding:14px;display:flex;gap:12px">
+          <div style="width:44px;height:44px;flex:none;border-radius:11px;background:#E4EBF4"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <div style="height:14px;width:62%;border-radius:6px;background:#E4EBF4"></div>
+            <div style="height:11px;width:50%;border-radius:6px;background:#EDF3F9"></div>
+            <div style="height:11px;width:36%;border-radius:6px;background:#EDF3F9"></div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#64768F">O esqueleto tem a forma do <code style="font-family:ui-monospace,monospace;background:#EDF3F9;padding:1px 4px;border-radius:4px">CartaoVaga</code>: nada salta de posição quando os dados chegam.</div>
+      </div>
+    </section>
+
+    <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;overflow:hidden">
+      <div style="background:#F6F9FC;border-bottom:1px solid #D5E0EE;padding:11px 16px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#64768F">2 · Lista vazia por filtro</div><div style="font-size:13px;color:#465A73;margin-top:2px">O acervo tem vagas; o recorte não</div></div>
+      <div style="padding:28px 18px;text-align:center">
+        <div style="font-size:16px;font-weight:700;color:#0E2138">Nenhuma vaga encontrada com esses filtros</div>
+        <p style="margin:6px auto 16px;max-width:38ch;font-size:13.5px;line-height:1.55;color:#465A73">A coleta de hoje trouxe 8 vagas ativas. Afrouxe um critério para voltar a vê-las.</p>
+        <button type="button" onClick="{{ irListaLimpa }}" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Limpar filtros</button>
+      </div>
+    </section>
+
+    <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;overflow:hidden">
+      <div style="background:#F6F9FC;border-bottom:1px solid #D5E0EE;padding:11px 16px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#64768F">3 · Lista vazia por origem</div><div style="font-size:13px;color:#465A73;margin-top:2px">A coleta rodou e não trouxe nada</div></div>
+      <div style="padding:28px 18px;text-align:center">
+        <div style="font-size:16px;font-weight:700;color:#0E2138">A coleta de hoje ainda não trouxe vagas novas</div>
+        <p style="margin:6px auto 14px;max-width:40ch;font-size:13.5px;line-height:1.55;color:#465A73">A última execução foi hoje às 06:00 e os portais de origem não publicaram vagas novas de TI desde então.</p>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:600;color:#0A4A8F"><span aria-hidden="true">ⓘ</span>Próxima coleta programada: amanhã às 06:00</div>
+      </div>
+    </section>
+
+    <section style="background:#fff;border:1px solid #F5C4BF;border-radius:14px;overflow:hidden">
+      <div style="background:#FDECEA;border-bottom:1px solid #F5C4BF;padding:11px 16px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#B42318">4 · Falha de rede ou serviço</div><div style="font-size:13px;color:#B42318;margin-top:2px">Mensagem honesta, com cache declarado</div></div>
+      <div style="padding:24px 18px">
+        <div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:14px">
+          <span aria-hidden="true" style="color:#B42318;font-size:16px">✕</span>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#0E2138">Não conseguimos falar com o serviço de vagas</div>
+            <p style="margin:5px 0 0;font-size:13.5px;line-height:1.55;color:#465A73">A verificação em <code style="font-family:ui-monospace,monospace;background:#EDF3F9;padding:1px 4px;border-radius:4px">/health</code> não respondeu. Não é a sua conexão.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:9px;align-items:flex-start;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:10px;padding:11px 13px;font-size:13px;line-height:1.5;color:#93370D;margin-bottom:14px">
+          <span aria-hidden="true">⚑</span><div>As vagas abaixo são do último carregamento, de <strong>hoje às 06:04</strong>. Podem já ter sido preenchidas na origem.</div>
+        </div>
+        <button type="button" onClick="{{ nadaAinda }}" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Tentar novamente</button>
+      </div>
+    </section>
+
+    <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;overflow:hidden">
+      <div style="background:#F6F9FC;border-bottom:1px solid #D5E0EE;padding:11px 16px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#64768F">5 · Sessão expirada</div><div style="font-size:13px;color:#465A73;margin-top:2px">Reautenticar sem perder o contexto</div></div>
+      <div style="padding:22px 18px">
+        <div style="border:1px solid #D5E0EE;border-radius:12px;background:#F8FBFD;padding:18px;text-align:center">
+          <div style="width:40px;height:40px;margin:0 auto 12px;border-radius:999px;background:#DCE7F3;color:#042D5C;display:grid;place-items:center;font-size:15px;font-weight:700" aria-hidden="true">S</div>
+          <div style="font-size:16px;font-weight:700;color:#0E2138">Sua sessão expirou por inatividade</div>
+          <p style="margin:6px auto 16px;max-width:40ch;font-size:13.5px;line-height:1.55;color:#465A73">Você estava em <strong>Estagiário de Desenvolvimento Back-end Python — Nexus Sistemas</strong>. Entre de novo e voltamos exatamente para essa vaga.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:9px;justify-content:center">
+            <button type="button" onClick="{{ irLogin }}" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Entrar novamente</button>
+            <button type="button" onClick="{{ nadaAinda }}" style="min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Continuar sem entrar</button>
+          </div>
+          <p style="margin:12px 0 0;font-size:12px;color:#64768F">Sem autenticar você continua vendo as vagas, mas sem compatibilidade e sem candidatar-se.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:#fff;border:1px solid #F3D3A6;border-radius:14px;overflow:hidden">
+      <div style="background:#FDF3E7;border-bottom:1px solid #F3D3A6;padding:11px 16px"><div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:#93370D">6 · Sem autorização de dados</div><div style="font-size:13px;color:#93370D;margin-top:2px">Quem recusou a Prancha 3 vê isto</div></div>
+      <div style="padding:22px 18px">
+        <div style="font-size:16px;font-weight:700;color:#0E2138">O StartMe funciona, mas às cegas</div>
+        <p style="margin:6px 0 14px;font-size:13.5px;line-height:1.55;color:#465A73">Sem o seu curso e semestre não há como dizer se uma vaga combina com o seu momento no curso. A busca e os filtros continuam funcionando.</p>
+        <ul style="margin:0 0 16px;padding-left:18px;display:flex;flex-direction:column;gap:7px;font-size:13.5px;line-height:1.5;color:#465A73">
+          <li>Sem ordenação por compatibilidade e sem selo nos cartões</li>
+          <li>Sem preenchimento automático na candidatura</li>
+          <li>Nenhum dado seu é enviado a empresa alguma</li>
+        </ul>
+        <div style="display:flex;flex-wrap:wrap;gap:9px">
+          <button type="button" onClick="{{ irConsent }}" style="min-height:44px;padding:0 18px;border-radius:10px;border:1px solid transparent;background:#042D5C;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#0A4A8F" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Autorizar agora</button>
+          <button type="button" onClick="{{ irListaLimpa }}" style="min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Continuar sem autorizar</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+    <aside style="margin-top:20px;background:#042D5C;color:#E2EDF7;border-radius:14px;padding:22px">
+      <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 10 · Decisões e por quê</div>
+      <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Estados de exceção</h2>
+      <ul style="margin:0;padding-left:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:11px;font-size:13px;line-height:1.55">
+        <li><strong style="color:#fff">Vazio por filtro ≠ vazio por origem.</strong> São causas diferentes e exigem ações diferentes — juntá-los na mesma mensagem faria o aluno limpar filtros que não são o problema.</li>
+        <li><strong style="color:#fff">Esqueleto com a forma do cartão.</strong> Evita salto de layout e já comunica que vem uma lista, não um formulário.</li>
+        <li><strong style="color:#fff">Falha declara o cache.</strong> Mostrar dados velhos sem avisar seria desonesto; a faixa âmbar diz a hora exata do último carregamento.</li>
+        <li><strong style="color:#fff">Sessão expirada preserva o destino.</strong> A vaga onde o aluno estava é citada por nome e ele volta para ela — sem isso, expirar sessão custa a candidatura.</li>
+        <li><strong style="color:#fff">Recusar consentimento não bloqueia o produto.</strong> Degrada com honestidade e lista o que se perde, mantendo o caminho para autorizar depois.</li>
+      </ul>
+    </aside>
+  </sc-if>
+</main>
+</sc-if>
+
+<sc-if value="{{ vCurriculo }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:20px">
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+    <div style="flex:999 1 460px;min-width:300px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between">
+        <h1 style="margin:0;font-size:24px;letter-spacing:-.01em;color:#0E2138">Meu currículo</h1>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" onClick="{{ nadaAinda }}" style="min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Exportar .docx</button>
+          <button type="button" onClick="{{ nadaAinda }}" style="min-height:44px;padding:0 14px;border-radius:10px;border:1px solid #BFCEDF;background:#fff;color:#0E2138;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">Exportar .xlsx</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:13.5px;line-height:1.55;color:#465A73">Monte aqui o currículo que você vai enviar nos sites das empresas. O StartMe organiza e formata — o envio continua sendo feito por você, no link de origem de cada vaga.</p>
+
+      <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:22px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px">
+          <h2 style="margin:0;font-size:17px;color:#0E2138">Formação</h2>
+          <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#042D5C;background:#DCE7F3;border-radius:999px;padding:4px 9px">Vindo do Portal Acadêmico</span>
+        </div>
+        <sc-for list="{{ curriculo.formacao }}" as="f" hint-placeholder-count="1">
+          <div style="border:1px solid #E1E9F3;background:#F6F9FC;border-radius:10px;padding:14px">
+            <div style="font-size:14.5px;font-weight:700;color:#0E2138">{{ f.curso }}</div>
+            <div style="font-size:13px;color:#465A73">{{ f.instituicao }}</div>
+            <div style="font-size:12.5px;color:#64768F;margin-top:2px">{{ f.periodo }}</div>
+          </div>
+        </sc-for>
+      </section>
+
+      <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:22px">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;margin-bottom:12px">
+          <h2 style="margin:0;font-size:17px;color:#0E2138">Experiências</h2>
+          <button type="button" onClick="{{ nadaAinda }}" style="min-height:36px;padding:0 12px;border:none;background:none;color:#0A4A8F;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px">+ Adicionar experiência</button>
+        </div>
+        <div style="border:1px dashed #B4C5DA;border-radius:10px;padding:20px;text-align:center;font-size:13.5px;color:#64768F">Nenhuma experiência adicionada ainda. Estágios encontrados pelo StartMe não entram aqui automaticamente — você registra o que já cursou ou trabalhou.</div>
+      </section>
+
+      <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:22px">
+        <h2 style="margin:0 0 12px;font-size:17px;color:#0E2138">Habilidades</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <sc-for list="{{ habilidadesCurriculo }}" as="h" hint-placeholder-count="6">
+            <span style="font-size:12.5px;font-weight:600;color:#0A4A8F;background:#EAF2FE;border:1px solid #B6D0FA;border-radius:999px;padding:5px 11px">{{ h }}</span>
+          </sc-for>
+        </div>
+        <p style="margin:12px 0 0;font-size:12.5px;color:#64768F">As destacadas em verde-água na Prancha 13 vieram de certificados enviados por você.</p>
+      </section>
+
+      <section style="background:#fff;border:1px solid #D5E0EE;border-radius:14px;padding:22px">
+        <h2 style="margin:0 0 12px;font-size:17px;color:#0E2138">Idiomas e links</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px">
+          <sc-for list="{{ curriculo.idiomas }}" as="i" hint-placeholder-count="1">
+            <span style="font-size:12.5px;font-weight:600;color:#465A73;background:#F6F9FC;border:1px solid #E1E9F3;border-radius:999px;padding:5px 11px">{{ i }}</span>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13.5px;color:#0A4A8F">
+          <span>{{ curriculo.links.github }}</span>
+          <span>{{ curriculo.links.linkedin }}</span>
+        </div>
+      </section>
+    </div>
+
+    <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:1 1 300px;max-width:340px;min-width:264px;background:#042D5C;color:#E2EDF7;border-radius:14px;padding:20px">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 12 · Decisões e por quê</div>
+        <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Meu currículo</h2>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55">
+          <li><strong style="color:#fff">Resolve manutenção, não candidatura.</strong> O StartMe não envia isso a empresa alguma; ele só ajuda a montar e manter atualizado o arquivo que você leva para o site de origem.</li>
+          <li><strong style="color:#fff">Formação é somente leitura, o resto é seu.</strong> Mesma regra da Prancha 9: o que vem do portal tem cadeado, o que você escreve é editável.</li>
+          <li><strong style="color:#fff">Exportar para .docx e .xlsx é o requisito central.</strong> O aluno precisa continuar podendo editar na própria máquina antes de enviar num site externo.</li>
+          <li><strong style="color:#fff">Habilidades de certificado aparecem aqui, mas se gerenciam na Prancha 13.</strong> Um lugar só para adicionar evidência, sem duplicar o controle.</li>
+        </ul>
+      </aside>
+    </sc-if>
+  </div>
+</main>
+</sc-if>
+
+<sc-if value="{{ vCertificados }}" hint-placeholder-val="{{ false }}">
+<main style="max-width:1440px;margin:0 auto;padding:20px">
+  <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start">
+    <div style="flex:999 1 460px;min-width:300px;display:flex;flex-direction:column;gap:16px">
+      <h1 style="margin:0;font-size:24px;letter-spacing:-.01em;color:#0E2138">Certificados</h1>
+      <p style="margin:0;font-size:13.5px;line-height:1.55;color:#465A73">Envie certificados de cursos e cada um pode virar uma habilidade no seu currículo, sem digitar de novo.</p>
+
+      <button type="button" onClick="{{ nadaAinda }}" style="width:100%;border:1px dashed #B4C5DA;border-radius:12px;background:#F8FBFD;padding:28px 16px;cursor:pointer;text-align:center" style-hover="border-color:#042D5C;background:#F6F9FC" style-focus="outline:3px solid #7FA8D4;outline-offset:2px">
+        <div style="font-size:15px;font-weight:700;color:#0E2138">Arraste um certificado aqui ou clique para escolher</div>
+        <div style="margin-top:4px;font-size:13px;color:#465A73">PDF ou imagem, até 5 MB</div>
+      </button>
+
+      <div style="display:flex;gap:10px;align-items:flex-start;background:#FDF3E7;border:1px solid #F3D3A6;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.5;color:#93370D">
+        <span aria-hidden="true">⚑</span>
+        <div><strong>Leitura automática do certificado é pendente de implementação.</strong> Extrair o nome do curso e a habilidade de um PDF exige OCR/parsing no backend — ainda não definido. Nesta prancha, os dois certificados abaixo estão pré-carregados para ilustrar o fluxo já com a habilidade extraída.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{ certificados }}" as="c" hint-placeholder-count="2">
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;border:1px solid #D5E0EE;background:#fff;border-radius:12px;padding:14px 16px">
+            <div style="flex:1 1 200px;min-width:0">
+              <div style="font-size:14px;font-weight:700;color:#0E2138">{{ c.nome }}</div>
+              <div style="font-size:12.5px;color:#465A73">Habilidade identificada: {{ c.habilidade }}</div>
+            </div>
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#0E2138;cursor:pointer">
+              <input type="checkbox" checked="{{ c.incluido }}" onChange="{{ c.toggle }}" style="width:19px;height:19px;accent-color:#042D5C;cursor:pointer">
+              Incluir no currículo
+            </label>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ notas }}" hint-placeholder-val="{{ true }}">
+      <aside style="flex:1 1 300px;max-width:340px;min-width:264px;background:#042D5C;color:#E2EDF7;border-radius:14px;padding:20px">
+        <div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Prancha 13 · Decisões e por quê</div>
+        <h2 style="margin:8px 0 12px;font-size:18px;color:#fff">Certificados</h2>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:11px;font-size:13px;line-height:1.55">
+          <li><strong style="color:#fff">O aviso de pendência é honesto.</strong> Ler um PDF e extrair a habilidade é OCR/parsing real; a tela mostra o resultado esperado, não finge que o backend já existe.</li>
+          <li><strong style="color:#fff">Cada certificado tem um interruptor, não uma decisão automática.</strong> A habilidade só entra no currículo se você confirmar — evita currículo inflado por um certificado irrelevante.</li>
+          <li><strong style="color:#fff">Atualiza o currículo, não substitui.</strong> As habilidades de certificado se somam às da Prancha 12; nada é sobrescrito.</li>
+        </ul>
+      </aside>
+    </sc-if>
+  </div>
+</main>
+</sc-if>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mostrarNotas&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Apresentação&quot;,&quot;label&quot;:&quot;Notas “Decisões e por quê”&quot;},&quot;mostrarPendencias&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Apresentação&quot;,&quot;label&quot;:&quot;Selos de pendência de dado&quot;},&quot;navegacaoResultados&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;paginacao&quot;,&quot;carregar-mais&quot;],&quot;default&quot;:&quot;paginacao&quot;,&quot;tsType&quot;:&quot;'paginacao' | 'carregar-mais'&quot;,&quot;section&quot;:&quot;Listagem&quot;,&quot;label&quot;:&quot;Navegação dos resultados&quot;}}">
+const VAGAS = [
+  { id:'v1', titulo:'Estagiário de Desenvolvimento Back-end Python', empresa:'Nexus Sistemas', link:'https://www.ciadeestagios.com.br/vaga/back-end-python', salario:'R$ 1.800,00', dias:0, dataColeta:'05/09/2026, 06:00 (UTC)', modalidade:'Híbrido', area:'Desenvolvimento', semestreMin:5, pct:92,
+    razao:'Pede Python e SQL, ambos na sua grade desde o 3º semestre',
+    criterios:[
+      {texto:'Pede Python, presente no seu curso a partir do 3º semestre', positivo:true},
+      {texto:'Pede noções de banco relacional — Banco de Dados I concluída no 4º semestre', positivo:true},
+      {texto:'Aceita estágio de 6 horas, compatível com curso noturno', positivo:true},
+      {texto:'Menciona Docker, que só aparece na grade no 9º semestre', positivo:false}
+    ],
+    descricao:'Estágio em squad de plataforma. Você vai atuar na manutenção de APIs REST em Python (FastAPI), escrever consultas SQL e participar das revisões de código junto aos desenvolvedores plenos.\n\nRequisitos:\n- cursando Engenharia/Ciência da Computação ou Análise e Desenvolvimento de Sistemas, a partir do 4º semestre\n- lógica de programação e Python\n- noções de SQL\n\nDesejável: Git, Docker, testes automatizados.\n\nBenefícios: bolsa-auxílio, vale-transporte, vale-refeição, 6h/dia, possibilidade de efetivação.' },
+
+  { id:'v2', titulo:'Estágio em Análise de Dados', empresa:'Grupo Vertere', link:'https://www.ciadeestagios.com.br/vaga/analise-dados', salario:'1500-2000', dias:1, dataColeta:'04/09/2026, 06:00 (UTC)', modalidade:'Presencial', area:'Dados', semestreMin:4, pct:84,
+    razao:'Pede SQL e Excel avançado, cobertos até o 4º semestre',
+    criterios:[
+      {texto:'Pede SQL, presente no seu curso a partir do 4º semestre', positivo:true},
+      {texto:'Pede estatística descritiva — Probabilidade e Estatística concluída no 5º semestre', positivo:true},
+      {texto:'Presencial em São Bernardo do Campo, sem informação de turno na origem', positivo:false}
+    ],
+    descricao:'Apoio ao time de BI na construção de relatórios gerenciais. Rotina: extração de dados em SQL, tratamento em planilhas e manutenção de painéis no Power BI.\n\nSalário informado na origem como faixa: 1500-2000.' },
+
+  { id:'v3', titulo:'Jovem Aprendiz — Suporte de Infraestrutura', empresa:'Tecnolar Distribuidora', link:'https://www.ciadeestagios.com.br/vaga/aprendiz-infra', salario:'', dias:2, dataColeta:'03/09/2026, 06:00 (UTC)', modalidade:'Presencial', area:'Infraestrutura', semestreMin:1, pct:61,
+    razao:'Programa de aprendiz: sem exigência técnica, mas abaixo do seu semestre',
+    criterios:[
+      {texto:'Não exige experiência prévia nem semestre mínimo', positivo:true},
+      {texto:'Programa de aprendiz costuma priorizar quem está nos primeiros semestres — você está no 7º', positivo:false},
+      {texto:'Escala 5x2 em horário comercial integral, incompatível com curso noturno de 10 semestres', positivo:false}
+    ],
+    descricao:'' },
+
+  { id:'v4', titulo:'Estagiário de QA — Testes Manuais', empresa:'Órbita Software', link:'https://www.ciadeestagios.com.br/vaga/qa-manual', salario:'A combinar', dias:2, dataColeta:'03/09/2026, 06:00 (UTC)', modalidade:'Remoto', area:'QA', semestreMin:3, pct:78,
+    razao:'Pede lógica e escrita de casos de teste, sem tecnologia fora da sua grade',
+    criterios:[
+      {texto:'Não exige experiência prévia em QA', positivo:true},
+      {texto:'Pede noções de banco de dados e API, cobertas no 4º e 6º semestres', positivo:true},
+      {texto:'Salário declarado como “A combinar” — impossível avaliar a compatibilidade financeira', positivo:false}
+    ],
+    descricao:'Execução de casos de teste manuais em produto SaaS, registro de defeitos em Jira e apoio à documentação de regressão.\n\nRemoto com um encontro presencial mensal em São Caetano do Sul.\n\nSalário: A combinar.' },
+
+  { id:'v5', titulo:'Estágio em Desenvolvimento Front-end React', empresa:'Pilar Digital', link:'https://www.ciadeestagios.com.br/vaga/front-react', salario:'R$ 2.100,00', dias:0, dataColeta:'05/09/2026, 06:00 (UTC)', modalidade:'Remoto', area:'Desenvolvimento', semestreMin:5, pct:88,
+    razao:'Pede JavaScript e HTML/CSS, na sua grade desde o 2º semestre',
+    criterios:[
+      {texto:'Pede JavaScript, HTML e CSS — Programação para Web concluída no 2º semestre', positivo:true},
+      {texto:'React é desejável, não obrigatório', positivo:true},
+      {texto:'Pede Git, presente nas disciplinas de projeto a partir do 5º semestre', positivo:true},
+      {texto:'Menciona TypeScript, ausente da grade do curso', positivo:false}
+    ],
+    descricao:'Estágio na squad de produto. Implementação de telas em React com Tailwind, consumo de APIs REST e participação nas cerimônias ágeis.\n\nRequisitos: HTML, CSS, JavaScript e vontade de aprender React. Desejável Git e noções de acessibilidade.' },
+
+  { id:'v6', titulo:'Estagiário de Suporte Técnico N1', empresa:'Metalúrgica Andrade', link:'https://www.ciadeestagios.com.br/vaga/suporte-n1', salario:'R$ 1.400,00', dias:5, dataColeta:'31/08/2026, 06:00 (UTC)', modalidade:'Presencial', area:'Suporte', semestreMin:1, pct:45,
+    razao:'Escala 6x1 em horário comercial, incompatível com curso noturno',
+    criterios:[
+      {texto:'Não exige tecnologia fora da sua grade', positivo:true},
+      {texto:'Escala 6x1 em horário comercial, incompatível com curso noturno', positivo:false},
+      {texto:'Atividade de suporte N1 não avança nas competências do 7º semestre', positivo:false}
+    ],
+    descricao:'Atendimento de chamados N1: formatação de estações, troca de periféricos, apoio ao usuário de fábrica e registro em planilha de ocorrências. Escala 6x1, das 8h às 17h.' },
+
+  { id:'v7', titulo:'Estágio em Engenharia de Dados (Pipelines)', empresa:'Cobalto Analytics', link:'https://www.ciadeestagios.com.br/vaga/eng-dados', salario:'R$ 2.400,00', dias:3, dataColeta:'02/09/2026, 06:00 (UTC)', modalidade:'Híbrido', area:'Dados', semestreMin:8, pct:57,
+    razao:'Pede Spark e Airflow, fora da grade do seu curso',
+    criterios:[
+      {texto:'Pede Python e SQL, ambos na sua grade', positivo:true},
+      {texto:'Pede Apache Spark e Airflow, ausentes da grade do curso', positivo:false},
+      {texto:'Pede experiência anterior com pipelines em produção', positivo:false}
+    ],
+    descricao:'Apoio ao time de dados na construção e monitoramento de pipelines em Airflow, transformações em Spark e modelagem de tabelas analíticas em data warehouse.' },
+
+  { id:'v8', titulo:'Estagiário de Desenvolvimento .NET', empresa:'Sigma Automação Industrial', link:'https://www.ciadeestagios.com.br/vaga/dev-dotnet', salario:'R$ 1.950,00', dias:4, dataColeta:'01/09/2026, 06:00 (UTC)', modalidade:'Presencial', area:'Desenvolvimento', semestreMin:5, pct:71,
+    razao:'Pede orientação a objetos (na sua grade), mas em C#, que o curso não cobre',
+    criterios:[
+      {texto:'Pede programação orientada a objetos, concluída no 3º semestre', positivo:true},
+      {texto:'Pede SQL Server — Banco de Dados II concluída no 5º semestre', positivo:true},
+      {texto:'A linguagem é C#, que não aparece na grade do curso', positivo:false}
+    ],
+    descricao:'Manutenção de sistema legado em .NET Framework e apoio à migração para .NET 8. Integração com equipamentos de automação industrial via OPC.' }
+];
+
+const PORTAIS = [
+  { nome:'Portal do Aluno', desc:'Notas, boletim, matrícula e financeiro.' },
+  { nome:'Novo Portal do Professor', desc:'Diário de classe e lançamento de notas.' },
+  { nome:'Portal Antigo do Professor/Funcionário', desc:'Acesso legado, em desativação gradual.' },
+  { nome:'Moodle (Graduação)', desc:'Ambiente virtual de aprendizagem dos cursos de graduação.' },
+  { nome:'AVA Pós', desc:'Ambiente virtual dos cursos de pós-graduação.' },
+  { nome:'Cursos Livres', desc:'Extensão e cursos de curta duração.' },
+  { nome:'Portal Mobile', desc:'Versão do portal para aplicativo.' },
+  { nome:'PROJETO STARTME', desc:'Vagas de estágio e primeiro emprego em TI, filtradas para o seu curso e semestre.', novo:true }
+];
+
+const CANDIDATURAS = [
+  { protocolo:'SM-2026-0391', titulo:'Estágio em Análise de Dados', empresa:'Grupo Vertere', link:'https://www.ciadeestagios.com.br/vaga/analise-dados', data:'28/08/2026', status:'entrevista',
+    etapas:[ {nome:'Candidatura enviada', quando:'28/08/2026', feita:true}, {nome:'Em análise pela empresa', quando:'30/08/2026', feita:true}, {nome:'Entrevista agendada', quando:'09/09/2026 · 14h', feita:true}, {nome:'Resultado final', quando:'—', feita:false} ] },
+  { protocolo:'SM-2026-0355', titulo:'Estagiário de QA — Testes Manuais', empresa:'Órbita Software', link:'https://www.ciadeestagios.com.br/vaga/qa-manual', data:'19/08/2026', status:'analise',
+    etapas:[ {nome:'Candidatura enviada', quando:'19/08/2026', feita:true}, {nome:'Em análise pela empresa', quando:'21/08/2026', feita:true}, {nome:'Entrevista', quando:'—', feita:false}, {nome:'Resultado final', quando:'—', feita:false} ] },
+  { protocolo:'SM-2026-0298', titulo:'Estágio em Desenvolvimento Front-end React', empresa:'Pilar Digital', link:'https://www.ciadeestagios.com.br/vaga/front-react', data:'02/08/2026', status:'recusada',
+    etapas:[ {nome:'Candidatura enviada', quando:'02/08/2026', feita:true}, {nome:'Em análise pela empresa', quando:'05/08/2026', feita:true}, {nome:'Não selecionado', quando:'14/08/2026', feita:true} ] },
+  { protocolo:'SM-2026-0201', titulo:'Estagiário de Desenvolvimento Back-end Python', empresa:'Nexus Sistemas', link:'https://www.ciadeestagios.com.br/vaga/back-end-python', data:'10/07/2026', status:'finalizada',
+    etapas:[ {nome:'Candidatura enviada', quando:'10/07/2026', feita:true}, {nome:'Entrevista realizada', quando:'22/07/2026', feita:true}, {nome:'Contratado', quando:'01/08/2026', feita:true} ] }
+];
+
+function mascaraCpf(v) {
+  const d = v.replace(/\D/g, '').slice(0, 11);
+  let out = d;
+  if (d.length > 9) out = d.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+  else if (d.length > 6) out = d.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+  else if (d.length > 3) out = d.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+  return out;
+}
+
+const FERRAMENTAS = ['Certificador de Documentos', 'Validador Diploma Digital', 'Validador Histórico Escolar Digital', 'Consulta Pública de Diplomas'];
+
+const CURRICULO_SECOES = {
+  formacao: [{ curso:'Engenharia de Computação', instituicao:'Centro Universitário Fundação Santo André', periodo:'2023 — previsão 2028 · 7º semestre' }],
+  experiencias: [],
+  habilidades: ['Python', 'SQL', 'HTML/CSS/JavaScript', 'Git'],
+  idiomas: ['Inglês — intermediário'],
+  links: { github:'github.com/viniciuspiva8', linkedin:'linkedin.com/in/viniciuspereira' }
+};
+
+const CERTIFICADOS = [
+  { id:'c1', nome:'Python para Data Science — Coursera.pdf', habilidade:'Python (Data Science)', incluido:true },
+  { id:'c2', nome:'Fundamentos de SQL — Alura.pdf', habilidade:'SQL', incluido:true }
+];
+
+const FAIXAS = [
+  { v:'todas', label:'Qualquer valor' },
+  { v:'ate1500', label:'Até R$ 1.500' },
+  { v:'1500a2000', label:'R$ 1.500 a R$ 2.000' },
+  { v:'acima2000', label:'Acima de R$ 2.000' },
+  { v:'sem', label:'Não informado na origem' }
+];
+const MODALIDADES = ['Presencial', 'Híbrido', 'Remoto'];
+const AREAS = ['Desenvolvimento', 'Dados', 'Infraestrutura', 'Suporte', 'QA'];
+const JANELAS = [ { v:'1', label:'Hoje' }, { v:'7', label:'7 dias' }, { v:'30', label:'30 dias' } ];
+const SEMESTRE_ALUNO = 7;
+const POR_PAGINA = 5;
+
+class Component extends DCLogic {
+  state = {
+    view:'portal', sel:'v1', menuAberto:false, aviso:'',
+    q:'', faixa:'todas', mods:[], areas:[], compatOnly:false, janela:'30',
+    ord:'compat', pagina:1, visiveis:POR_PAGINA,
+    salvas:['v4'], aplicadas:['v2'],
+    modal:null,
+    notasOverride:null, navRecolhida:false,
+    cpf:'', senha:'', verSenha:false, erroLogin:false,
+    statusFiltro:'todos', candAberta:null,
+    perfil:{ email:'vinicius.pereira@aluno.fsa.br', telefone:'(11) 9 8123-4567', github:'github.com/viniciuspiva8', linkedin:'linkedin.com/in/viniciuspereira', disponibilidade:'Manhã e tarde · 6h/dia' },
+    interesses:['Desenvolvimento','Dados'],
+    certificados: CERTIFICADOS.map(c => ({ ...c }))
+  };
+
+  salarioMin(v) {
+    const nums = (v.salario || '').replace(/\./g, '').match(/\d+/g);
+    if (!nums) return null;
+    return parseInt(nums[0], 10);
+  }
+
+  passaFiltro(v) {
+    const s = this.state;
+    if (s.q) {
+      const alvo = (v.titulo + ' ' + v.empresa + ' ' + v.descricao).toLowerCase();
+      if (!alvo.includes(s.q.toLowerCase())) return false;
+    }
+    if (s.compatOnly && v.semestreMin > SEMESTRE_ALUNO) return false;
+    if (s.compatOnly && v.pct < 70) return false;
+    if (s.mods.length && !s.mods.includes(v.modalidade)) return false;
+    if (s.areas.length && !s.areas.includes(v.area)) return false;
+    if (parseInt(s.janela, 10) === 1 && v.dias > 0) return false;
+    if (parseInt(s.janela, 10) === 7 && v.dias > 7) return false;
+    if (s.faixa !== 'todas') {
+      const min = this.salarioMin(v);
+      if (s.faixa === 'sem') { if (min !== null) return false; }
+      else if (min === null) return false;
+      else if (s.faixa === 'ate1500' && min > 1500) return false;
+      else if (s.faixa === '1500a2000' && (min < 1500 || min > 2000)) return false;
+      else if (s.faixa === 'acima2000' && min <= 2000) return false;
+    }
+    return true;
+  }
+
+  quando(d) {
+    if (d === 0) return 'hoje';
+    if (d === 1) return 'ontem';
+    return 'há ' + d + ' dias';
+  }
+
+  set(patch) { this.setState(patch); }
+
+  setPerfil(campo, valor) { this.setState(st => ({ perfil: { ...st.perfil, [campo]: valor } })); }
+
+  toggleCertificado(id) { this.setState(st => ({ certificados: st.certificados.map(c => c.id === id ? { ...c, incluido: !c.incluido } : c) })); }
+
+  enfeitar(v) {
+    const s = this.state;
+    const aplicada = s.aplicadas.includes(v.id);
+    const salva = s.salvas.includes(v.id);
+    return {
+      ...v,
+      monograma: v.empresa.trim().charAt(0).toUpperCase(),
+      quando: this.quando(v.dias),
+      temSalario: !!v.salario, semSalario: !v.salario,
+      compatAlta: v.pct >= 80, compatMedia: v.pct >= 60 && v.pct < 80, compatBaixa: v.pct < 60,
+      nivel: v.pct >= 80 ? 'Alta compatibilidade com o seu momento no curso' : (v.pct >= 60 ? 'Compatibilidade parcial — leia as ressalvas' : 'Distante do seu momento no curso'),
+      largura: v.pct + '%',
+      aplicada, naoAplicada: !aplicada,
+      salva, naoSalva: !salva,
+      temDescricao: !!v.descricao, semDescricao: !v.descricao,
+      criterios: (v.criterios || []).map(c => ({ ...c, negativo: !c.positivo })),
+      rotuloCompat: v.pct + (v.pct >= 80 ? '% compatível' : (v.pct >= 60 ? '% parcial' : '% distante')),
+      abrir: () => this.setState({ view:'detalhe', sel:v.id, menuAberto:false }),
+      salvar: () => this.setState(st => ({
+        salvas: st.salvas.includes(v.id) ? st.salvas.filter(x => x !== v.id) : st.salvas.concat(v.id)
+      }))
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const paginacao = (this.props.navegacaoResultados ?? 'paginacao') === 'paginacao';
+
+    let lista = VAGAS.filter(v => this.passaFiltro(v));
+    if (s.ord === 'compat') lista = lista.slice().sort((a,b) => b.pct - a.pct);
+    if (s.ord === 'recentes') lista = lista.slice().sort((a,b) => a.dias - b.dias);
+    if (s.ord === 'salario') lista = lista.slice().sort((a,b) => (this.salarioMin(b) || -1) - (this.salarioMin(a) || -1));
+
+    const total = lista.length;
+    const totalPaginas = Math.max(1, Math.ceil(total / POR_PAGINA));
+    const pagina = Math.min(s.pagina, totalPaginas);
+    const recorte = paginacao
+      ? lista.slice((pagina - 1) * POR_PAGINA, pagina * POR_PAGINA)
+      : lista.slice(0, s.visiveis);
+
+    const paginas = [];
+    for (let i = 1; i <= totalPaginas; i++) {
+      paginas.push({ n: i, atual: i === pagina, outra: i !== pagina, ir: () => this.setState({ pagina: i }) });
+    }
+
+    const atual = VAGAS.find(v => v.id === s.sel) || VAGAS[0];
+    const d = this.enfeitar(atual);
+    const candFiltradas = s.statusFiltro === 'todos' ? CANDIDATURAS : CANDIDATURAS.filter(c => c.status === s.statusFiltro);
+
+    return {
+      vLista: s.view === 'lista', vDetalhe: s.view === 'detalhe', vSistema: s.view === 'sistema',
+      mostrarApp: ['home','lista','detalhe','candidaturas','perfil','curriculo','certificados'].includes(s.view),
+      vPortal: s.view === 'portal', vLogin: s.view === 'login', vConsent: s.view === 'consent',
+      vHome: s.view === 'home', vCand: s.view === 'candidaturas', vPerfil: s.view === 'perfil',
+      vExcecoes: s.view === 'excecoes', vCurriculo: s.view === 'curriculo', vCertificados: s.view === 'certificados',
+      ferramentas: FERRAMENTAS.map(nome => ({ nome })),
+      navExpandida: !s.navRecolhida, navRecolhida: s.navRecolhida,
+      navLargura: s.navRecolhida ? '56px' : '208px',
+      navRotuloToggle: s.navRecolhida ? 'Expandir navegação' : 'Recolher navegação',
+      toggleNav: () => this.setState(st => ({ navRecolhida: !st.navRecolhida })),
+      navGrupos: [
+        { rotulo:'Entrada', itens:[['portal','1','Portal'],['login','2','Login'],['consent','3','Consentimento']] },
+        { rotulo:'Aplicação', itens:[['home','4','Início'],['lista','5','Vagas'],['detalhe','6','Detalhe + 7'],['candidaturas','8','Candidaturas'],['perfil','9','Perfil']] },
+        { rotulo:'Currículo', itens:[['curriculo','12','Currículo'],['certificados','13','Certificados']] },
+        { rotulo:'Referência', itens:[['excecoes','10','Exceções'],['sistema','11','Sistema']] }
+      ].map(g => ({ rotulo:g.rotulo, itens: g.itens.map(([v,num,titulo]) => ({
+        numero:num, titulo, label: num + ' ' + titulo, ativo: s.view === v, inativo: s.view !== v,
+        ir: () => this.setState({ view:v, menuAberto:false, aviso:'' })
+      })) })),
+      notas: s.notasOverride === null ? (this.props.mostrarNotas ?? true) : s.notasOverride,
+      pendencias: this.props.mostrarPendencias ?? true,
+      menuAberto: s.menuAberto,
+      aviso: s.aviso,
+      irLista: () => this.setState({ view:'lista', menuAberto:false }),
+      irDetalhe: () => this.setState({ view:'detalhe', menuAberto:false }),
+      irSistema: () => this.setState({ view:'sistema', menuAberto:false }),
+      toggleNotas: () => this.setState(st => ({
+        notasOverride: !(st.notasOverride === null ? (this.props.mostrarNotas ?? true) : st.notasOverride)
+      })),
+      toggleMenu: () => this.setState(st => ({ menuAberto: !st.menuAberto })),
+      irPerfil: () => this.setState({ view:'perfil', menuAberto:false }),
+      irCandidaturas: () => this.setState({ view:'candidaturas', menuAberto:false }),
+      irPortal: () => this.setState({ view:'portal', menuAberto:false, aviso:'' }),
+      fecharAviso: () => this.setState({ aviso:'' }),
+
+      q: s.q,
+      setQ: e => this.setState({ q: e.target.value, pagina:1, visiveis:POR_PAGINA }),
+      compatOnly: s.compatOnly,
+      toggleCompat: () => this.setState(st => ({ compatOnly: !st.compatOnly, pagina:1 })),
+      faixas: FAIXAS.map(f => ({ label:f.label, on: s.faixa === f.v, set: () => this.setState({ faixa:f.v, pagina:1 }) })),
+      modalidades: MODALIDADES.map(m => ({ label:m, on: s.mods.includes(m), toggle: () => this.setState(st => ({
+        mods: st.mods.includes(m) ? st.mods.filter(x => x !== m) : st.mods.concat(m), pagina:1 })) })),
+      areas: AREAS.map(a => ({ label:a, n: VAGAS.filter(v => v.area === a).length, on: s.areas.includes(a), toggle: () => this.setState(st => ({
+        areas: st.areas.includes(a) ? st.areas.filter(x => x !== a) : st.areas.concat(a), pagina:1 })) })),
+      janelas: JANELAS.map(j => ({ label:j.label, on: s.janela === j.v, set: () => this.setState({ janela:j.v, pagina:1 }) })),
+      limparFiltros: () => this.setState({ q:'', faixa:'todas', mods:[], areas:[], compatOnly:false, janela:'30', pagina:1, visiveis:POR_PAGINA }),
+
+      ord: s.ord,
+      setOrd: e => this.setState({ ord: e.target.value, pagina:1 }),
+      resultados: total === 1 ? '1 vaga encontrada' : total + ' vagas encontradas',
+      totalBruto: VAGAS.length,
+      vagas: recorte.map(v => this.enfeitar(v)),
+      vazioPorFiltro: total === 0,
+      temPaginacao: paginacao && total > POR_PAGINA,
+      temCarregarMais: !paginacao && total > s.visiveis,
+      carregarMais: () => this.setState(st => ({ visiveis: st.visiveis + POR_PAGINA })),
+      paginas,
+      paginaAnterior: () => this.setState(st => ({ pagina: Math.max(1, st.pagina - 1) })),
+      paginaProxima: () => this.setState({ pagina: Math.min(totalPaginas, pagina + 1) }),
+
+      d,
+      salvarAtual: d.salvar,
+      modalOk: s.modal === 'ok',
+      marcarCliqueOrigem: () => {},
+      toggleAplicada: () => this.setState(st => {
+        const ja = st.aplicadas.includes(st.sel);
+        return { aplicadas: ja ? st.aplicadas.filter(x => x !== st.sel) : st.aplicadas.concat(st.sel), modal: ja ? null : 'ok' };
+      }),
+      verCandidaturas: () => this.setState({ modal:null, view:'candidaturas' }),
+      continuarBuscando: () => this.setState({ modal:null, view:'lista' }),
+
+      // Prancha 1
+      portais: PORTAIS.map(p => ({
+        nome:p.nome, desc:p.desc, destaque:!!p.novo, comum:!p.novo,
+        ir: p.novo
+          ? () => this.setState({ view:'login', aviso:'' })
+          : () => this.setState({ aviso:'Este cartão faz parte do ambiente simulado do portal e não abre nada — só o cartão PROJETO STARTME é funcional na demonstração.' })
+      })),
+
+      // Prancha 2
+      cpf: s.cpf, senha: s.senha,
+      setCpf: e => this.setState({ cpf: mascaraCpf(e.target.value), erroLogin:false }),
+      setSenha: e => this.setState({ senha: e.target.value, erroLogin:false }),
+      tipoSenha: s.verSenha ? 'text' : 'password',
+      rotuloSenha: s.verSenha ? 'Ocultar' : 'Mostrar',
+      toggleSenha: () => this.setState(st => ({ verSenha: !st.verSenha })),
+      erroLogin: s.erroLogin,
+      podeEntrar: s.cpf.length === 14 && s.senha.length > 0,
+      naoPodeEntrar: !(s.cpf.length === 14 && s.senha.length > 0),
+      preencherDemo: () => this.setState({ cpf:'123.456.789-00', senha:'demo2026', erroLogin:false }),
+      entrar: () => {
+        if (s.cpf === '123.456.789-00' && s.senha === 'demo2026') this.setState({ view:'consent', erroLogin:false });
+        else this.setState({ erroLogin:true });
+      },
+
+      // Prancha 3
+      dadosSim: [
+        { nome:'Vínculo acadêmico ativo (sim/não)', para:'Para confirmar que você é aluno da instituição' },
+        { nome:'Nome completo', para:'Para personalizar a experiência dentro do StartMe' },
+        { nome:'Curso', para:'Para filtrar vagas da sua área de formação' },
+        { nome:'Semestre em andamento', para:'Para calcular a compatibilidade da vaga com o seu momento no curso' }
+      ],
+      dadosNao: ['Notas','Histórico escolar','Dados financeiros','Faltas','CPF completo','Documentos'],
+      autorizar: () => this.setState({ view:'home', aviso:'Autorização concedida. O StartMe recebeu vínculo, nome, curso e semestre — e nada além disso.' }),
+      naoAutorizar: () => this.setState({ view:'excecoes', aviso:'Você recusou o compartilhamento. É o estado 6 da Prancha 10, abaixo — com caminho para autorizar depois.' }),
+
+      // Prancha 4
+      indicadores: [
+        { rotulo:'Vagas ativas hoje', valor: VAGAS.length, nota:'Após remover as expiradas na origem' },
+        { rotulo:'Compatíveis com o seu semestre', valor: VAGAS.filter(v => v.pct >= 70 && v.semestreMin <= SEMESTRE_ALUNO).length, nota:'7º semestre de Engenharia de Computação' },
+        { rotulo:'Candidaturas em andamento', valor: CANDIDATURAS.filter(c => ['enviada','analise','entrevista'].includes(c.status)).length, nota:'Enviada, em análise ou entrevista' }
+      ],
+      recomendadas: VAGAS.slice().sort((a,b) => b.pct - a.pct).slice(0,3).map(v => this.enfeitar(v)),
+      recentes: VAGAS.slice().sort((a,b) => a.dias - b.dias).slice(0,4).map(v => this.enfeitar(v)),
+
+      // Prancha 8
+      totalCand: CANDIDATURAS.length === 1 ? '1 candidatura' : CANDIDATURAS.length + ' candidaturas',
+      statusFiltros: [['todos','Todas'],['enviada','Enviada'],['analise','Em análise'],['entrevista','Entrevista'],['recusada','Não selecionado'],['finalizada','Finalizada']]
+        .map(([v,label]) => ({ label, on: s.statusFiltro === v, off: s.statusFiltro !== v, set: () => this.setState({ statusFiltro:v, candAberta:null }) })),
+      limparStatus: () => this.setState({ statusFiltro:'todos' }),
+      candidaturas: candFiltradas.map(c => ({
+        ...c,
+        monograma: c.empresa.trim().charAt(0).toUpperCase(),
+        stEnviada: c.status === 'enviada', stAnalise: c.status === 'analise',
+        stEntrevista: c.status === 'entrevista', stRecusada: c.status === 'recusada',
+        stFinalizada: c.status === 'finalizada',
+        aberta: s.candAberta === c.protocolo, fechada: s.candAberta !== c.protocolo,
+        etapas: c.etapas.map(e => ({ ...e, pendente: !e.feita })),
+        toggle: () => this.setState(st => ({ candAberta: st.candAberta === c.protocolo ? null : c.protocolo }))
+      })),
+      candVazia: candFiltradas.length === 0,
+
+      // Prancha 9
+      camposAcademicos: [
+        { rotulo:'Nome completo', valor:'Vinicius Pereira' },
+        { rotulo:'Curso', valor:'Engenharia de Computação' },
+        { rotulo:'Semestre', valor:'7º de 10' },
+        { rotulo:'Situação do vínculo', valor:'Ativo' }
+      ],
+      camposEditaveis: [
+        { rotulo:'E-mail de contato', valor:s.perfil.email, dica:'seu.nome@aluno.fsa.br', set: e => this.setPerfil('email', e.target.value) },
+        { rotulo:'Telefone', valor:s.perfil.telefone, dica:'(11) 9 0000-0000', set: e => this.setPerfil('telefone', e.target.value) },
+        { rotulo:'Disponibilidade de horário', valor:s.perfil.disponibilidade, dica:'Manhã · 6h/dia', set: e => this.setPerfil('disponibilidade', e.target.value) },
+        { rotulo:'GitHub', valor:s.perfil.github, dica:'github.com/usuario', set: e => this.setPerfil('github', e.target.value) },
+        { rotulo:'LinkedIn', valor:s.perfil.linkedin, dica:'linkedin.com/in/usuario', set: e => this.setPerfil('linkedin', e.target.value) }
+      ],
+      interesses: AREAS.map(a => ({ label:a, on: s.interesses.includes(a), toggle: () => this.setState(st => ({
+        interesses: st.interesses.includes(a) ? st.interesses.filter(x => x !== a) : st.interesses.concat(a) })) })),
+      revogar: () => this.setState({ view:'excecoes', aviso:'Autorização revogada. O aluno cai no estado 6 abaixo: o produto continua, sem compatibilidade.' }),
+
+      // Prancha 12 e 13
+      curriculo: CURRICULO_SECOES,
+      certificados: s.certificados.map(c => ({ ...c, toggle: () => this.toggleCertificado(c.id) })),
+      habilidadesCurriculo: CURRICULO_SECOES.habilidades.concat(s.certificados.filter(c => c.incluido).map(c => c.habilidade)),
+      irCurriculo: () => this.setState({ view:'curriculo', menuAberto:false }),
+      irCertificados: () => this.setState({ view:'certificados', menuAberto:false }),
+
+      // Prancha 10 e utilitários
+      irLogin: () => this.setState({ view:'login', cpf:'', senha:'', erroLogin:false, aviso:'' }),
+      irConsent: () => this.setState({ view:'consent', aviso:'' }),
+      irListaLimpa: () => this.setState({ view:'lista', q:'', faixa:'todas', mods:[], areas:[], compatOnly:false, janela:'30', pagina:1, aviso:'' }),
+      nadaAinda: () => this.setState({ aviso:'Ação ilustrativa desta prancha — o comportamento real depende do endpoint correspondente, listado em “Contratos de API” na Prancha 11.' })
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+/* StartMe — folha de estilos única do frontend v1.1.
+   Tokens extraídos da Prancha 11 (Sistema de design) do protótipo original
+   (design-reference/StartMe.dc.html). Base: Manual da Marca da Fundação
+   Santo André — Azul Institucional #042D5C confirmado no manual; Verde-água
+   #00A99D derivado de amostra impressa e sinalizado como pendente de
+   confirmação (ver Prancha 11 / #view-sistema abaixo). */
+
+:root {
+  --acao-50: #EAF1F9;
+  --acao-300: #7FA8D4;
+  --acao-600: #042D5C;
+  --acao-700: #0A4A8F;
+  --acao-800: #02203F;
+
+  --agua-50: #E3F6F4;
+  --agua-200: #A6E1DC;
+  --agua-500: #00A99D;
+  --agua-700: #067A73;
+
+  --inst-100: #DCE7F3;
+
+  --superficie: #FFFFFF;
+  --superficie-alt: #F6F9FC;
+  --fundo: #F1F5FA;
+  --borda: #D5E0EE;
+  --borda-forte: #B4C5DA;
+
+  --texto-primario: #0E2138;
+  --texto-secundario: #465A73;
+  --texto-terciario: #64768F;
+  --texto-quaternario: #94A5BB;
+
+  --sucesso-texto: #05603A; --sucesso-fundo: #E7F6EE; --sucesso-borda: #A9DDC1;
+  --atencao-texto: #93370D; --atencao-fundo: #FDF3E7; --atencao-borda: #F3D3A6;
+  --erro-texto: #B42318;    --erro-fundo: #FDECEA;    --erro-borda: #F5C4BF;
+  --info-texto: #0A4A8F;    --info-fundo: #EAF2FE;    --info-borda: #B6D0FA;
+
+  --raio-sm: 8px;
+  --raio-md: 10px;
+  --raio-lg: 14px;
+  --raio-pill: 999px;
+
+  --sombra-1: 0 1px 2px rgba(4,45,92,.05);
+  --sombra-2: 0 8px 22px -14px rgba(4,45,92,.25);
+  --sombra-3: 0 24px 48px -24px rgba(4,45,92,.45);
+
+  --fonte-titulo: Georgia, "Times New Roman", serif;
+  --fonte-corpo: "Montserrat", system-ui, sans-serif;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--fonte-corpo);
+  background: var(--fundo);
+  color: var(--texto-primario);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--fonte-titulo); font-weight: 700; margin: 0; }
+a { color: var(--acao-600); text-decoration: underline; text-underline-offset: 2px; }
+a:hover { color: var(--acao-700); }
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+code { font-family: ui-monospace, SFMono-Regular, monospace; }
+:focus-visible { outline: 3px solid var(--acao-300); outline-offset: 2px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* ---------------- Layout raiz ---------------- */
+.sm-shell { min-height: 100vh; background: var(--fundo); display: flex; }
+.sm-main-col { flex: 1; min-width: 0; }
+.sm-container { max-width: 1440px; margin: 0 auto; padding: 20px; }
+.sm-container--narrow { max-width: 1180px; }
+.sm-container--sistema { max-width: 1180px; padding: 28px 20px 64px; }
+.sm-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+.sm-col-main { flex: 999 1 480px; min-width: 300px; }
+.sm-col-main--detalhe { flex: 999 1 460px; }
+
+/* ---------------- Navegação lateral (modo demo/QA) ---------------- */
+.sm-nav {
+  flex: none; width: 208px; background: #fff; color: var(--texto-primario);
+  padding: 14px 8px; display: flex; flex-direction: column; gap: 14px;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto; overflow-x: hidden;
+  z-index: 40; border-right: 1px solid #E4EBF4; transition: width .15s ease;
+}
+.sm-nav.is-collapsed { width: 56px; }
+.sm-nav__head { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 0 4px; }
+.sm-nav__brand { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--texto-terciario); white-space: nowrap; overflow: hidden; }
+.sm-nav__toggle {
+  flex: none; width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--borda);
+  background: #fff; color: var(--texto-secundario); font-size: 12px; cursor: pointer;
+}
+.sm-nav__toggle:hover { background: var(--superficie-alt); }
+.sm-nav__group { display: flex; flex-direction: column; gap: 3px; }
+.sm-nav__group-label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--texto-quaternario); padding: 6px 6px 0; white-space: nowrap; overflow: hidden; }
+.sm-nav__item {
+  text-align: left; min-height: 36px; padding: 0 8px; border-radius: 7px; border: none;
+  border-left: 3px solid transparent; background: transparent; color: var(--texto-secundario);
+  font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;
+  white-space: nowrap; overflow: hidden; width: 100%;
+}
+.sm-nav__item:hover { background: var(--superficie-alt); }
+.sm-nav__item.is-active { border-left-color: var(--acao-600); background: var(--fundo); color: var(--acao-600); font-weight: 700; }
+.sm-nav__item-num { flex: none; width: 18px; text-align: center; font-variant-numeric: tabular-nums; color: var(--texto-quaternario); }
+.sm-nav__item.is-active .sm-nav__item-num { color: inherit; }
+.sm-nav__notes-btn {
+  margin-top: auto; text-align: left; min-height: 36px; padding: 0 8px; border-radius: 7px;
+  border: 1px solid var(--borda); background: #fff; color: var(--texto-secundario);
+  font-size: 12.5px; font-weight: 600; cursor: pointer; white-space: nowrap; overflow: hidden;
+}
+.sm-nav__notes-btn:hover { background: var(--superficie-alt); }
+
+/* ---------------- Cabeçalho ---------------- */
+.sm-header { background: #fff; border-bottom: 1px solid var(--borda); position: sticky; top: 0; z-index: 30; }
+.sm-header__row { max-width: 1440px; margin: 0 auto; padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.sm-logo-btn { display: flex; align-items: center; gap: 10px; background: none; border: none; padding: 4px; cursor: pointer; border-radius: 8px; }
+.sm-logo-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(140deg, var(--acao-600), var(--acao-700)); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 18px; }
+.sm-logo-text { text-align: left; }
+.sm-logo-title { font-size: 16px; font-weight: 700; letter-spacing: -.01em; color: var(--texto-primario); font-family: var(--fonte-corpo); }
+.sm-logo-sub { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--texto-terciario); font-weight: 600; }
+.sm-search { flex: 999 1 280px; min-width: 200px; display: flex; align-items: center; gap: 8px; background: var(--superficie-alt); border: 1px solid var(--borda); border-radius: var(--raio-md); padding: 0 12px; min-height: 44px; }
+.sm-search:focus-within { border-color: var(--acao-600); }
+.sm-search input { flex: 1; min-width: 0; border: none; background: none; outline: none; font-size: 14px; color: var(--texto-primario); min-height: 42px; }
+.sm-avatar { width: 38px; height: 38px; border-radius: var(--raio-pill); background: var(--inst-100); color: var(--acao-700); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.sm-menu-btn { min-height: 44px; display: flex; align-items: center; gap: 6px; background: none; border: 1px solid var(--borda); border-radius: var(--raio-md); padding: 0 12px; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--texto-primario); }
+.sm-menu-btn:hover { background: var(--superficie-alt); }
+.sm-menu-drop { max-width: 1440px; margin: 0 auto; padding: 0 20px 12px; display: flex; justify-content: flex-end; }
+.sm-menu-card { border: 1px solid var(--borda); background: #fff; border-radius: 12px; box-shadow: var(--sombra-3); padding: 6px; min-width: 220px; display: flex; flex-direction: column; gap: 2px; }
+.sm-menu-card button { text-align: left; min-height: 44px; padding: 0 12px; border: none; background: none; border-radius: 8px; font-size: 14px; color: var(--texto-primario); cursor: pointer; }
+.sm-menu-card button:hover { background: var(--superficie-alt); }
+.sm-menu-card button.is-danger { color: var(--erro-texto); }
+.sm-menu-card button.is-danger:hover { background: var(--erro-fundo); }
+.sm-menu-card small { color: var(--texto-terciario); font-size: 12px; }
+
+.sm-contexto { max-width: 1440px; margin: 0 auto; padding: 14px 20px 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 13px; color: var(--texto-secundario); }
+
+/* ---------------- Etiquetas/pills ---------------- */
+.sm-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--raio-pill); padding: 5px 11px; font-weight: 600; font-size: 12px; }
+.sm-pill--inst { background: var(--inst-100); color: var(--acao-700); }
+.sm-pill--neutro { background: var(--superficie-alt); border: 1px solid #E1E9F3; color: var(--texto-secundario); }
+.sm-pill--info { background: var(--info-fundo); border: 1px solid var(--info-borda); color: var(--info-texto); }
+.sm-pill--atencao { background: var(--atencao-fundo); border: 1px solid var(--atencao-borda); color: var(--atencao-texto); font-weight: 700; text-transform: uppercase; letter-spacing: .04em; font-size: 10px; }
+.sm-pill--sucesso { background: var(--sucesso-fundo); border: 1px solid var(--sucesso-borda); color: var(--sucesso-texto); font-weight: 700; }
+.sm-pill--erro { background: var(--erro-fundo); border: 1px solid var(--erro-borda); color: var(--erro-texto); font-weight: 700; }
+
+/* ---------------- Alertas ---------------- */
+.sm-alerta { display: flex; gap: 10px; align-items: flex-start; border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.5; }
+.sm-alerta--info { background: var(--info-fundo); border: 1px solid var(--info-borda); color: var(--info-texto); }
+.sm-alerta--atencao { background: var(--atencao-fundo); border: 1px solid var(--atencao-borda); color: var(--atencao-texto); }
+.sm-alerta--erro { background: var(--erro-fundo); border: 1px solid var(--erro-borda); color: var(--erro-texto); }
+.sm-alerta--sucesso { background: var(--sucesso-fundo); border: 1px solid var(--sucesso-borda); color: var(--sucesso-texto); }
+.sm-alerta__fechar { min-width: 44px; min-height: 24px; border: none; background: none; cursor: pointer; font-size: 16px; color: inherit; }
+.sm-alerta-topo { max-width: 1440px; margin: 12px auto 0; padding: 0 20px; }
+
+.sm-faixa-simulado { background: var(--atencao-fundo); border-bottom: 1px solid var(--atencao-borda); color: var(--atencao-texto); padding: 9px 20px; font-size: 12.5px; font-weight: 700; letter-spacing: .02em; text-align: center; }
+
+/* ---------------- Cartões ---------------- */
+.sm-card { background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-lg); padding: 22px; }
+.sm-card--pad-sm { padding: 16px; }
+.sm-card--shadow { box-shadow: var(--sombra-1); }
+.sm-card--interactive:hover { border-color: var(--borda-forte); box-shadow: var(--sombra-2); }
+
+.sm-notas { background: var(--acao-600); color: #E2EDF7; border-radius: var(--raio-lg); padding: 20px; }
+.sm-notas__eyebrow { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #9DC1E4; }
+.sm-notas h2 { margin: 8px 0 12px; font-size: 18px; color: #fff; font-family: var(--fonte-corpo); }
+.sm-notas p { margin: 0 0 16px; font-size: 13px; line-height: 1.55; color: #BDD4EA; }
+.sm-notas ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 11px; font-size: 13px; line-height: 1.55; color: #E2EDF7; }
+.sm-notas ul.sm-notas__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 11px; }
+.sm-notas strong { color: #fff; }
+.sm-notas code { font-size: 12px; }
+.sm-aside-sticky { flex: 1 1 300px; max-width: 340px; min-width: 264px; }
+.sm-aside-sticky--detalhe { position: sticky; top: 96px; display: flex; flex-direction: column; gap: 16px; }
+
+/* ---------------- Botões ---------------- */
+.sm-btn { min-height: 44px; padding: 0 18px; border-radius: var(--raio-md); border: 1px solid transparent; font-size: 14px; font-weight: 600; cursor: pointer; }
+.sm-btn-primario { background: var(--acao-600); color: #fff; }
+.sm-btn-primario:hover { background: var(--acao-700); }
+.sm-btn-primario:disabled { background: var(--fundo); border-color: var(--borda); color: var(--texto-quaternario); cursor: not-allowed; }
+.sm-btn-secundario { background: #fff; border: 1px solid #BFCEDF; color: var(--texto-primario); }
+.sm-btn-secundario:hover { background: var(--superficie-alt); }
+.sm-btn-perigo { background: #fff; border: 1px solid var(--erro-borda); color: var(--erro-texto); }
+.sm-btn-perigo:hover { background: var(--erro-fundo); }
+.sm-btn-texto { min-height: 40px; padding: 0 4px; border: none; background: none; color: var(--acao-600); font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.sm-btn-chip { min-height: 36px; padding: 0 12px; border-radius: var(--raio-pill); border: 1px solid var(--borda); background: #fff; color: var(--texto-secundario); font-size: 13px; font-weight: 600; cursor: pointer; }
+.sm-btn-chip:hover { border-color: var(--borda-forte); background: var(--superficie-alt); }
+.sm-btn-chip.is-on { color: var(--acao-600); }
+.sm-btn-chip--pilula { min-height: 40px; padding: 0 13px; border-radius: var(--raio-pill); }
+.sm-btn-chip--pilula.is-on { background: var(--acao-600); border-color: var(--acao-600); color: #fff; }
+.sm-btn-block { width: 100%; }
+
+/* ---------------- Formulários ---------------- */
+.sm-field { display: flex; flex-direction: column; gap: 6px; }
+.sm-field label { font-size: 13px; font-weight: 600; color: var(--texto-primario); }
+.sm-field input[type="text"], .sm-field input[type="password"], .sm-field select {
+  min-height: 44px; border: 1px solid var(--borda); border-radius: var(--raio-md); background: #fff;
+  padding: 10px 12px; font-size: 14px; color: var(--texto-primario); width: 100%;
+}
+.sm-field input:focus, .sm-field select:focus { border-color: var(--acao-600); }
+.sm-field--readonly .sm-readonly-box { min-height: 44px; display: flex; align-items: center; border: 1px solid #E1E9F3; border-radius: var(--raio-md); background: var(--superficie-alt); padding: 10px 12px; font-size: 14.5px; font-weight: 600; color: #22364F; }
+.sm-checkbox { width: 20px; height: 20px; accent-color: var(--acao-600); cursor: pointer; flex: none; }
+.sm-radio { width: 18px; height: 18px; accent-color: var(--acao-600); cursor: pointer; }
+
+/* ---------------- Badges de compatibilidade ---------------- */
+.sm-compat { flex: none; text-align: right; border-radius: var(--raio-md); padding: 7px 11px; }
+.sm-compat--alta { background: var(--agua-50); border: 1px solid var(--agua-200); }
+.sm-compat--media { background: var(--atencao-fundo); border: 1px solid var(--atencao-borda); }
+.sm-compat--baixa { background: var(--superficie-alt); border: 1px solid var(--borda); }
+.sm-compat__valor { display: flex; align-items: center; justify-content: flex-end; font-size: 16px; font-weight: 700; }
+.sm-compat--alta .sm-compat__valor, .sm-compat--alta .sm-compat__razao { color: var(--agua-700); }
+.sm-compat--media .sm-compat__valor, .sm-compat--media .sm-compat__razao { color: var(--atencao-texto); }
+.sm-compat--baixa .sm-compat__valor, .sm-compat--baixa .sm-compat__razao { color: var(--texto-secundario); }
+.sm-compat__razao { font-size: 12px; max-width: 210px; }
+
+/* ---------------- Cartão de vaga ---------------- */
+.sm-vaga-card { background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-lg); padding: 18px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--sombra-1); }
+.sm-vaga-card:hover { border-color: var(--borda-forte); box-shadow: var(--sombra-2); }
+.sm-vaga-card__top { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start; }
+.sm-monograma { width: 46px; height: 46px; flex: none; border-radius: 11px; background: var(--inst-100); color: var(--acao-700); display: grid; place-items: center; font-weight: 700; font-size: 17px; }
+.sm-monograma--sm { width: 34px; height: 34px; border-radius: 9px; font-size: 13px; }
+.sm-monograma--md { width: 40px; height: 40px; border-radius: 10px; font-size: 15px; }
+.sm-monograma--lg { width: 54px; height: 54px; border-radius: 13px; font-size: 20px; }
+.sm-vaga-card__titulo { margin: 0; font-size: 17px; font-weight: 700; line-height: 1.3; color: var(--texto-primario); font-family: var(--fonte-corpo); }
+.sm-vaga-card__empresa { margin-top: 3px; font-size: 14px; color: var(--texto-secundario); }
+.sm-vaga-card__meta { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+.sm-vaga-card__salario { font-size: 14px; font-weight: 700; color: var(--texto-primario); }
+.sm-vaga-card__sem-salario { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: var(--texto-terciario); border: 1px dashed var(--borda-forte); border-radius: var(--raio-sm); padding: 3px 8px; }
+.sm-divisor-v { width: 1px; height: 16px; background: var(--borda); }
+.sm-vaga-card__acoes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-top: 1px solid #E4EBF4; padding-top: 14px; }
+.sm-vaga-card__link-origem { margin-left: auto; font-size: 13px; color: var(--texto-secundario); }
+
+/* ---------------- Listagem (Prancha 5) ---------------- */
+.sm-filtros { flex: 1 1 280px; max-width: 320px; min-width: 264px; background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-lg); padding: 18px; }
+.sm-filtros__head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 16px; }
+.sm-filtros__grupo { border-top: 1px solid #E4EBF4; padding-top: 14px; margin-bottom: 14px; }
+.sm-filtros__grupo:last-child { margin-bottom: 0; }
+.sm-filtros__label-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.sm-filtros__titulo { font-size: 13px; font-weight: 700; color: var(--texto-primario); }
+.sm-filtros__ajuda { margin: 6px 0 0; font-size: 12px; color: var(--texto-terciario); }
+.sm-check-row { display: flex; align-items: center; justify-content: space-between; gap: 9px; min-height: 36px; font-size: 14px; color: var(--texto-secundario); cursor: pointer; }
+.sm-check-row-simple { display: flex; align-items: center; gap: 9px; min-height: 36px; font-size: 14px; color: var(--texto-secundario); cursor: pointer; }
+.sm-chips-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.sm-empty-state { background: #fff; border: 1px dashed var(--borda-forte); border-radius: var(--raio-lg); padding: 40px 24px; text-align: center; }
+.sm-empty-state--sm { padding: 28px 18px; }
+.sm-empty-state__titulo { font-size: 17px; font-weight: 700; color: var(--texto-primario); }
+.sm-empty-state p { margin: 6px auto 16px; max-width: 420px; font-size: 14px; color: var(--texto-secundario); }
+.sm-pager { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.sm-pager button { min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: var(--raio-md); border: 1px solid #BFCEDF; background: #fff; color: var(--texto-primario); font-size: 14px; font-weight: 600; cursor: pointer; }
+.sm-pager button:hover { background: var(--superficie-alt); }
+.sm-pager__atual { color: var(--acao-600); text-decoration: underline; text-underline-offset: 4px; font-weight: 700; }
+
+/* ---------------- Detalhe (Prancha 6/7) ---------------- */
+.sm-voltar { min-height: 44px; padding: 0 4px; background: none; border: none; color: var(--acao-600); font-size: 14px; font-weight: 600; cursor: pointer; margin-bottom: 10px; }
+.sm-compat-grande { font-size: 40px; font-weight: 700; letter-spacing: -.03em; color: var(--texto-primario); line-height: 1; font-variant-numeric: tabular-nums; }
+.sm-barra { height: 10px; border-radius: var(--raio-pill); background: #E4EBF4; overflow: hidden; }
+.sm-barra__preenchida { height: 10px; border-radius: var(--raio-pill); background: var(--acao-600); }
+.sm-criterios { margin: 16px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.sm-criterios li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.5; color: var(--texto-primario); }
+.sm-criterios .ok { color: var(--sucesso-texto); font-weight: 700; }
+.sm-criterios .aviso { color: var(--atencao-texto); font-weight: 700; }
+.sm-descricao-texto { font-size: 15px; line-height: 1.65; color: #22364F; white-space: pre-line; max-width: 66ch; }
+.sm-dl { margin: 16px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; font-size: 14px; }
+.sm-dl dt { color: var(--texto-terciario); margin: 0; }
+.sm-dl dd { margin: 0; color: var(--texto-primario); font-weight: 600; }
+
+/* ---------------- Modal ---------------- */
+.sm-modal-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(4,45,92,.5); display: flex; align-items: center; justify-content: center; padding: 24px; }
+.sm-modal { background: #fff; border-radius: var(--raio-lg); box-shadow: var(--sombra-3); max-width: 480px; width: 100%; padding: 28px; text-align: center; }
+.sm-modal__icone { width: 56px; height: 56px; margin: 0 auto; border-radius: var(--raio-pill); background: var(--sucesso-fundo); border: 1px solid var(--sucesso-borda); color: var(--sucesso-texto); display: grid; place-items: center; font-size: 26px; font-weight: 700; }
+.sm-modal h2 { margin: 16px 0 6px; font-size: 22px; letter-spacing: -.02em; color: var(--texto-primario); }
+.sm-modal p { margin: 0 auto 22px; max-width: 44ch; font-size: 14.5px; line-height: 1.6; color: var(--texto-secundario); }
+.sm-modal__acoes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+/* ---------------- Portal acadêmico (Prancha 1) ---------------- */
+.sm-portal-header { background: #fff; border-bottom: 3px solid var(--acao-600); padding: 22px 20px; }
+.sm-portal-header__row { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+.sm-portal-mark { width: 52px; height: 52px; border-radius: 8px; background: var(--acao-600); color: #fff; display: grid; place-items: center; font-family: var(--fonte-titulo); font-size: 22px; font-weight: 700; }
+.sm-portal-title { font-family: var(--fonte-titulo); font-size: 24px; font-weight: 700; color: var(--acao-600); line-height: 1.15; }
+.sm-portal-sub { font-size: 12.5px; color: var(--texto-terciario); }
+.sm-portal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(252px,1fr)); gap: 16px; }
+.sm-portal-card { background: #fff; border: 1px solid var(--borda); border-radius: 6px; padding: 22px 20px; display: flex; flex-direction: column; gap: 12px; text-align: center; }
+.sm-portal-card--destaque { border: 2px solid var(--agua-500); box-shadow: 0 10px 26px -18px rgba(4,45,92,.4); }
+.sm-portal-card h3 { font-size: 15px; font-variant-caps: small-caps; letter-spacing: .04em; color: var(--acao-600); line-height: 1.3; font-family: var(--fonte-corpo); }
+.sm-portal-card p { margin: 0; flex: 1; font-size: 12.5px; line-height: 1.5; color: var(--texto-secundario); }
+.sm-portal-badge-novo { align-self: center; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: var(--agua-500); border-radius: var(--raio-pill); padding: 4px 10px; }
+.sm-portal-acessar { min-height: 40px; border-radius: 5px; border: 1px solid var(--acao-600); background: #fff; color: var(--acao-600); font-size: 13.5px; font-weight: 700; cursor: pointer; letter-spacing: .02em; }
+.sm-portal-acessar:hover { background: var(--superficie-alt); }
+.sm-portal-acessar--destaque { border: 1px solid transparent; background: var(--acao-600); color: #fff; }
+.sm-portal-acessar--destaque:hover { background: var(--acao-700); }
+
+/* ---------------- Login / Consentimento (Prancha 2/3) ---------------- */
+.sm-auth-bg { background: linear-gradient(155deg, var(--acao-600), var(--acao-700) 60%, #063E7E); min-height: 80vh; padding: 36px 20px 56px; }
+.sm-auth-card { max-width: 1080px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 28px 56px -28px rgba(2,32,63,.7); display: flex; flex-wrap: wrap; }
+.sm-auth-form { flex: 1 1 380px; min-width: 300px; padding: 34px 32px; }
+.sm-auth-side { flex: 1 1 320px; min-width: 280px; background: linear-gradient(165deg, var(--acao-600), #063E7E); color: #E2EDF7; padding: 34px 32px; display: flex; flex-direction: column; justify-content: center; gap: 18px; }
+.sm-auth-badge { width: 40px; height: 40px; border-radius: 11px; border: 2px solid var(--acao-600); color: var(--acao-600); display: grid; place-items: center; font-family: var(--fonte-titulo); font-size: 17px; font-weight: 700; }
+.sm-input-icon-row { display: flex; align-items: center; gap: 9px; border: 1px solid var(--borda); border-radius: var(--raio-md); background: #fff; padding: 0 12px; min-height: 48px; }
+.sm-input-icon-row:focus-within { border-color: var(--acao-600); }
+.sm-input-icon-row input { flex: 1; min-width: 0; border: none; outline: none; background: none; font-size: 15px; color: var(--texto-primario); min-height: 46px; }
+.sm-demo-box { border: 1px dashed var(--borda-forte); background: #F8FBFD; border-radius: var(--raio-md); padding: 13px 15px; }
+.sm-consent-bloco-sim { border: 1px solid var(--agua-200); background: var(--agua-50); border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+.sm-consent-bloco-nao { border: 1px solid var(--borda); background: var(--superficie-alt); border-radius: 12px; padding: 18px; margin-bottom: 22px; }
+.sm-riscado { text-decoration: line-through; text-decoration-color: var(--borda-forte); }
+
+/* ---------------- Home (Prancha 4) ---------------- */
+.sm-indicadores { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 14px; }
+.sm-indicador { background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-lg); padding: 18px; }
+.sm-indicador__rotulo { font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--texto-secundario); }
+.sm-indicador__valor { margin-top: 8px; font-family: var(--fonte-titulo); font-size: 34px; font-weight: 700; color: var(--acao-600); line-height: 1; font-variant-numeric: tabular-nums; }
+.sm-indicador__nota { margin-top: 6px; font-size: 12px; color: var(--texto-terciario); }
+.sm-lista-recentes { background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-lg); overflow: hidden; }
+.sm-recente-row { width: 100%; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; text-align: left; background: none; border: none; border-bottom: 1px solid #E4EBF4; padding: 14px 16px; cursor: pointer; min-height: 44px; }
+.sm-recente-row:hover { background: var(--superficie-alt); }
+.sm-recente-row:last-child { border-bottom: none; }
+
+/* ---------------- Candidaturas (Prancha 8) ---------------- */
+.sm-cand-tabela { background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-lg); overflow: hidden; }
+.sm-cand-head { display: flex; gap: 12px; background: var(--superficie-alt); border-bottom: 1px solid var(--borda); padding: 11px 16px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--texto-terciario); }
+.sm-cand-row-btn { width: 100%; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; text-align: left; background: none; border: none; padding: 14px 16px; cursor: pointer; min-height: 56px; }
+.sm-cand-row-btn:hover { background: #F8FBFD; }
+.sm-cand-detalhe { background: #F8FBFD; border-top: 1px solid #E4EBF4; padding: 18px 16px 18px 62px; }
+.sm-timeline { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.sm-timeline li { display: flex; gap: 12px; align-items: flex-start; }
+.sm-timeline__ponto-ok { flex: none; width: 20px; height: 20px; border-radius: var(--raio-pill); background: var(--acao-600); color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+.sm-timeline__ponto-pendente { flex: none; width: 20px; height: 20px; border-radius: var(--raio-pill); border: 2px dashed var(--borda-forte); background: #fff; }
+
+/* ---------------- Estados de exceção (Prancha 10) ---------------- */
+.sm-excecoes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px,1fr)); gap: 16px; }
+.sm-excecao-card { background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-lg); overflow: hidden; }
+.sm-excecao-card--erro { border-color: var(--erro-borda); }
+.sm-excecao-card--atencao { border-color: var(--atencao-borda); }
+.sm-excecao-head { background: var(--superficie-alt); border-bottom: 1px solid var(--borda); padding: 11px 16px; }
+.sm-excecao-card--erro .sm-excecao-head { background: var(--erro-fundo); border-bottom-color: var(--erro-borda); }
+.sm-excecao-card--atencao .sm-excecao-head { background: var(--atencao-fundo); border-bottom-color: var(--atencao-borda); }
+.sm-excecao-head__eyebrow { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--texto-terciario); }
+.sm-excecao-card--erro .sm-excecao-head__eyebrow { color: var(--erro-texto); }
+.sm-excecao-card--atencao .sm-excecao-head__eyebrow { color: var(--atencao-texto); }
+.sm-excecao-head__sub { font-size: 13px; color: var(--texto-secundario); margin-top: 2px; }
+.sm-excecao-body { padding: 22px 18px; }
+.sm-skeleton { background: #E4EBF4; border-radius: 6px; }
+.sm-skeleton-sub { background: #EDF3F9; border-radius: 6px; }
+
+/* ---------------- Sistema de design (Prancha 11) ---------------- */
+.sm-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 12px; margin-bottom: 24px; }
+.sm-swatch { border: 1px solid var(--borda); border-radius: var(--raio-md); overflow: hidden; }
+.sm-swatch__cor { height: 56px; }
+.sm-swatch__legenda { padding: 8px 10px; }
+.sm-swatch__nome { font-size: 12px; font-weight: 700; color: var(--texto-primario); }
+.sm-swatch__hex { font-size: 12px; color: var(--texto-terciario); }
+.sm-sistema-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--texto-terciario); margin-bottom: 10px; }
+.sm-sistema-pre { margin: 0; overflow-x: auto; background: #021E3F; border: 1px solid #0E4577; border-radius: 12px; padding: 16px; font-family: ui-monospace, SFMono-Regular, monospace; font-size: 12.5px; line-height: 1.7; color: #C9D6F2; }
+.sm-contrato-card { border: 1px solid #E4EBF4; border-radius: 12px; padding: 14px 16px; }
+.sm-metodo-badge { font-size: 11px; font-weight: 700; border-radius: 6px; padding: 3px 7px; font-family: ui-monospace, monospace; }
+.sm-metodo-badge--get { background: var(--acao-50); color: var(--acao-700); }
+.sm-metodo-badge--post { background: var(--sucesso-fundo); color: var(--sucesso-texto); }
+.sm-metodo-badge--lote { background: var(--atencao-fundo); color: var(--atencao-texto); }
+.sm-componente-card { border: 1px solid #E4EBF4; border-radius: 10px; padding: 12px 14px; }
+.sm-componente-card code { font-weight: 700; color: var(--acao-700); }
+.sm-cobertura-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 10px; font-size: 14px; }
+.sm-cobertura-card { border: 1px solid #E4EBF4; border-radius: 10px; padding: 12px 14px; color: var(--texto-secundario); }
+
+/* ---------------- Certificados/currículo ---------------- */
+.sm-upload-drop { width: 100%; border: 1px dashed var(--borda-forte); border-radius: 12px; background: #F8FBFD; padding: 28px 16px; cursor: pointer; text-align: center; }
+.sm-upload-drop:hover { border-color: var(--acao-600); background: var(--superficie-alt); }
+.sm-certificado-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; border: 1px solid var(--borda); background: #fff; border-radius: 12px; padding: 14px 16px; }
+.sm-curriculo-formacao { border: 1px solid #E1E9F3; background: var(--superficie-alt); border-radius: var(--raio-md); padding: 14px; }
+
+/* Utilidades de texto */
+.text-muted { color: var(--texto-terciario); }
+.text-sm { font-size: 13px; }
+.mt-0 { margin-top: 0; }
+
+@media (max-width: 720px) {
+  .sm-nav { display: none; }
+  .sm-container { padding: 14px; }
+}
