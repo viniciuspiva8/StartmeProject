@@ -149,20 +149,18 @@ function renderNotas(prancha, titulo, listaHtml, grid) {
 // Prancha 1 — Portal acadêmico simulado
 // ------------------------------------------------------------------
 function renderPortal(s) {
-  const cartoes = PORTAIS.map((p) => {
+  const cartoesOficiais = PORTAIS.map((p) => {
     if (p.novo) {
-      return `<article class="sm-portal-card sm-portal-card--destaque">
-        <span class="sm-portal-badge-novo">Novo</span>
+      return `<div class="sm-portalfsa-item sm-portalfsa-item--novo">
         <h3>${esc(p.nome)}</h3>
-        <p>${esc(p.desc)}</p>
-        <button type="button" class="sm-portal-acessar sm-portal-acessar--destaque" onclick="App.portalClicar('${esc(p.nome)}')">Acessar</button>
-      </article>`;
+        <button type="button" class="sm-portalfsa-acessar sm-portalfsa-acessar--novo" onclick="App.portalClicar('${esc(p.nome)}')"><span aria-hidden="true">⚡</span> Acessar</button>
+        <span class="sm-portalfsa-badge-novo">Novo</span>
+      </div>`;
     }
-    return `<article class="sm-portal-card">
+    return `<div class="sm-portalfsa-item">
       <h3>${esc(p.nome)}</h3>
-      <p>${esc(p.desc)}</p>
-      <button type="button" class="sm-portal-acessar" onclick="App.portalClicar('${esc(p.nome)}')">Acessar</button>
-    </article>`;
+      <button type="button" class="sm-portalfsa-acessar" onclick="App.portalClicar('${esc(p.nome)}')"><span aria-hidden="true">⚡</span> Acessar</button>
+    </div>`;
   }).join('');
 
   const ferramentas = FERRAMENTAS.map((nome) => `
@@ -173,32 +171,40 @@ function renderPortal(s) {
 
   return `
   <div class="sm-faixa-simulado">AMBIENTE SIMULADO — PROTÓTIPO DE TCC, RÉPLICA CONCEITUAL DO PORTAL.FSA.BR. NÃO INSIRA CREDENCIAIS REAIS.</div>
-  <main style="background:var(--fundo);min-height:80vh;padding:0 0 56px">
-    <div class="sm-portal-header">
-      <div class="sm-portal-header__row">
-        <div class="sm-portal-mark" aria-hidden="true">FSA</div>
-        <div>
-          <div class="sm-portal-title">Portal FSA</div>
-          <div class="sm-portal-sub">Réplica conceitual · Centro Universitário Fundação Santo André — marca real usada só nesta demonstração acadêmica</div>
-        </div>
+  <div class="sm-portalfsa-topo">
+    <div class="sm-portalfsa-topo__row">
+      <div class="sm-portalfsa-logo" aria-hidden="true">
+        <span class="sm-portalfsa-logo__c sm-portalfsa-logo__c--f">F</span>
+        <span class="sm-portalfsa-logo__c sm-portalfsa-logo__c--s">S</span>
+        <span class="sm-portalfsa-logo__c sm-portalfsa-logo__c--a">A</span>
+      </div>
+      <div>
+        <div class="sm-portalfsa-instituicao__eyebrow">Centro Universitário</div>
+        <div class="sm-portalfsa-instituicao__nome">Fundação Santo André</div>
       </div>
     </div>
-    <div class="sm-container--narrow" style="margin:0 auto;padding:32px 20px 0">
-      <h1 style="font-size:15px;font-weight:700;color:var(--texto-secundario);margin-bottom:16px;font-family:var(--fonte-corpo)">Portal do Aluno</h1>
-      <div class="sm-portal-grid" style="margin-bottom:36px">${cartoes}</div>
-      <h2 style="font-size:15px;font-weight:700;color:var(--texto-secundario);margin-bottom:16px;font-family:var(--fonte-corpo)">Ferramentas</h2>
-      <div class="sm-portal-grid">${ferramentas}</div>
-      ${App._internal.notasVisiveis() ? `
-      <div style="margin-top:32px;max-width:760px">
-        ${renderNotas('1', 'Portal acadêmico (réplica do portal.fsa.br)', `
-          <li><strong>Layout, textos e ordem dos sete cartões e das quatro ferramentas replicam o portal.fsa.br real.</strong> Fundo branco, cartão com borda fina e botão contornado — nada de gradiente decorativo, que o portal real não tem.</li>
-          <li><strong>O oitavo cartão é nativo, não banner.</strong> Mesma caixa, mesmo botão "Acessar" — só o selo "Novo" e a borda verde-água o distinguem, exatamente como o portal real destaca lançamentos.</li>
-          <li><strong>Nenhuma marca de terceiros nem logotipo real da FSA usado como elemento de UI.</strong> O monograma "FSA" é tipográfico, não a logo oficial — a faixa declara que é réplica conceitual para demonstração acadêmica.</li>
-          <li><strong>A faixa de simulação começa aqui.</strong> A banca vê o aviso antes de qualquer campo de credencial, não só na tela de login.</li>
-        `)}
-      </div>` : ''}
+    <button type="button" class="sm-portalfsa-trocarsenha" onclick="App.nadaAinda()">Troque sua senha</button>
+  </div>
+  <main class="sm-portalfsa-hero">
+    <div class="sm-portalfsa-lockup">
+      <span class="sm-portalfsa-lockup__portal">PORTAL</span>
+      <span class="sm-portalfsa-lockup__fsa">FSA</span>
     </div>
-  </main>`;
+    <div class="sm-portalfsa-grid">${cartoesOficiais}</div>
+  </main>
+  <div class="sm-container--narrow" style="margin:0 auto;padding:32px 20px 0">
+    <h2 style="font-size:15px;font-weight:700;color:var(--texto-secundario);margin-bottom:16px;font-family:var(--fonte-corpo)">Ferramentas</h2>
+    <div class="sm-portal-grid">${ferramentas}</div>
+    ${App._internal.notasVisiveis() ? `
+    <div style="margin-top:32px;max-width:760px">
+      ${renderNotas('1', 'Portal acadêmico (réplica do portal.fsa.br)', `
+        <li><strong>Cabeçalho e hero replicam o portal.fsa.br real pixel a pixel</strong> (referência: captura de tela do portal em produção) — logo em três círculos, "Troque sua senha" em vermelho, gradiente azul institucional atrás do lockup "PORTAL FSA" e da grade de oito acessos sem caixa/borda, só título e botão.</li>
+        <li><strong>O StartMe entra como oitavo item da mesma grade do portal</strong>, não como cartão separado abaixo — só o selo "Novo" e o botão em azul sólido (em vez do gradiente roxo dos demais) o distinguem, mantendo-o no mesmo "quadrado" visual dos outros sete acessos.</li>
+        <li><strong>Nenhuma marca de terceiros nem logotipo real da FSA usado como elemento de UI.</strong> Os círculos "F/S/A" e o "FSA" do lockup são tipográficos, não a logo oficial — a faixa declara que é réplica conceitual para demonstração acadêmica.</li>
+        <li><strong>A faixa de simulação continua no topo, acima do cabeçalho.</strong> A banca vê o aviso antes de qualquer campo de credencial, não só na tela de login.</li>
+      `)}
+    </div>` : ''}
+  </div>`;
 }
 
 // ------------------------------------------------------------------

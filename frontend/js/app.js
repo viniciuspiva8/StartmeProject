@@ -29,7 +29,7 @@ const App = (function () {
 
     salvas: ['v4'],
     modal: null,
-    notasOverride: null, navRecolhida: false,
+    notasOverride: false, navRecolhida: true,
 
     // Login (Prancha 2)
     cpf: '', senha: '', verSenha: false, erroLogin: false,
