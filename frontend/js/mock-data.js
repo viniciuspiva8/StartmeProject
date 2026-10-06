@@ -91,19 +91,24 @@ const VAGAS = [
     descricao: 'Manutenção de sistema legado em .NET Framework e apoio à migração para .NET 8. Integração com equipamentos de automação industrial via OPC.' }
 ];
 
-// Prancha 1 — cartões do portal acadêmico simulado. Só "PROJETO STARTME" (novo:true) é clicável de verdade.
+// Prancha 1 — cartões da seção "Outros Acessos" do portal acadêmico simulado.
+// Só "Projeto StartMe" (novo:true) é clicável de verdade — preenche as
+// credenciais de demonstração no formulário de login acima.
 const PORTAIS = [
-  { nome: 'Portal do Aluno', desc: 'Notas, boletim, matrícula e financeiro.' },
-  { nome: 'Novo Portal do Professor', desc: 'Diário de classe e lançamento de notas.' },
-  { nome: 'Portal Antigo do Professor/Funcionário', desc: 'Acesso legado, em desativação gradual.' },
-  { nome: 'Moodle (Graduação)', desc: 'Ambiente virtual de aprendizagem dos cursos de graduação.' },
-  { nome: 'AVA Pós', desc: 'Ambiente virtual dos cursos de pós-graduação.' },
-  { nome: 'Cursos Livres', desc: 'Extensão e cursos de curta duração.' },
-  { nome: 'Portal Mobile', desc: 'Versão do portal para aplicativo.' },
-  { nome: 'PROJETO STARTME', desc: 'Vagas de estágio e primeiro emprego em TI, filtradas para o seu curso e semestre.', novo: true }
+  { nome: 'Portal do Funcionário', icone: 'maleta' },
+  { nome: 'Cursos Livres', icone: 'capelo' },
+  { nome: 'Acesso ao EducaMobile', icone: 'educa' },
+  { nome: 'Executor Web', icone: 'executor' },
+  { nome: 'Projeto StartMe', icone: 'raio', novo: true }
 ];
 
-const FERRAMENTAS = ['Certificador de Documentos', 'Validador Diploma Digital', 'Validador Histórico Escolar Digital', 'Consulta Pública de Diplomas'];
+// Prancha 1 — cartões da seção "Ferramentas de Documentos".
+const FERRAMENTAS = [
+  { nome: 'Certificador de Documentos', icone: 'certificado' },
+  { nome: 'Validador de Diploma Digital', icone: 'diploma' },
+  { nome: 'Validador de Histórico Escolar Digital', icone: 'historico' },
+  { nome: 'Consulta Pública de Diplomas', icone: 'busca' }
+];
 
 // Prancha 8 — seed de candidaturas. Não existe endpoint de candidaturas em
 // nenhum backend (ver design-reference/github.md); esta lista é combinada em
@@ -177,18 +182,25 @@ const DADOS_SIM = [
 ];
 const DADOS_NAO = ['Notas', 'Histórico escolar', 'Dados financeiros', 'Faltas', 'CPF completo', 'Documentos'];
 
-// Prancha 2 — coluna institucional (texto citado do Manual da Marca da FSA).
+// Texto citado do Manual da Marca da FSA — exibido na antiga coluna
+// institucional do login (Prancha 2), removida quando essa tela foi fundida
+// na Prancha 1 (ver views.js, renderPortal). Mantido aqui sem uso na tela por
+// enquanto, para eventual reaproveitamento.
 const MISSAO_INSTITUCIONAL = 'Produzir, disseminar e aplicar o conhecimento tecnológico e acadêmico, para formação cidadã, por meio do ensino, da pesquisa e da extensão.';
 const VALORES_INSTITUCIONAIS = ['Cidadania', 'Ética', 'Inovação', 'Transparência'];
 
-// Credenciais fixas de demonstração (Prancha 2) — não há autenticação real de
-// usuário final em nenhum dos dois backends (ver README.md, "Pendências conhecidas").
+// Credenciais fixas de demonstração (Prancha 1 — login fundido no portal) —
+// não há autenticação real de usuário final em nenhum dos dois backends
+// (ver README.md, "Pendências conhecidas").
 const CPF_DEMO = '123.456.789-00';
 const SENHA_DEMO = 'demo2026';
 
 // Navegação lateral — modo "demo/QA" para mostrar a jornada completa tela a tela.
+// A Prancha 2 (Login) foi fundida na Prancha 1 (ver renderPortal em views.js) —
+// os números continuam pulando de 1 para 3 para não desalinhar com o resto da
+// numeração, herdada do protótipo original de 13 pranchas.
 const NAV_GRUPOS_DEF = [
-  { rotulo: 'Entrada', itens: [['portal', '1', 'Portal'], ['login', '2', 'Login'], ['consent', '3', 'Consentimento']] },
+  { rotulo: 'Entrada', itens: [['portal', '1', 'Portal + Login'], ['consent', '3', 'Consentimento']] },
   { rotulo: 'Aplicação', itens: [['home', '4', 'Início'], ['lista', '5', 'Vagas'], ['detalhe', '6', 'Detalhe + 7'], ['candidaturas', '8', 'Candidaturas'], ['perfil', '9', 'Perfil']] },
   { rotulo: 'Currículo', itens: [['curriculo', '12', 'Currículo'], ['certificados', '13', 'Certificados']] },
   { rotulo: 'Referência', itens: [['excecoes', '10', 'Exceções'], ['sistema', '11', 'Sistema']] }
