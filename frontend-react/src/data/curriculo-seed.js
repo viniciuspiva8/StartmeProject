@@ -21,4 +21,12 @@ export const CURRICULO_SEED = {
 };
 
 export const TIPOS_ATIVIDADE = ['Projeto acadêmico', 'Iniciação científica', 'Monitoria', 'Voluntariado', 'Empresa júnior', 'Evento ou hackathon'];
+// Nível de uma habilidade declarada pelo aluno. A descrição ajuda a escolher
+// com honestidade, porque o nível aparece no currículo exportado.
+export const NIVEIS_HABILIDADE = [
+  { v: 'Básico', desc: 'Já usei em exercícios ou cursos' },
+  { v: 'Intermediário', desc: 'Uso sem ajuda em tarefas do dia a dia' },
+  { v: 'Avançado', desc: 'Resolvo problemas complexos e consigo ensinar' },
+];
+
 export const NIVEIS_IDIOMA = ['Básico', 'Intermediário', 'Avançado', 'Fluente'];

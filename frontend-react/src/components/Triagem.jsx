@@ -40,7 +40,7 @@ function resumoTexto(t) {
 }
 
 /** Versão compacta: lista de vagas e destaques do início. */
-export function TriagemCompacta({ triagem }) {
+export function TriagemCompacta({ triagem, linhasRessalva = 1 }) {
   const tom = TOM[triagem.estado];
   return (
     <div className="flex flex-col gap-1">
@@ -55,14 +55,14 @@ export function TriagemCompacta({ triagem }) {
       {triagem.principalRessalva && (
         <p className="flex items-start gap-1.5 text-[13px] text-tinta-3" title={triagem.principalRessalva}>
           <Icone nome="alerta" size={14} className="mt-[3px] text-ressalva-barra" />
-          <span className="line-clamp-1"><span className="sr-only">Ressalva: </span>{triagem.principalRessalva}</span>
+          <span className={linhasRessalva > 1 ? 'line-clamp-2' : 'line-clamp-1'}><span className="sr-only">Ressalva: </span>{triagem.principalRessalva}</span>
         </p>
       )}
     </div>
   );
 }
 
-function Item({ c }) {
+function Item({ c, vagaId }) {
   const { a } = useApp();
   const faltaNoCurriculo = c.tipo === 'requisito' && !c.positivo;
   return (
@@ -73,12 +73,9 @@ function Item({ c }) {
       <span className="flex min-w-0 flex-col gap-2">
         <span><span className="sr-only">{c.positivo ? 'Atende: ' : 'Ressalva: '}</span>{c.texto}</span>
         {faltaNoCurriculo && (
-          <span className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => a.declararHabilidade(c.termo)} className="btn-claro min-h-9 rounded-lg px-3 text-[13px]">
+          <span>
+            <button type="button" onClick={() => a.abrirHabilidade({ nome: c.termo }, vagaId)} className="btn-claro min-h-9 rounded-lg px-3 text-[13px]">
               Eu sei {c.termo}
-            </button>
-            <button type="button" onClick={() => a.irView('curriculo')} className="btn-fantasma min-h-9 rounded-lg px-2 text-[13px]">
-              Adicionar certificado ou atividade
             </button>
           </span>
         )}
@@ -88,7 +85,8 @@ function Item({ c }) {
 }
 
 /** Versão completa, no detalhe: veredito, cada ponto avaliado e de onde vem, diferenciais. */
-export function TriagemCompleta({ triagem }) {
+export function TriagemCompleta({ triagem, vagaId }) {
+  const { a } = useApp();
   const tom = TOM[triagem.estado];
   if (triagem.estado === 'sem-dados') {
     return (
@@ -122,26 +120,37 @@ export function TriagemCompleta({ triagem }) {
       {requisitos.length > 0 && (
         <>
           <h3 className="mt-5 text-[13px] font-bold text-tinta-2">Requisitos</h3>
-          <ul className="mt-2 flex flex-col gap-3">{requisitos.map((c) => <Item key={c.texto} c={c} />)}</ul>
+          <ul className="mt-2 flex flex-col gap-3">{requisitos.map((c) => <Item key={c.texto} c={c} vagaId={vagaId} />)}</ul>
         </>
       )}
       {condicoes.length > 0 && (
         <>
           <h3 className="mt-5 text-[13px] font-bold text-tinta-2">Condições da vaga</h3>
-          <ul className="mt-2 flex flex-col gap-3">{condicoes.map((c) => <Item key={c.texto} c={c} />)}</ul>
+          <ul className="mt-2 flex flex-col gap-3">{condicoes.map((c) => <Item key={c.texto} c={c} vagaId={vagaId} />)}</ul>
         </>
       )}
       {triagem.desejaveis.length > 0 && (
         <>
           <h3 className="mt-5 text-[13px] font-bold text-tinta-2">Diferenciais (não contam contra você)</h3>
           <ul className="mt-2 flex flex-wrap gap-2">
-            {triagem.desejaveis.map((d) => (
-              <li key={d.termo} className={`inline-flex items-center gap-1.5 rounded-pill px-3 py-1 text-[13px] font-semibold ${d.positivo ? 'bg-white text-agua-texto' : 'border border-dashed border-linha-forte text-tinta-3'}`}>
-                {d.positivo && <Icone nome="check" size={14} />}
+            {triagem.desejaveis.map((d) => (d.positivo ? (
+              <li key={d.termo} className="inline-flex min-h-8 items-center gap-1.5 rounded-pill bg-white px-3 text-[13px] font-semibold text-agua-texto">
+                <Icone nome="check" size={14} />
                 {d.termo}
-                <span className="sr-only">{d.positivo ? ': você tem' : ': não está no seu currículo'}</span>
+                <span className="sr-only">: você tem</span>
               </li>
-            ))}
+            ) : (
+              <li key={d.termo}>
+                <button
+                  type="button"
+                  onClick={() => a.abrirHabilidade({ nome: d.termo }, vagaId)}
+                  aria-label={`${d.termo}: não está no seu currículo. Eu sei ${d.termo}`}
+                  className="inline-flex min-h-8 cursor-pointer items-center gap-1 rounded-pill border border-dashed border-linha-forte px-3 text-[13px] font-semibold text-tinta-3 hover:border-azul-500 hover:text-azul"
+                >
+                  {d.termo} <span aria-hidden="true">+</span>
+                </button>
+              </li>
+            )))}
           </ul>
         </>
       )}

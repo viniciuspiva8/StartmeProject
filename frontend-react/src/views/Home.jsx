@@ -74,7 +74,7 @@ export default function Home() {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-2xl border border-linha bg-white p-5">
               <h3 className="text-[15px] font-bold text-tinta">Pedidas nas vagas, ausentes no seu currículo</h3>
-              <p className="mt-1 text-[13px] text-tinta-3">Se você já sabe, adicione: a avaliação das vagas muda na hora.</p>
+              <p className="mt-1 text-[13px] text-tinta-3">Se você já sabe, conte o nível e onde aprendeu: a avaliação das vagas muda na hora.</p>
               {faltam.length === 0 ? (
                 <p className="mt-4 text-sm text-agua-texto">Seu currículo cobre todos os requisitos obrigatórios das vagas atuais.</p>
               ) : (
@@ -85,7 +85,7 @@ export default function Home() {
                         <span className="block text-sm font-semibold text-tinta">{f.termo}</span>
                         <span className="block text-[13px] text-tinta-3">Obrigatório em {f.vagas} {f.vagas === 1 ? 'vaga' : 'vagas'}</span>
                       </span>
-                      <button type="button" onClick={() => a.declararHabilidade(f.termo)} className="btn-claro min-h-9 rounded-lg px-3 text-[13px]">
+                      <button type="button" onClick={() => a.abrirHabilidade({ nome: f.termo })} className="btn-claro min-h-9 rounded-lg px-3 text-[13px]">
                         Eu sei {f.termo}
                       </button>
                     </li>

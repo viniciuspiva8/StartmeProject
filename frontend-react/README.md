@@ -32,12 +32,16 @@ fontes, guardando a origem de cada habilidade: disciplinas cursadas até o semes
 em `src/data/grade.js`), certificações, atividades acadêmicas e voluntariado, e habilidades declaradas. Cada vaga
 tem requisitos obrigatórios, desejáveis e condições (`src/data/requisitos.js`, de demonstração). O detalhe mostra
 de onde vem cada requisito atendido ("pelo certificado Fundamentos de SQL") e oferece "Eu sei Excel" para o que
-falta. Ao mudar o currículo, a avaliação é refeita no navegador e um aviso diz quantas vagas mudaram.
+falta. "Eu sei X" não grava direto: leva ao currículo com o formulário da habilidade aberto e o nome preenchido,
+onde o aluno informa nível (básico, intermediário, avançado), onde aprendeu, ano e, se quiser, anexa o certificado
+(com certificado, a habilidade conta como comprovada). Ao salvar, a avaliação é refeita no navegador, um aviso diz
+quantas vagas mudaram e oferece voltar para a vaga de onde o aluno saiu.
 
 **Meu currículo** (`#/curriculo`): dados do Portal Acadêmico (não editáveis), contato, resumo, habilidades
 (da grade, comprovadas e declaradas), certificações (com arquivo opcional, só o nome é guardado), atividades
 acadêmicas e voluntariado, idiomas. Ao lado, a prévia "como a empresa vê", que é o que sai em **Exportar PDF**
-(impressão do navegador, A4, só a prévia é impressa).
+(impressão do navegador, A4, só a prévia é impressa). No desktop a prévia fica presa ao lado do editor e tem
+rolagem própria, separada da página.
 
 **"Já me candidatei"** é só uma anotação do aluno na vaga, sem etapas. Salvas e candidatadas viram um filtro
 ("Minhas marcações") e ficam guardadas no navegador. O endereço antigo `#/candidaturas` leva ao currículo.
@@ -53,8 +57,10 @@ um medidor em que cada segmento é um requisito (verde-água quando bate com o c
 "Provavelmente não") e a principal ressalva. O percentual de compatibilidade saiu: era um número
 sem regra definida. Vagas reais do coletor, que não trazem requisitos, ficam como "Sem dados para avaliar".
 
-**Lista e detalhe lado a lado** a partir de 1024 px. Abaixo disso, o detalhe abre em tela cheia
-com a barra de ações fixa embaixo.
+**Lista no centro, detalhe sob demanda** (ajuste de 08/10/2026). A lista ocupa o centro da tela e cada
+cartão mostra o necessário para decidir: veredito, principal ressalva, salário, modalidade, data de coleta e os
+requisitos marcados contra o currículo. Ao clicar, a lista vira uma coluna à esquerda e o detalhe abre ao lado;
+fechar (botão, Esc ou Voltar do navegador) devolve a lista ao centro. Abaixo de 1024 px, o detalhe abre em tela cheia.
 
 **Filtros em linha.** Busca, atalho "Combina com o meu semestre" e os demais filtros em botões
 que abrem uma lista de opções. No celular, a linha rola na horizontal.

@@ -7,7 +7,7 @@ import Icone from '../components/Icone.jsx';
 import { Monograma } from '../components/VagaCard.jsx';
 import { TriagemCompleta } from '../components/Triagem.jsx';
 
-export default function Detalhe({ v, telaCheia = false }) {
+export default function Detalhe({ v, telaCheia = false, aoFechar = null }) {
   const { s, a } = useApp();
   const tituloRef = useRef(null);
 
@@ -35,7 +35,7 @@ export default function Detalhe({ v, telaCheia = false }) {
         <header className="flex flex-col gap-5">
           <div className="flex items-start gap-4">
             <Monograma letra={v.monograma} grande />
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <h1 ref={tituloRef} tabIndex={-1} className="font-serif text-[26px] leading-[1.2] font-bold text-tinta focus:outline-none sm:text-[30px]">
                 {v.titulo}
               </h1>
@@ -43,6 +43,17 @@ export default function Detalhe({ v, telaCheia = false }) {
                 <Icone nome="predio" size={17} className="text-tinta-4" /> {v.empresa}
               </p>
             </div>
+            {aoFechar && !telaCheia && (
+              <button
+                type="button"
+                onClick={aoFechar}
+                aria-label="Fechar detalhe e voltar à lista"
+                title="Fechar (Esc)"
+                className="grid size-10 flex-none cursor-pointer place-items-center rounded-xl text-tinta-3 hover:bg-nevoa hover:text-azul"
+              >
+                <Icone nome="fechar" size={20} />
+              </button>
+            )}
           </div>
 
           <dl className="grid grid-cols-2 gap-x-6 gap-y-3 border-y border-linha py-4 @3xl:grid-cols-4">
@@ -59,7 +70,7 @@ export default function Detalhe({ v, telaCheia = false }) {
           <Acoes v={v} fixa={false} className={telaCheia ? 'hidden' : 'flex'} />
         </header>
 
-        <TriagemCompleta triagem={v.triagem} />
+        <TriagemCompleta triagem={v.triagem} vagaId={v.id} />
 
         <section aria-labelledby="descricao-titulo" className="flex flex-col gap-3">
           <h2 id="descricao-titulo" className="font-serif text-xl font-bold text-tinta">Descrição do anúncio</h2>

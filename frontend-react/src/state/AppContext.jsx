@@ -52,6 +52,18 @@ function novoId(prefixo) {
   return `${prefixo}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 }
 
+/** Currículos salvos antes de 08/10 guardavam habilidades como texto solto. */
+function normalizarHabilidades(lista) {
+  return (lista || []).map((h) => (typeof h === 'string'
+    ? { id: novoId('h'), nome: h, nivel: '', onde: '', ano: '', arquivo: '' }
+    : h));
+}
+
+function carregarCurriculo() {
+  const cv = { ...CURRICULO_SEED, ...lerLocal(CHAVE_CURRICULO, {}) };
+  return { ...cv, habilidadesDeclaradas: normalizarHabilidades(cv.habilidadesDeclaradas) };
+}
+
 function estadoInicial() {
   const rota = lerHash();
   return {
@@ -72,7 +84,8 @@ function estadoInicial() {
 
     salvas: lerLocal(CHAVE_SALVAS, ['v4']),
     aplicadas: lerLocal(CHAVE_APLICADAS, []),
-    curriculo: { ...CURRICULO_SEED, ...lerLocal(CHAVE_CURRICULO, {}) },
+    curriculo: carregarCurriculo(),
+    habilidadeEmEdicao: null,
 
     vagas: VAGAS.map((v) => ({ ...v })),
     vagasFonte: 'mock',
@@ -90,6 +103,9 @@ export function AppProvider({ children }) {
   // Começa em true: a primeira escrita da URL substitui a entrada atual em vez de empilhar.
   const substituirHistorico = useRef(true);
   const timerToast = useRef(null);
+
+  const estadoAtual = useRef(s);
+  estadoAtual.current = s;
 
   const set = useCallback((patch) => {
     setS((prev) => ({ ...prev, ...(typeof patch === 'function' ? patch(prev) : patch) }));
@@ -125,8 +141,13 @@ export function AppProvider({ children }) {
     }
   }, [s.view, s.sel]);
 
-  // Rola para o topo ao trocar de tela.
-  useEffect(() => { window.scrollTo({ top: 0 }); }, [s.view]);
+  // Rola para o topo ao trocar de tela, exceto quando a tela abre já apontando
+  // para um formulário (o "Eu sei X" leva direto ao formulário da habilidade,
+  // que rola até si mesmo). Este efeito roda depois dos efeitos dos filhos.
+  useEffect(() => {
+    if (estadoAtual.current.habilidadeEmEdicao) return;
+    window.scrollTo({ top: 0 });
+  }, [s.view]);
 
   // Persistência no navegador.
   useEffect(() => { gravarLocal(CHAVE_CURRICULO, s.curriculo); }, [s.curriculo]);
@@ -136,12 +157,10 @@ export function AppProvider({ children }) {
   // Perfil de habilidades derivado do currículo: é a base de todo o match.
   const perfil = useMemo(() => montarPerfil(s.curriculo, s.semestreAluno), [s.curriculo, s.semestreAluno]);
 
-  const estadoAtual = useRef(s);
-  estadoAtual.current = s;
 
   const actions = useMemo(() => {
     /** Aplica a mudança no currículo e conta quantas vagas mudaram de avaliação. */
-    const mudarCurriculo = (transformar, mensagem) => {
+    const mudarCurriculo = (transformar, mensagem, acaoForcada) => {
       const atual = estadoAtual.current;
       const novo = transformar(atual.curriculo);
       if (novo === atual.curriculo) return;
@@ -153,7 +172,8 @@ export function AppProvider({ children }) {
       set({ curriculo: novo });
       const sufixo = mudaram === 0 ? ' Nenhuma vaga mudou de avaliação.'
         : mudaram === 1 ? ' 1 vaga mudou de avaliação.' : ` ${mudaram} vagas mudaram de avaliação.`;
-      mostrarToast(mensagem + sufixo, mudaram > 0 && atual.view !== 'vagas' ? { rotulo: 'Ver vagas', view: 'vagas' } : null);
+      const acaoPadrao = mudaram > 0 && atual.view !== 'vagas' ? { rotulo: 'Ver vagas', view: 'vagas' } : null;
+      mostrarToast(mensagem + sufixo, acaoForcada !== undefined ? acaoForcada : acaoPadrao);
     };
     const mostrarToast = (texto, acao = null) => {
       clearTimeout(timerToast.current);
@@ -234,14 +254,38 @@ export function AppProvider({ children }) {
       removerAtividade: (id) => mudarCurriculo((cv) => ({ ...cv, atividades: cv.atividades.filter((x) => x.id !== id) }), 'Atividade removida.'),
       addIdioma: (i) => set((p) => ({ curriculo: { ...p.curriculo, idiomas: [...p.curriculo.idiomas, { ...i, id: novoId('i') }] } })),
       removerIdioma: (id) => set((p) => ({ curriculo: { ...p.curriculo, idiomas: p.curriculo.idiomas.filter((x) => x.id !== id) } })),
-      declararHabilidade: (termo) => {
-        const t = termo.trim();
-        if (!t) return;
-        mudarCurriculo((cv) => (cv.habilidadesDeclaradas.some((h) => normalizar(h) === normalizar(t))
-          ? cv
-          : { ...cv, habilidadesDeclaradas: [...cv.habilidadesDeclaradas, t] }), `${t} entrou no seu currículo.`);
+      /**
+       * "Eu sei X" não grava direto: leva ao currículo com o formulário da
+       * habilidade aberto e o nome preenchido, para o aluno informar nível,
+       * onde aprendeu e, se quiser, anexar o certificado.
+       * `dados` pode trazer uma habilidade existente (edição); `origemVaga`
+       * guarda a vaga de onde o aluno veio, para oferecer a volta.
+       */
+      abrirHabilidade: (dados = {}, origemVaga = null) => {
+        const existente = dados.id ? null
+          : estadoAtual.current.curriculo.habilidadesDeclaradas.find((h) => dados.nome && normalizar(h.nome) === normalizar(dados.nome));
+        set({
+          view: 'curriculo', sel: null, menuAberto: false,
+          habilidadeEmEdicao: {
+            id: null, nome: '', nivel: '', onde: '', ano: '', arquivo: '', ...(existente || dados), origemVaga, abertoEm: Date.now(),
+          },
+        });
       },
-      removerHabilidade: (termo) => mudarCurriculo((cv) => ({ ...cv, habilidadesDeclaradas: cv.habilidadesDeclaradas.filter((h) => h !== termo) }), `${termo} saiu do seu currículo.`),
+      fecharHabilidade: () => set({ habilidadeEmEdicao: null }),
+      salvarHabilidade: ({ origemVaga, abertoEm, ...dados }) => {
+        const nome = dados.nome.trim();
+        if (!nome || !dados.nivel) return;
+        mudarCurriculo((cv) => {
+          const lista = dados.id
+            ? cv.habilidadesDeclaradas.map((h) => (h.id === dados.id ? { ...dados, nome } : h))
+            : [...cv.habilidadesDeclaradas.filter((h) => normalizar(h.nome) !== normalizar(nome)), { ...dados, nome, id: novoId('h') }];
+          return { ...cv, habilidadesDeclaradas: lista };
+        },
+        dados.id ? `${nome} atualizada.` : `${nome} entrou no seu currículo.`,
+        origemVaga ? { rotulo: 'Voltar para a vaga', view: 'vagas', sel: origemVaga } : undefined);
+        set({ habilidadeEmEdicao: null });
+      },
+      removerHabilidade: (id) => mudarCurriculo((cv) => ({ ...cv, habilidadesDeclaradas: cv.habilidadesDeclaradas.filter((h) => h.id !== id) }), 'Habilidade removida.'),
       restaurarCurriculo: () => mudarCurriculo(() => CURRICULO_SEED, 'Currículo de demonstração restaurado.'),
     };
   }, [set]);

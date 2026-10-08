@@ -151,7 +151,11 @@ function Toast() {
           {s.toast.acao && (
             <button
               type="button"
-              onClick={() => { a.irView(s.toast.acao.view); a.fecharToast(); }}
+              onClick={() => {
+                const { view, sel } = s.toast.acao;
+                if (sel) a.abrirVaga(sel); else a.irView(view);
+                a.fecharToast();
+              }}
               className="min-h-10 cursor-pointer rounded-xl px-3 font-bold whitespace-nowrap text-agua-claro hover:bg-white/10"
             >
               {s.toast.acao.rotulo}

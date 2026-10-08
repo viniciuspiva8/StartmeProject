@@ -2,10 +2,11 @@
 // Tudo o que entra aqui (certificações, atividades, voluntariado, habilidades)
 // alimenta o match com as vagas na hora, e o mesmo conteúdo vira o currículo
 // padrão que o aluno exporta em PDF para os sites das empresas.
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useApp } from '../state/AppContext.jsx';
 import { GRADE } from '../data/grade.js';
-import { NIVEIS_IDIOMA, TIPOS_ATIVIDADE } from '../data/curriculo-seed.js';
+import { NIVEIS_HABILIDADE, NIVEIS_IDIOMA, TIPOS_ATIVIDADE } from '../data/curriculo-seed.js';
+import { normalizar } from '../lib/match.js';
 import Icone from '../components/Icone.jsx';
 
 /** O que falta para o currículo ficar completo (usado aqui e no início). */
@@ -70,9 +71,22 @@ export default function Curriculo() {
           <RestaurarDemo />
         </div>
 
-        <div className={`${aba === 'previa' ? 'block' : 'hidden'} lg:sticky lg:top-24 lg:block print:block`}>
-          <p className="mb-3 text-[13px] font-semibold text-tinta-3 print:hidden">Como a empresa vê</p>
-          <Previa />
+        {/* No desktop, a prévia fica presa ao lado do editor e rola sozinha: o aluno
+            percorre o currículo inteiro sem perder de vista o que está editando.
+            É uma região focável, para dar para rolar também pelo teclado. */}
+        <div className={`${aba === 'previa' ? 'block' : 'hidden'} lg:sticky lg:top-24 lg:flex lg:max-h-[calc(100dvh-7.5rem)] lg:flex-col print:static print:block print:max-h-none`}>
+          <div className="mb-3 flex items-baseline justify-between gap-3 print:hidden">
+            <p className="text-[13px] font-semibold text-tinta-3">Como a empresa vê</p>
+            <p className="hidden text-xs text-tinta-4 lg:block">Role aqui para ver o currículo inteiro</p>
+          </div>
+          <div
+            role="region"
+            aria-label="Prévia do currículo"
+            tabIndex={0}
+            className="rounded-2xl lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:overscroll-contain lg:[scrollbar-gutter:stable] print:overflow-visible"
+          >
+            <Previa />
+          </div>
         </div>
       </div>
     </main>
@@ -174,7 +188,6 @@ function Chip({ children, onRemover, tom = 'neutro' }) {
 
 function SecaoHabilidades() {
   const { s, a, perfil } = useApp();
-  const [nova, setNova] = useState('');
   const daGrade = useMemo(
     () => [...new Set(GRADE.filter((d) => d.semestre <= s.semestreAluno).flatMap((d) => d.habilidades))],
     [s.semestreAluno],
@@ -182,15 +195,11 @@ function SecaoHabilidades() {
   const comprovadas = [...perfil.habilidades.values()]
     .filter((h) => h.fontes.some((f) => f.tipo === 'certificado' || f.tipo === 'atividade'))
     .map((h) => h.termo);
-
-  const enviar = (e) => {
-    e.preventDefault();
-    separarHabilidades(nova).forEach((h) => a.declararHabilidade(h));
-    setNova('');
-  };
+  const declaradas = s.curriculo.habilidadesDeclaradas;
+  const editando = s.habilidadeEmEdicao;
 
   return (
-    <Secao id="sec-hab" titulo="Habilidades" descricao="As da grade e as comprovadas entram sozinhas. Declare as que você domina e ainda não aparecem.">
+    <Secao id="sec-hab" titulo="Habilidades" descricao="As da grade e as comprovadas por certificação ou atividade entram sozinhas. As outras, você adiciona com o nível e onde aprendeu.">
       <h3 className="text-[13px] font-semibold text-tinta-2">Da sua grade, até o {s.semestreAluno}º semestre</h3>
       <ul className="mt-2 flex flex-wrap gap-1.5">{daGrade.map((h) => <Chip key={h}>{h}</Chip>)}</ul>
 
@@ -199,18 +208,128 @@ function SecaoHabilidades() {
         ? <ul className="mt-2 flex flex-wrap gap-1.5">{comprovadas.map((h) => <Chip key={h} tom="comprovada">{h}</Chip>)}</ul>
         : <p className="mt-2 text-sm text-tinta-3">Adicione uma certificação para comprovar habilidades.</p>}
 
-      <h3 className="mt-5 text-[13px] font-semibold text-tinta-2">Declaradas por você</h3>
-      {s.curriculo.habilidadesDeclaradas.length > 0 && (
-        <ul className="mt-2 flex flex-wrap gap-1.5">
-          {s.curriculo.habilidadesDeclaradas.map((h) => <Chip key={h} tom="declarada" onRemover={() => a.removerHabilidade(h)}>{h}</Chip>)}
+      <h3 className="mt-5 text-[13px] font-semibold text-tinta-2">Adicionadas por você</h3>
+      {declaradas.length > 0 ? (
+        <ul className="mt-2 flex flex-col divide-y divide-linha rounded-xl border border-linha">
+          {declaradas.map((h) => (
+            <li key={h.id} className={`flex items-center gap-3 py-2.5 pr-2 pl-4 ${editando?.id === h.id ? 'bg-nevoa' : ''}`}>
+              <span className="min-w-0 flex-1">
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="text-[15px] font-semibold text-tinta">{h.nome}</span>
+                  {h.nivel && <span className="rounded-pill bg-nevoa px-2.5 py-0.5 text-xs font-semibold text-azul">{h.nivel}</span>}
+                  {h.arquivo && <span className="inline-flex items-center gap-1 text-xs font-semibold text-agua-texto"><Icone nome="certificado" size={14} /> Certificado</span>}
+                </span>
+                <span className="block text-[13px] text-tinta-3">
+                  {h.onde ? `${h.onde}${h.ano ? `, ${h.ano}` : ''}` : h.nivel ? 'Onde aprendeu não informado' : 'Falta informar o nível'}
+                </span>
+              </span>
+              <button type="button" onClick={() => a.abrirHabilidade(h)} className="btn-fantasma min-h-10 px-3 text-[13px]">
+                Editar<span className="sr-only"> {h.nome}</span>
+              </button>
+              <Remover rotulo={`Remover ${h.nome}`} onClick={() => a.removerHabilidade(h.id)} />
+            </li>
+          ))}
         </ul>
+      ) : (
+        <p className="mt-2 text-sm text-tinta-3">Nenhuma ainda.</p>
       )}
-      <form onSubmit={enviar} className="mt-3 flex gap-2">
-        <label className="sr-only" htmlFor="nova-hab">Nova habilidade</label>
-        <input id="nova-hab" value={nova} onChange={(e) => setNova(e.target.value)} placeholder="Ex.: Excel, Power BI" className={ENTRADA} />
-        <button type="submit" className="btn-claro flex-none" disabled={!nova.trim()}>Adicionar</button>
-      </form>
+
+      {editando ? (
+        <FormHabilidade key={editando.abertoEm} inicial={editando} />
+      ) : (
+        <button type="button" onClick={() => a.abrirHabilidade()} className="btn-claro mt-3">+ Adicionar habilidade</button>
+      )}
     </Secao>
+  );
+}
+
+/** Formulário de habilidade. Aberto pelo "Eu sei X" (nome já preenchido) ou pelo botão da seção. */
+function FormHabilidade({ inicial }) {
+  const { s, a } = useApp();
+  const [f, setF] = useState(inicial);
+  const formRef = useRef(null);
+  const nomeRef = useRef(null);
+  const nivelRef = useRef(null);
+
+  // Ao abrir, traz o formulário para o centro da tela e põe o foco no próximo campo a preencher.
+  useEffect(() => {
+    const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    formRef.current?.scrollIntoView({ behavior: reduz ? 'auto' : 'smooth', block: 'center' });
+    (inicial.nome ? nivelRef : nomeRef).current?.focus({ preventScroll: true });
+  }, [inicial]);
+
+  const duplicada = !inicial.id && f.nome.trim()
+    && s.curriculo.habilidadesDeclaradas.some((h) => normalizar(h.nome) === normalizar(f.nome));
+  const podeSalvar = f.nome.trim() && f.nivel;
+  const enviar = (e) => {
+    e.preventDefault();
+    if (podeSalvar) a.salvarHabilidade(f);
+  };
+
+  return (
+    <form
+      ref={formRef}
+      onSubmit={enviar}
+      aria-labelledby="form-hab-titulo"
+      className="mt-4 grid animate-entra scroll-mt-24 gap-4 rounded-xl border border-azul-300/60 bg-nevoa p-4 sm:grid-cols-[1fr_8rem] sm:p-5"
+    >
+      <div className="sm:col-span-2">
+        <p id="form-hab-titulo" className="text-[15px] font-bold text-tinta">{inicial.id ? `Editar ${inicial.nome}` : 'Nova habilidade'}</p>
+        {inicial.origemVaga && (
+          <p className="mt-0.5 text-[13px] text-tinta-3">A vaga que você estava vendo pede esta habilidade. Ao salvar, a avaliação dela é refeita.</p>
+        )}
+      </div>
+
+      <Campo rotulo="Habilidade" largo>
+        <input ref={nomeRef} required value={f.nome} onChange={(e) => setF({ ...f, nome: e.target.value })} placeholder="Ex.: Power BI" className={ENTRADA} />
+        {duplicada && <span className="text-xs text-tinta-3">Você já adicionou esta habilidade; salvar substitui os dados anteriores.</span>}
+      </Campo>
+
+      <fieldset className="sm:col-span-2">
+        <legend className="text-[13px] font-semibold text-tinta-2">Nível de conhecimento</legend>
+        <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
+          {NIVEIS_HABILIDADE.map((n, i) => (
+            <label
+              key={n.v}
+              className="flex min-h-11 cursor-pointer flex-col justify-center rounded-xl border border-linha-forte bg-white px-3 py-2 transition-colors hover:border-azul-500 has-[:checked]:border-azul has-[:checked]:ring-1 has-[:checked]:ring-azul has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-azul-300"
+            >
+              <input
+                ref={i === 0 ? nivelRef : undefined}
+                type="radio"
+                name="nivel-habilidade"
+                value={n.v}
+                checked={f.nivel === n.v}
+                onChange={() => setF({ ...f, nivel: n.v })}
+                className="sr-only"
+              />
+              <span className="text-sm font-bold text-tinta">{n.v}</span>
+              <span className="text-xs leading-snug text-tinta-3">{n.desc}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <Campo rotulo="Onde aprendeu">
+        <input value={f.onde} onChange={(e) => setF({ ...f, onde: e.target.value })} placeholder="Ex.: Hashtag Treinamentos, estágio, sozinho" className={ENTRADA} />
+      </Campo>
+      <Campo rotulo="Ano">
+        <input inputMode="numeric" maxLength={4} value={f.ano} onChange={(e) => setF({ ...f, ano: e.target.value.replace(/\D/g, '') })} placeholder="2025" className={ENTRADA} />
+      </Campo>
+
+      <Campo rotulo="Certificado (opcional)" largo>
+        <input type="file" accept=".pdf,image/*" onChange={(e) => setF({ ...f, arquivo: e.target.files?.[0]?.name || '' })}
+          className="text-sm text-tinta-2 file:mr-3 file:min-h-10 file:cursor-pointer file:rounded-lg file:border-0 file:bg-white file:px-3 file:font-semibold file:text-azul" />
+        <span className="text-xs text-tinta-3">
+          {f.arquivo ? `Anexado: ${f.arquivo}. ` : ''}Com certificado, a habilidade conta como comprovada. Nesta versão só o nome do arquivo é guardado.
+        </span>
+      </Campo>
+
+      <div className="flex flex-wrap items-center gap-2 sm:col-span-2">
+        <button type="submit" className="btn-primario" disabled={!podeSalvar}>{inicial.id ? 'Salvar alterações' : 'Adicionar ao currículo'}</button>
+        <button type="button" onClick={a.fecharHabilidade} className="btn-fantasma">Cancelar</button>
+        {!f.nivel && <span className="text-[13px] text-tinta-3">Escolha o nível para salvar.</span>}
+      </div>
+    </form>
   );
 }
 
@@ -391,8 +510,11 @@ function Previa() {
   const curso = campo('Curso') || 'Curso';
   const contato = [cv.contato.email, cv.contato.telefone, cv.contato.cidade, cv.contato.linkedin, cv.contato.github].filter(Boolean);
   // Habilidades comprovadas primeiro, depois as da grade, por fim as declaradas.
-  const peso = (h) => Math.min(...h.fontes.map((f) => ({ certificado: 0, atividade: 0, disciplina: 1, declarada: 2 }[f.tipo])));
-  const habilidades = [...perfil.habilidades.values()].sort((a, b) => peso(a) - peso(b)).map((h) => h.termo);
+  const peso = (h) => Math.min(...h.fontes.map((f) => (f.tipo === 'declarada' && f.comprovante ? 0 : { certificado: 0, atividade: 0, disciplina: 1, declarada: 2 }[f.tipo])));
+  const nivelDe = new Map(cv.habilidadesDeclaradas.filter((h) => h.nivel).map((h) => [normalizar(h.nome), h.nivel.toLowerCase()]));
+  const habilidades = [...perfil.habilidades.values()]
+    .sort((a, b) => peso(a) - peso(b))
+    .map((h) => (nivelDe.has(normalizar(h.termo)) ? `${h.termo} (${nivelDe.get(normalizar(h.termo))})` : h.termo));
 
   return (
     <article className="rounded-2xl border border-linha bg-white p-8 text-[13px] leading-relaxed text-tinta shadow-painel sm:p-10 print:rounded-none print:border-0 print:p-0 print:shadow-none">
