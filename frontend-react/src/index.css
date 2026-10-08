@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------------
+   Sistema visual StartMe v2 — tokens tirados do Manual da Marca da FSA
+   (design-reference/uploads/manual da marca.pdf, pág. 4 e 6).
+   Cores com "derivado" no comentário não estão no manual: foram escurecidas
+   a partir da cor oficial para atingir contraste AA (4,5:1) com texto.
+   ------------------------------------------------------------------------ */
+@theme {
+  /* Tipografia oficial: Georgia em títulos, Montserrat em títulos, subtítulos e textos. */
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+
+  /* Azul institucional e variações (manual) */
+  --color-azul: #042D5C;
+  --color-azul-700: #07448A;
+  --color-azul-500: #0C78B3;
+  --color-azul-300: #36A4E0;
+  --color-nevoa: #EBF1FF;            /* branco, variação 3 */
+  --color-nevoa-forte: #D6E2FA;      /* derivado: borda sobre névoa */
+
+  /* Verde-água e variações (manual) */
+  --color-agua-claro: #65FFF2;
+  --color-agua-400: #42D3C7;
+  --color-agua-600: #27AFA4;
+  --color-agua: #00A699;
+  --color-agua-texto: #00736A;       /* derivado: texto sobre branco, 5,4:1 */
+  --color-agua-fundo: #E3F8F5;       /* derivado */
+
+  /* Preto e variações (manual) */
+  --color-tinta: #161A1F;
+  --color-tinta-2: #2D3144;
+  --color-tinta-3: #565C70;          /* derivado: texto secundário, 6,6:1 */
+  --color-tinta-4: #8A90A2;          /* derivado: só para ícones e bordas */
+
+  /* Branco e variações (manual) */
+  --color-papel: #F8F8F8;
+  --color-papel-2: #F3F3F3;
+  --color-linha: #E3E6EE;            /* derivado: divisórias */
+  --color-linha-forte: #C9CEDB;      /* derivado */
+
+  /* Ressalva e erro: semânticos, fora do manual */
+  --color-ressalva: #A14B00;
+  --color-ressalva-fundo: #FDF1E3;
+  --color-ressalva-barra: #F0A53A;
+  --color-erro: #B42318;
+  --color-erro-fundo: #FDECEA;
+
+  --radius-pill: 999px;
+  --shadow-painel: 0 1px 0 rgba(4, 45, 92, 0.04), 0 12px 32px -18px rgba(4, 45, 92, 0.28);
+  --shadow-flutuante: 0 18px 48px -16px rgba(4, 45, 92, 0.45);
+
+  --animate-entra: entra 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-sobe: sobe 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  @keyframes entra {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes sobe {
+    from { transform: translateY(100%); }
+    to { transform: none; }
+  }
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-papel font-sans text-tinta antialiased;
+    font-feature-settings: "tnum" 0;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-azul-300);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  ::selection { background: var(--color-agua-400); color: var(--color-tinta); }
+}
+
+@utility btn {
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed;
+}
+
+@layer components {
+  .btn-primario {
+    @apply btn bg-azul text-white hover:bg-azul-700 disabled:bg-papel-2 disabled:text-tinta-4;
+  }
+  .btn-claro {
+    @apply btn border border-linha-forte bg-white text-tinta hover:border-azul-500 hover:text-azul;
+  }
+  .btn-fantasma {
+    @apply btn px-3 text-tinta-2 hover:bg-nevoa hover:text-azul;
+  }
+  .chip {
+    @apply inline-flex min-h-10 cursor-pointer items-center gap-1.5 rounded-pill border border-linha-forte bg-white px-3.5 text-[13px] font-semibold whitespace-nowrap text-tinta-2 transition-colors hover:border-azul-500 hover:text-azul;
+  }
+  .chip-ativo {
+    @apply border-azul bg-azul text-white hover:bg-azul-700 hover:text-white;
+  }
+  .rotulo {
+    @apply text-[13px] font-semibold text-tinta-3;
+  }
+}
+
+/* Troca de vaga no painel de detalhe: única animação automática da interface.
+   Usa a View Transitions API quando o navegador oferece; sem ela, troca direta. */
+::view-transition-old(detalhe),
+::view-transition-new(detalhe) {
+  animation-duration: 0.2s;
+}
+
+/* Exportação do currículo: o navegador imprime só a prévia, em A4. */
+@page { size: A4; margin: 16mm; }
+@media print {
+  body { background: #fff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

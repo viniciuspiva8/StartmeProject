@@ -31,7 +31,8 @@ cadastro/             API de cadastro (Node / Express / MySQL)
   backend/            servidor e rotas REST
   frontend/           telas de cadastro (legado)
   database/schema.sql schema DB12 e modelagem
-frontend/             NOVO — interface unificada da jornada do aluno (HTML/CSS/JS vanilla, ver "Frontend v1.1" abaixo)
+frontend/             interface unificada da jornada do aluno em HTML/CSS/JS vanilla — referência das 13 pranchas
+frontend-react/      port React 18 + Vite + Tailwind do núcleo do aluno (Pranchas 1, 3, 4, 5, 6–8); ver frontend-react/README.md
 design-reference/     protótipo de design de origem (StartMe.dc.html) e mapa de telas
 docs/
   arquitetura/        topologia e documentação do MVP
