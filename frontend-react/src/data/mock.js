@@ -11,11 +11,11 @@
 // feature de "compatibilidade" que ainda não tem regra de cálculo definida
 // pelo time — a Prancha 6 do design original já expõe esse aviso na tela de
 // detalhe da vaga, e o mantemos (ver views.js, renderDetalhe).
-"use strict";
+
 
 // Vagas de demonstração (usadas quando o coletor está fora do ar, ou como base
 // para enriquecer vagas reais vindas de GET /api/vagas — ver js/api.js).
-const VAGAS = [
+export const VAGAS = [
   { id: 'v1', titulo: 'Estagiário de Desenvolvimento Back-end Python', empresa: 'Nexus Sistemas', link: 'https://www.ciadeestagios.com.br/vaga/back-end-python', salario: 'R$ 1.800,00', dias: 0, dataColeta: '05/09/2026, 06:00 (UTC)', modalidade: 'Híbrido', area: 'Desenvolvimento', semestreMin: 5, pct: 92,
     razao: 'Pede Python e SQL, ambos na sua grade desde o 3º semestre',
     criterios: [
@@ -94,7 +94,7 @@ const VAGAS = [
 // Prancha 1 — cartões da seção "Outros Acessos" do portal acadêmico simulado.
 // Só "Projeto StartMe" (novo:true) é clicável de verdade — preenche as
 // credenciais de demonstração no formulário de login acima.
-const PORTAIS = [
+export const PORTAIS = [
   { nome: 'Portal do Funcionário', icone: 'maleta' },
   { nome: 'Cursos Livres', icone: 'capelo' },
   { nome: 'Acesso ao EducaMobile', icone: 'educa' },
@@ -103,7 +103,7 @@ const PORTAIS = [
 ];
 
 // Prancha 1 — cartões da seção "Ferramentas de Documentos".
-const FERRAMENTAS = [
+export const FERRAMENTAS = [
   { nome: 'Certificador de Documentos', icone: 'certificado' },
   { nome: 'Validador de Diploma Digital', icone: 'diploma' },
   { nome: 'Validador de Histórico Escolar Digital', icone: 'historico' },
@@ -114,7 +114,7 @@ const FERRAMENTAS = [
 // nenhum backend (ver design-reference/github.md); esta lista é combinada em
 // tempo de execução com as candidaturas novas criadas pelo usuário e
 // persistida em localStorage (chave startme:candidaturas) — ver js/api.js.
-const CANDIDATURAS_SEED = [
+export const CANDIDATURAS_SEED = [
   { protocolo: 'SM-2026-0391', vagaId: 'v2', titulo: 'Estágio em Análise de Dados', empresa: 'Grupo Vertere', link: 'https://www.ciadeestagios.com.br/vaga/analise-dados', data: '28/08/2026', status: 'entrevista',
     etapas: [{ nome: 'Candidatura enviada', quando: '28/08/2026', feita: true }, { nome: 'Em análise pela empresa', quando: '30/08/2026', feita: true }, { nome: 'Entrevista agendada', quando: '09/09/2026 · 14h', feita: true }, { nome: 'Resultado final', quando: '—', feita: false }] },
   { protocolo: 'SM-2026-0355', vagaId: 'v4', titulo: 'Estagiário de QA — Testes Manuais', empresa: 'Órbita Software', link: 'https://www.ciadeestagios.com.br/vaga/qa-manual', data: '19/08/2026', status: 'analise',
@@ -127,27 +127,27 @@ const CANDIDATURAS_SEED = [
 
 // Prancha 9 — dados acadêmicos usados quando GET {STARTME_CADASTRO_URL}/alunos/1 falha
 // (backend fora do ar é o cenário mais provável no ambiente de teste).
-const CAMPOS_ACADEMICOS_MOCK = [
+export const CAMPOS_ACADEMICOS_MOCK = [
   { rotulo: 'Nome completo', valor: 'Vinicius Pereira' },
   { rotulo: 'Curso', valor: 'Engenharia de Computação' },
   { rotulo: 'Semestre', valor: '7º de 10' },
   { rotulo: 'Situação do vínculo', valor: 'Ativo' }
 ];
-const SEMESTRE_ALUNO_MOCK = 7;
+export const SEMESTRE_ALUNO_MOCK = 7;
 
 // Prancha 9 — valores padrão dos "dados de empregabilidade" (não existem colunas
 // para eles no schema relacional; ficam só em localStorage, chave startme:perfil).
-const PERFIL_PADRAO = {
+export const PERFIL_PADRAO = {
   email: 'vinicius.pereira@aluno.fsa.br',
   telefone: '(11) 9 8123-4567',
   github: 'github.com/viniciuspiva8',
   linkedin: 'linkedin.com/in/viniciuspereira',
   disponibilidade: 'Manhã e tarde · 6h/dia'
 };
-const INTERESSES_PADRAO = ['Desenvolvimento', 'Dados'];
+export const INTERESSES_PADRAO = ['Desenvolvimento', 'Dados'];
 
 // Prancha 12/13 — currículo e certificados são 100% mock (sem backend nenhum).
-const CURRICULO_SECOES = {
+export const CURRICULO_SECOES = {
   formacao: [{ curso: 'Engenharia de Computação', instituicao: 'Centro Universitário Fundação Santo André', periodo: '2023 — previsão 2028 · 7º semestre' }],
   experiencias: [],
   habilidades: ['Python', 'SQL', 'HTML/CSS/JavaScript', 'Git'],
@@ -155,58 +155,58 @@ const CURRICULO_SECOES = {
   links: { github: 'github.com/viniciuspiva8', linkedin: 'linkedin.com/in/viniciuspereira' }
 };
 
-const CERTIFICADOS_SEED = [
+export const CERTIFICADOS_SEED = [
   { id: 'c1', nome: 'Python para Data Science — Coursera.pdf', habilidade: 'Python (Data Science)', incluido: true },
   { id: 'c2', nome: 'Fundamentos de SQL — Alura.pdf', habilidade: 'SQL', incluido: true }
 ];
 
 // Prancha 5 — opções de filtro.
-const FAIXAS = [
+export const FAIXAS = [
   { v: 'todas', label: 'Qualquer valor' },
   { v: 'ate1500', label: 'Até R$ 1.500' },
   { v: '1500a2000', label: 'R$ 1.500 a R$ 2.000' },
   { v: 'acima2000', label: 'Acima de R$ 2.000' },
   { v: 'sem', label: 'Não informado na origem' }
 ];
-const MODALIDADES = ['Presencial', 'Híbrido', 'Remoto'];
-const AREAS = ['Desenvolvimento', 'Dados', 'Infraestrutura', 'Suporte', 'QA'];
-const JANELAS = [{ v: '1', label: 'Hoje' }, { v: '7', label: '7 dias' }, { v: '30', label: '30 dias' }];
-const POR_PAGINA = 5;
+export const MODALIDADES = ['Presencial', 'Híbrido', 'Remoto'];
+export const AREAS = ['Desenvolvimento', 'Dados', 'Infraestrutura', 'Suporte', 'QA'];
+export const JANELAS = [{ v: '1', label: 'Hoje' }, { v: '7', label: '7 dias' }, { v: '30', label: '30 dias' }];
+export const POR_PAGINA = 5;
 
 // Prancha 3 — o que é e o que não é compartilhado pelo Portal Acadêmico.
-const DADOS_SIM = [
+export const DADOS_SIM = [
   { nome: 'Vínculo acadêmico ativo (sim/não)', para: 'Para confirmar que você é aluno da instituição' },
   { nome: 'Nome completo', para: 'Para personalizar a experiência dentro do StartMe' },
   { nome: 'Curso', para: 'Para filtrar vagas da sua área de formação' },
   { nome: 'Semestre em andamento', para: 'Para calcular a compatibilidade da vaga com o seu momento no curso' }
 ];
-const DADOS_NAO = ['Notas', 'Histórico escolar', 'Dados financeiros', 'Faltas', 'CPF completo', 'Documentos'];
+export const DADOS_NAO = ['Notas', 'Histórico escolar', 'Dados financeiros', 'Faltas', 'CPF completo', 'Documentos'];
 
 // Texto citado do Manual da Marca da FSA — exibido na antiga coluna
 // institucional do login (Prancha 2), removida quando essa tela foi fundida
 // na Prancha 1 (ver views.js, renderPortal). Mantido aqui sem uso na tela por
 // enquanto, para eventual reaproveitamento.
-const MISSAO_INSTITUCIONAL = 'Produzir, disseminar e aplicar o conhecimento tecnológico e acadêmico, para formação cidadã, por meio do ensino, da pesquisa e da extensão.';
-const VALORES_INSTITUCIONAIS = ['Cidadania', 'Ética', 'Inovação', 'Transparência'];
+export const MISSAO_INSTITUCIONAL = 'Produzir, disseminar e aplicar o conhecimento tecnológico e acadêmico, para formação cidadã, por meio do ensino, da pesquisa e da extensão.';
+export const VALORES_INSTITUCIONAIS = ['Cidadania', 'Ética', 'Inovação', 'Transparência'];
 
 // Credenciais fixas de demonstração (Prancha 1 — login fundido no portal) —
 // não há autenticação real de usuário final em nenhum dos dois backends
 // (ver README.md, "Pendências conhecidas").
-const CPF_DEMO = '123.456.789-00';
-const SENHA_DEMO = 'demo2026';
+export const CPF_DEMO = '000.000.000-00';
+export const SENHA_DEMO = 'senha';
 
 // Navegação lateral — modo "demo/QA" para mostrar a jornada completa tela a tela.
 // A Prancha 2 (Login) foi fundida na Prancha 1 (ver renderPortal em views.js) —
 // os números continuam pulando de 1 para 3 para não desalinhar com o resto da
 // numeração, herdada do protótipo original de 13 pranchas.
-const NAV_GRUPOS_DEF = [
+export const NAV_GRUPOS_DEF = [
   { rotulo: 'Entrada', itens: [['portal', '1', 'Portal + Login'], ['consent', '3', 'Consentimento']] },
   { rotulo: 'Aplicação', itens: [['home', '4', 'Início'], ['lista', '5', 'Vagas'], ['detalhe', '6', 'Detalhe + 7'], ['candidaturas', '8', 'Candidaturas'], ['perfil', '9', 'Perfil']] },
   { rotulo: 'Currículo', itens: [['curriculo', '12', 'Currículo'], ['certificados', '13', 'Certificados']] },
   { rotulo: 'Referência', itens: [['excecoes', '10', 'Exceções'], ['sistema', '11', 'Sistema']] }
 ];
 
-const STATUS_FILTROS_DEF = [
+export const STATUS_FILTROS_DEF = [
   ['todos', 'Todas'], ['enviada', 'Enviada'], ['analise', 'Em análise'],
   ['entrevista', 'Entrevista'], ['recusada', 'Não selecionado'], ['finalizada', 'Finalizada']
 ];

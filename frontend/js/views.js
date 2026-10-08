@@ -35,7 +35,6 @@ function renderShell() {
 function renderView(s) {
   switch (s.view) {
     case 'portal': return renderPortal(s);
-    case 'login': return renderLogin(s);
     case 'consent': return renderConsent(s);
     case 'home': return renderHome(s);
     case 'lista': return renderLista(s);
@@ -146,131 +145,101 @@ function renderNotas(prancha, titulo, listaHtml, grid) {
 }
 
 // ------------------------------------------------------------------
-// Prancha 1 — Portal acadêmico simulado
+// Ícones de linha (genéricos, não são logos de terceiros) usados nos
+// cartões de "Ferramentas de Documentos" e "Outros Acessos" da Prancha 1.
 // ------------------------------------------------------------------
-function renderPortal(s) {
-  const cartoesOficiais = PORTAIS.map((p) => {
-    if (p.novo) {
-      return `<div class="sm-portalfsa-item sm-portalfsa-item--novo">
-        <h3>${esc(p.nome)}</h3>
-        <button type="button" class="sm-portalfsa-acessar sm-portalfsa-acessar--novo" onclick="App.portalClicar('${esc(p.nome)}')"><span aria-hidden="true">⚡</span> Acessar</button>
-        <span class="sm-portalfsa-badge-novo">Novo</span>
-      </div>`;
-    }
-    return `<div class="sm-portalfsa-item">
-      <h3>${esc(p.nome)}</h3>
-      <button type="button" class="sm-portalfsa-acessar" onclick="App.portalClicar('${esc(p.nome)}')"><span aria-hidden="true">⚡</span> Acessar</button>
-    </div>`;
-  }).join('');
+function iconePfsa(nome) {
+  const paths = {
+    pessoa: '<circle cx="12" cy="8.5" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/>',
+    cadeado: '<rect x="5.5" y="10.5" width="13" height="9" rx="1.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+    certificado: '<circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/>',
+    diploma: '<path d="M12 3l3 2v4l-3 2-3-2V5z"/><path d="M9 11l-1.5 7 2.5-1 2 2 2-2 2.5 1L15 11"/>',
+    historico: '<rect x="6" y="4" width="12" height="16" rx="1.5"/><path d="M9 9h6M9 12.5h6M9 16h3.5"/>',
+    busca: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l4.5 4.5"/>',
+    maleta: '<rect x="4" y="9" width="16" height="10" rx="1.5"/><path d="M9 9V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M4 13.5h16"/>',
+    capelo: '<path d="M12 6 2 10l10 4 10-4-10-4z"/><path d="M6 12.5V17c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-4.5"/>',
+    educa: '<path d="M12 6c-1.8-1.3-4.2-2-6.5-2-.3 0-.5.2-.5.5v11c0 .3.2.5.5.5 2.3 0 4.7.7 6.5 2 1.8-1.3 4.2-2 6.5-2 .3 0 .5-.2.5-.5v-11c0-.3-.2-.5-.5-.5-2.3 0-4.7.7-6.5 2z"/><path d="M12 6v12"/>',
+    executor: '<path d="M9 8l-4 4 4 4"/><path d="M15 8l4 4-4 4"/>',
+    raio: '<path d="M13 3 5 13h5l-1 8 8-10h-5l1-8z"/>'
+  };
+  return `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[nome] || paths.raio}</svg>`;
+}
 
-  const ferramentas = FERRAMENTAS.map((nome) => `
-    <article class="sm-portal-card">
-      <h3>${esc(nome)}</h3>
-      <button type="button" class="sm-portal-acessar" onclick="App.nadaAinda()" style="margin-top:auto">Acessar</button>
-    </article>`).join('');
-
-  return `
-  <div class="sm-faixa-simulado">AMBIENTE SIMULADO — PROTÓTIPO DE TCC, RÉPLICA CONCEITUAL DO PORTAL.FSA.BR. NÃO INSIRA CREDENCIAIS REAIS.</div>
-  <div class="sm-portalfsa-topo">
-    <div class="sm-portalfsa-topo__row">
-      <div class="sm-portalfsa-logo" aria-hidden="true">
-        <span class="sm-portalfsa-logo__c sm-portalfsa-logo__c--f">F</span>
-        <span class="sm-portalfsa-logo__c sm-portalfsa-logo__c--s">S</span>
-        <span class="sm-portalfsa-logo__c sm-portalfsa-logo__c--a">A</span>
-      </div>
-      <div>
-        <div class="sm-portalfsa-instituicao__eyebrow">Centro Universitário</div>
-        <div class="sm-portalfsa-instituicao__nome">Fundação Santo André</div>
-      </div>
-    </div>
-    <button type="button" class="sm-portalfsa-trocarsenha" onclick="App.nadaAinda()">Troque sua senha</button>
-  </div>
-  <main class="sm-portalfsa-hero">
-    <div class="sm-portalfsa-lockup">
-      <span class="sm-portalfsa-lockup__portal">PORTAL</span>
-      <span class="sm-portalfsa-lockup__fsa">FSA</span>
-    </div>
-    <div class="sm-portalfsa-grid">${cartoesOficiais}</div>
-  </main>
-  <div class="sm-container--narrow" style="margin:0 auto;padding:32px 20px 0">
-    <h2 style="font-size:15px;font-weight:700;color:var(--texto-secundario);margin-bottom:16px;font-family:var(--fonte-corpo)">Ferramentas</h2>
-    <div class="sm-portal-grid">${ferramentas}</div>
-    ${App._internal.notasVisiveis() ? `
-    <div style="margin-top:32px;max-width:760px">
-      ${renderNotas('1', 'Portal acadêmico (réplica do portal.fsa.br)', `
-        <li><strong>Cabeçalho e hero replicam o portal.fsa.br real pixel a pixel</strong> (referência: captura de tela do portal em produção) — logo em três círculos, "Troque sua senha" em vermelho, gradiente azul institucional atrás do lockup "PORTAL FSA" e da grade de oito acessos sem caixa/borda, só título e botão.</li>
-        <li><strong>O StartMe entra como oitavo item da mesma grade do portal</strong>, não como cartão separado abaixo — só o selo "Novo" e o botão em azul sólido (em vez do gradiente roxo dos demais) o distinguem, mantendo-o no mesmo "quadrado" visual dos outros sete acessos.</li>
-        <li><strong>Nenhuma marca de terceiros nem logotipo real da FSA usado como elemento de UI.</strong> Os círculos "F/S/A" e o "FSA" do lockup são tipográficos, não a logo oficial — a faixa declara que é réplica conceitual para demonstração acadêmica.</li>
-        <li><strong>A faixa de simulação continua no topo, acima do cabeçalho.</strong> A banca vê o aviso antes de qualquer campo de credencial, não só na tela de login.</li>
-      `)}
-    </div>` : ''}
-  </div>`;
+function cartaoPfsa(item, onClick) {
+  return `<button type="button" class="sm-pfsa2-card${item.novo ? ' sm-pfsa2-card--novo' : ''}" onclick="${onClick}">
+    <span class="sm-pfsa2-card__icone">${iconePfsa(item.icone)}</span>
+    <span class="sm-pfsa2-card__label">${esc(item.nome)}</span>
+    ${item.novo ? '<span class="sm-pfsa2-badge-novo">Novo</span>' : ''}
+  </button>`;
 }
 
 // ------------------------------------------------------------------
-// Prancha 2 — Login simulado
+// Prancha 1 — Portal acadêmico simulado (Portal + Login fundidos numa
+// tela só, réplica do redesign atual do portal.fsa.br)
 // ------------------------------------------------------------------
-function renderLogin(s) {
+function renderPortal(s) {
   const podeEntrar = s.cpf.length === 14 && s.senha.length > 0;
+  const ferramentas = FERRAMENTAS.map((f) => cartaoPfsa(f, 'App.nadaAinda()')).join('');
+  const outrosAcessos = PORTAIS.map((p) => cartaoPfsa(p, `App.portalClicar('${esc(p.nome)}')`)).join('');
+
   return `
-  <div class="sm-faixa-simulado">AMBIENTE SIMULADO — PROTÓTIPO DE TCC. NÃO INSIRA CREDENCIAIS REAIS.</div>
-  <main class="sm-auth-bg">
-    <div class="sm-auth-card">
-      <section class="sm-auth-form">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:26px">
-          <div class="sm-auth-badge" aria-hidden="true">PA</div>
-          <div style="font-family:var(--fonte-titulo);font-size:18px;font-weight:700;color:var(--acao-600)">Portal Acadêmico</div>
+  <div class="sm-faixa-simulado">AMBIENTE SIMULADO — PROTÓTIPO DE TCC, RÉPLICA CONCEITUAL DO PORTAL.FSA.BR. NÃO INSIRA CREDENCIAIS REAIS.</div>
+  <main class="sm-pfsa2-bg">
+    <div class="sm-pfsa2-card-login">
+      <div class="sm-pfsa2-logo" aria-hidden="true">
+        <span class="sm-pfsa2-logo__c sm-pfsa2-logo__c--f">F</span>
+        <span class="sm-pfsa2-logo__c sm-pfsa2-logo__c--s">S</span>
+        <span class="sm-pfsa2-logo__c sm-pfsa2-logo__c--a">A</span>
+      </div>
+      <div class="sm-pfsa2-instituicao">
+        <div class="sm-pfsa2-instituicao__eyebrow">Centro Universitário</div>
+        <div class="sm-pfsa2-instituicao__nome">Fundação Santo André</div>
+      </div>
+      <h1 class="sm-pfsa2-titulo">Portais FSA</h1>
+      <p class="sm-pfsa2-boasvindas">Boas-vindas</p>
+
+      <div class="sm-pfsa2-form">
+        <div class="sm-input-icon-row sm-pfsa2-input">
+          <span aria-hidden="true">${iconePfsa('pessoa').replace('width="22" height="22"', 'width="18" height="18"')}</span>
+          <input id="cpf" type="text" inputmode="numeric" value="${esc(s.cpf)}" oninput="App.setCpf(this.value)" placeholder="CPF" aria-label="CPF" autocomplete="off">
         </div>
-        <h1 style="font-size:26px;color:var(--texto-primario);letter-spacing:-.01em;margin-bottom:6px">Entrar</h1>
-        <p style="margin:0 0 22px;font-size:14px;line-height:1.55;color:var(--texto-secundario)">Use o CPF cadastrado na secretaria acadêmica.</p>
-
-        <div style="display:flex;flex-direction:column;gap:16px">
-          <div class="sm-field">
-            <label for="cpf">CPF</label>
-            <div class="sm-input-icon-row">
-              <input id="cpf" type="text" inputmode="numeric" value="${esc(s.cpf)}" oninput="App.setCpf(this.value)" placeholder="000.000.000-00" autocomplete="off">
-            </div>
-          </div>
-          <div class="sm-field">
-            <label for="senha">Senha</label>
-            <div class="sm-input-icon-row">
-              <input id="senha" type="${s.verSenha ? 'text' : 'password'}" value="${esc(s.senha)}" oninput="App.setSenha(this.value)" placeholder="Sua senha">
-              <button type="button" onclick="App.toggleSenha()" aria-label="${s.verSenha ? 'Ocultar' : 'Mostrar'}" style="min-width:44px;min-height:44px;border:none;background:none;color:var(--texto-secundario);font-size:12px;font-weight:700;cursor:pointer;border-radius:8px">${s.verSenha ? 'Ocultar' : 'Mostrar'}</button>
-            </div>
-          </div>
-
-          ${s.erroLogin ? `<div role="alert" class="sm-alerta sm-alerta--erro"><span aria-hidden="true">✕</span><div>CPF ou senha inválidos. Use as credenciais de demonstração abaixo — nenhuma credencial real é aceita.</div></div>` : ''}
-
-          <button type="button" class="sm-btn sm-btn-primario" style="min-height:50px;font-size:16px" ${podeEntrar ? '' : 'disabled'} onclick="App.entrar()">Entrar</button>
-          <a href="#" onclick="return false" style="align-self:flex-start;font-size:13.5px">Esqueceu sua senha?</a>
-
-          <div class="sm-demo-box">
-            <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--texto-terciario);margin-bottom:6px">Credenciais fixas de demonstração</div>
-            <div style="font-size:14px;color:var(--texto-primario);font-family:ui-monospace,monospace">CPF ${CPF_DEMO} · senha ${SENHA_DEMO}</div>
-            <button type="button" class="sm-btn sm-btn-secundario" style="margin-top:10px;min-height:40px" onclick="App.preencherDemo()">Preencher automaticamente</button>
-          </div>
+        <div class="sm-input-icon-row sm-pfsa2-input">
+          <span aria-hidden="true">${iconePfsa('cadeado').replace('width="22" height="22"', 'width="18" height="18"')}</span>
+          <input id="senha" type="${s.verSenha ? 'text' : 'password'}" value="${esc(s.senha)}" oninput="App.setSenha(this.value)" placeholder="Senha" aria-label="Senha">
+          <button type="button" onclick="App.toggleSenha()" aria-label="${s.verSenha ? 'Ocultar senha' : 'Mostrar senha'}" style="min-width:36px;min-height:36px;border:none;background:none;color:var(--texto-secundario);cursor:pointer;border-radius:8px">${s.verSenha ? '🙈' : '👁'}</button>
         </div>
-      </section>
-      <section class="sm-auth-side">
-        <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#9DC1E4">Missão institucional</div>
-        <p style="margin:0;font-family:var(--fonte-titulo);font-size:19px;line-height:1.5;color:#fff">${esc(MISSAO_INSTITUCIONAL)}</p>
-        <div style="height:1px;background:#14507F"></div>
-        <ul style="margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px">
-          ${VALORES_INSTITUCIONAIS.map((v) => `<li style="font-size:12px;font-weight:600;color:#E3F6F4;border:1px solid #14507F;border-radius:999px;padding:5px 11px">${esc(v)}</li>`).join('')}
-        </ul>
-        <p style="margin:0;font-size:12px;line-height:1.55;color:#BDD4EA">Texto e valores citados do Manual da Marca da instituição. Nenhum logotipo, marca ou nome de fornecedor de ERP é reproduzido nesta simulação.</p>
-      </section>
+
+        ${s.erroLogin ? `<div role="alert" class="sm-alerta sm-alerta--erro"><span aria-hidden="true">✕</span><div>CPF ou senha inválidos. Use as credenciais de demonstração abaixo — nenhuma credencial real é aceita.</div></div>` : ''}
+
+        <button type="button" class="sm-btn sm-btn-primario sm-pfsa2-entrar" ${podeEntrar ? '' : 'disabled'} onclick="App.entrar()">Entrar</button>
+        <a href="#" class="sm-pfsa2-link" onclick="App.nadaAinda(); return false">Clique aqui caso tenha esquecido ou precise trocar a senha</a>
+
+        <div class="sm-demo-box">
+          <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--texto-terciario);margin-bottom:6px">Credenciais fixas de demonstração</div>
+          <div style="font-size:14px;color:var(--texto-primario);font-family:ui-monospace,monospace">CPF ${CPF_DEMO} · senha ${SENHA_DEMO}</div>
+          <button type="button" class="sm-btn sm-btn-secundario" style="margin-top:10px;min-height:40px" onclick="App.preencherDemo()">Preencher automaticamente</button>
+        </div>
+      </div>
     </div>
+
+    <div class="sm-pfsa2-secao">
+      <h2 class="sm-pfsa2-rotulo">Ferramentas de Documentos</h2>
+      <div class="sm-pfsa2-grid">${ferramentas}</div>
+    </div>
+    <div class="sm-pfsa2-secao">
+      <h2 class="sm-pfsa2-rotulo">Outros Acessos</h2>
+      <div class="sm-pfsa2-grid">${outrosAcessos}</div>
+    </div>
+
     ${App._internal.notasVisiveis() ? `
-    <aside style="max-width:1080px;margin:22px auto 0;background:rgba(2,32,63,.55);border:1px solid #14507F;border-radius:14px;padding:20px" class="sm-notas">
-      ${renderNotas('2', 'Autenticação institucional (mockada)', `
-        <li><strong>Ordem de tabulação declarada:</strong> CPF → Senha → revelar senha → Entrar → Esqueceu sua senha → Preencher automaticamente. Nenhum <code>tabindex</code> positivo: a ordem do DOM já é a ordem correta.</li>
-        <li><strong>"Entrar" desabilitado é honesto, não hostil.</strong> Só habilita com 11 dígitos de CPF e senha preenchida; o motivo fica visível no próprio formato do campo (<code>000.000.000-00</code>).</li>
-        <li><strong>Erro inline, sem recarregar.</strong> A mensagem entra como <code>role="alert"</code> acima do botão, mantendo o que foi digitado.</li>
-        <li><strong>A coluna direita não é ilustração decorativa.</strong> É a missão institucional citada do manual — comunica continuidade sem clonar sistema de terceiros nem inventar imagem.</li>
-        <li><strong>CPF entra, mas não fica.</strong> Ele autentica e é descartado: nenhuma tela do StartMe volta a exibi-lo, nem completo nem parcial.</li>
+    <div class="sm-pfsa2-secao" style="max-width:760px;margin:8px auto 0">
+      ${renderNotas('1', 'Portal acadêmico — Portal + Login fundidos (réplica do redesign do portal.fsa.br)', `
+        <li><strong>Login e portal viraram uma tela só</strong>, seguindo o redesign real: CPF, senha e "Entrar" ficam no topo do mesmo cartão onde antes só havia os acessos. A Prancha 2 (Login) deixou de existir como etapa separada — ver NAV_GRUPOS_DEF em mock-data.js, que agora pula de "1" para "3" na navegação lateral para não desalinhar a numeração do restante do protótipo.</li>
+        <li><strong>"Projeto StartMe" virou um cartão em "Outros Acessos"</strong>, não mais um acesso com botão próprio. Clicar nele preenche as credenciais de demonstração no formulário acima (mesmo efeito de "Preencher automaticamente") — o aluno ainda precisa clicar em "Entrar", preservando o mesmo número de passos de antes.</li>
+        <li><strong>Ícones são desenhos de linha genéricos, não logos reais.</strong> Nenhum deles reproduz a identidade visual de um fornecedor (ex.: EducaMobile, Moodle) — são só pictogramas (maleta, capelo, livro, chaves) coerentes com o estilo "ícone circular + rótulo" da captura de tela de referência.</li>
+        <li><strong>O painel de "missão institucional" que existia ao lado do login antigo foi removido</strong> — o novo design de referência não reserva espaço para ele. O texto do manual da marca continua disponível em MISSAO_INSTITUCIONAL (mock-data.js) para reaproveitamento futuro, só não é mais exibido aqui.</li>
       `)}
-    </aside>` : ''}
+    </div>` : ''}
   </main>`;
 }
 

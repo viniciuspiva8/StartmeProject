@@ -31,7 +31,7 @@ const App = (function () {
     modal: null,
     notasOverride: false, navRecolhida: true,
 
-    // Login (Prancha 2)
+    // Login (fundido na Prancha 1 — ver renderPortal em views.js)
     cpf: '', senha: '', verSenha: false, erroLogin: false,
 
     // Candidaturas (Prancha 8)
@@ -162,11 +162,14 @@ const App = (function () {
 
   // Prancha 1
   function portalClicar(nome) {
-    if (nome === 'PROJETO STARTME') { setState({ view: 'login', aviso: '' }); return; }
-    setState({ aviso: 'Este cartão faz parte do ambiente simulado do portal e não abre nada — só o cartão PROJETO STARTME é funcional na demonstração.' });
+    if (nome === 'Projeto StartMe') {
+      setState({ cpf: CPF_DEMO, senha: SENHA_DEMO, erroLogin: false, aviso: 'Credenciais de demonstração preenchidas no formulário acima — clique em "Entrar" para continuar.' });
+      return;
+    }
+    setState({ aviso: 'Este cartão faz parte do ambiente simulado do portal e não abre nada — só o cartão Projeto StartMe é funcional na demonstração.' });
   }
 
-  // Prancha 2
+  // Login (fundido na Prancha 1)
   function setCpf(valor) { setState({ cpf: mascaraCpf(valor), erroLogin: false }); }
   function setSenha(valor) { setState({ senha: valor, erroLogin: false }); }
   function toggleSenha() { setState({ verSenha: !state.verSenha }); }
@@ -256,7 +259,7 @@ const App = (function () {
   }
 
   // Navegação utilitária (Prancha 10 e menus)
-  function irLogin() { setState({ view: 'login', cpf: '', senha: '', erroLogin: false, aviso: '' }); }
+  function irLogin() { setState({ view: 'portal', cpf: '', senha: '', erroLogin: false, aviso: '' }); }
   function irConsent() { setState({ view: 'consent', aviso: '' }); }
   function irListaLimpa() { setState({ view: 'lista', q: '', faixa: 'todas', mods: [], areas: [], compatOnly: false, janela: '30', pagina: 1, aviso: '' }); }
 

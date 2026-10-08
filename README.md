@@ -31,7 +31,8 @@ cadastro/             API de cadastro (Node / Express / MySQL)
   backend/            servidor e rotas REST
   frontend/           telas de cadastro (legado)
   database/schema.sql schema DB12 e modelagem
-frontend/             NOVO — interface unificada da jornada do aluno (HTML/CSS/JS vanilla, ver "Frontend v1.1" abaixo)
+frontend/             interface unificada da jornada do aluno em HTML/CSS/JS vanilla — referência das 13 pranchas
+frontend-react/      port React 18 + Vite + Tailwind do núcleo do aluno (Pranchas 1, 3, 4, 5, 6–8); ver frontend-react/README.md
 design-reference/     protótipo de design de origem (StartMe.dc.html) e mapa de telas
 docs/
   arquitetura/        topologia e documentação do MVP
@@ -117,7 +118,7 @@ diretórios legados `cadastro/frontend/` e `coletor/web/` **não foram apagados*
 | Dados de contato (e-mail, telefone, GitHub, LinkedIn, disponibilidade) | **Mock editável, persistido em `localStorage`** (`startme:perfil`) | A tabela `Aluno` do schema relacional não tem colunas para esses campos; não há onde gravá-los de verdade. |
 | Minhas candidaturas | **Mock, persistido em `localStorage`** (`startme:candidaturas`) | Não existe endpoint de candidaturas em nenhum backend (ver `design-reference/github.md`). A lista combina uma seed de demonstração com as candidaturas que o usuário cria ao marcar "já me candidatei" na Prancha 6, gerando um protocolo `SM-2026-XXXX`. |
 | Currículo e certificados | **100% mock** | Sem backend para isso. Os toggles de "incluir certificado no currículo" são persistidos em `localStorage` (`startme:certificados`) para a demo ficar coerente entre recarregamentos. |
-| Login e consentimento (Pranchas 2 e 3) | **Mock fixo, intencional** | Credenciais de demonstração `123.456.789-00` / `demo2026`. Não é um corte de escopo: o README já lista "Não há autenticação de usuário final em nenhum dos módulos" como pendência conhecida. |
+| Login (fundido na Prancha 1, junto do portal) e consentimento (Prancha 3) | **Mock fixo, intencional** | Credenciais de demonstração `123.456.789-00` / `demo2026`. Não é um corte de escopo: o README já lista "Não há autenticação de usuário final em nenhum dos módulos" como pendência conhecida. |
 
 ### Como rodar o frontend novo
 
