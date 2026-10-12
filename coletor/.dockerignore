@@ -1,5 +1,11 @@
 credenciais.json
 .env
-__pycache__/
+.venv/
+**/__pycache__/
 *.pyc
+.pytest_cache/
 web/
+tests/
+pytest.ini
+requirements-dev.txt
+docker-compose*.yml

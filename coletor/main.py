@@ -1,25 +1,27 @@
 """
 StartMe - Servico de coleta de vagas.
 
-Extrai vagas do portal Companhia de Estagios, persiste no Google Cloud
-Firestore e expoe a colecao por uma API HTTP.
+Coleta vagas de estagio, trainee e junior em TI pela SerpApi (Google Jobs),
+persiste no Google Cloud Firestore e expoe a colecao por uma API HTTP.
 
 Toda a configuracao vem de variaveis de ambiente (ver .env.example).
 Nenhum segredo e versionado.
 """
 import logging
 import os
-from datetime import datetime, timedelta, timezone
-from typing import Dict, List, Optional
+from contextlib import asynccontextmanager
+from datetime import datetime, timezone
+from typing import List, Optional
 
 import firebase_admin
-import requests
-from bs4 import BeautifulSoup
 from fastapi import Depends, FastAPI, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import credentials, firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
 from pydantic import BaseModel
+
+from fontes import serpapi
+from fontes.serpapi import ResultadoSerpapi
 
 # --------------------------------------------------------------------------
 # Configuracao
@@ -28,37 +30,92 @@ logging.basicConfig(
     level=os.getenv("LOG_LEVEL", "INFO"),
     format="%(asctime)s %(levelname)-7s %(name)s - %(message)s",
 )
+serpapi.instalar_redacao_logs()  # a api_key vai na query string: nunca pode ir para o log
 log = logging.getLogger("startme.coletor")
 
 CRED_PATH = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "credenciais.json")
 SCRAPER_TOKEN = os.getenv("SCRAPER_TOKEN")
-ALLOWED_ORIGINS = [
-    o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://127.0.0.1:5500").split(",") if o.strip()
+
+# Origens de desenvolvimento: Vite (dev 5173 e preview 4173) e Live Server (5500).
+# Em producao, defina ALLOWED_ORIGINS com o dominio real do frontend.
+ORIGENS_DEV = [
+    f"http://{host}:{porta}"
+    for porta in (5173, 4173, 5500)
+    for host in ("localhost", "127.0.0.1")
 ]
-PORTAL_URL = os.getenv("PORTAL_URL", "https://www.ciadeestagios.com.br/vagas-de-estagio/")
-PORTAL_BASE = os.getenv("PORTAL_BASE", "https://www.ciadeestagios.com.br")
-VAGA_TTL_DIAS = int(os.getenv("VAGA_TTL_DIAS", "30"))
-HTTP_TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "20"))
-USER_AGENT = os.getenv(
-    "USER_AGENT",
-    "StartMe-Bot/1.0 (TCC Eng. Computacao - Centro Universitario Fundacao Santo Andre)",
-)
 
-if not os.path.exists(CRED_PATH):
-    raise RuntimeError(
-        f"Credencial do Firebase nao encontrada em '{CRED_PATH}'. "
-        "Baixe o JSON da conta de servico e aponte GOOGLE_APPLICATION_CREDENTIALS para ele. "
-        "Esse arquivo NUNCA deve ser versionado."
-    )
 
-firebase_admin.initialize_app(credentials.Certificate(CRED_PATH))
-db = firestore.client()
-COLECAO = "vagas"
+def _origens_permitidas(bruto: Optional[str]) -> List[str]:
+    """Lista explicita de origens. Nunca curinga; barra final e removida.
+
+    O navegador envia a origem sem "/" no fim, entao "http://x:5173/" nunca
+    casaria. "*" e descartado com aviso: o contrato e lista explicita.
+    """
+    if not bruto or not bruto.strip():
+        return list(ORIGENS_DEV)
+    origens = []
+    for origem in (o.strip().rstrip("/") for o in bruto.split(",")):
+        if origem == "*":
+            log.warning("ALLOWED_ORIGINS contem '*': ignorado. Liste as origens explicitamente.")
+        elif origem:
+            origens.append(origem)
+    return origens
+
+
+ALLOWED_ORIGINS = _origens_permitidas(os.getenv("ALLOWED_ORIGINS"))
+COLECAO = serpapi.COLECAO_VAGAS
+
+# Variavel vazia nao e "desligada" para a biblioteca do Firestore: remove-a.
+if "FIRESTORE_EMULATOR_HOST" in os.environ and not os.environ["FIRESTORE_EMULATOR_HOST"].strip():
+    del os.environ["FIRESTORE_EMULATOR_HOST"]
+
+_db = None
+
+
+def get_db():
+    """Cliente do Firestore, criado na primeira chamada.
+
+    Fica fora do import para que os testes possam substitui-lo (dependency
+    override) sem credencial do Firebase.
+
+    Se FIRESTORE_EMULATOR_HOST estiver definido (desenvolvimento local), usa o
+    emulador com credencial anonima: nenhum arquivo de credencial e necessario
+    e nada sai para o Firebase real.
+    """
+    global _db
+    if _db is None and os.getenv("FIRESTORE_EMULATOR_HOST"):
+        from google.auth.credentials import AnonymousCredentials
+        from google.cloud import firestore as gcf
+
+        projeto = os.getenv("GOOGLE_CLOUD_PROJECT", "startme-local")
+        log.warning(
+            "Firestore EMULADOR em %s (projeto '%s'): nao e o Firebase real.",
+            os.environ["FIRESTORE_EMULATOR_HOST"], projeto,
+        )
+        _db = gcf.Client(project=projeto, credentials=AnonymousCredentials())
+    if _db is None:
+        if not os.path.exists(CRED_PATH):
+            raise RuntimeError(
+                f"Credencial do Firebase nao encontrada em '{CRED_PATH}'. "
+                "Baixe o JSON da conta de servico e aponte GOOGLE_APPLICATION_CREDENTIALS para ele. "
+                "Esse arquivo NUNCA deve ser versionado."
+            )
+        firebase_admin.initialize_app(credentials.Certificate(CRED_PATH))
+        _db = firestore.client()
+    return _db
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    get_db()  # falha rapido na subida se a credencial nao existir
+    yield
+
 
 app = FastAPI(
     title="StartMe - Coletor de Vagas",
-    version="0.2.0",
-    description="Coleta, armazena e disponibiliza vagas de estagio em TI.",
+    version="0.3.0",
+    description="Coleta, armazena e disponibiliza vagas de estagio e junior em TI.",
+    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,
@@ -80,13 +137,20 @@ class Vaga(BaseModel):
     data_coleta: str
     descricao: str = ""
     salario: str = ""
+    # Campos extras: vagas gravadas antes da SerpApi nao tem fonte, via nem logo.
+    fonte: str = "companhia_estagios"
+    via: str = ""
+    # Logo da empresa como data URI (vazio = a interface mostra a letra da empresa).
+    logo: str = ""
 
 
 class ResultadoColeta(BaseModel):
     vagas_expiradas_removidas: int
     vagas_novas: int
     vagas_renovadas: int
+    # Vagas unicas que passaram no filtro de estagio/trainee/junior nesta execucao.
     cards_encontrados: int
+    serpapi: Optional[ResultadoSerpapi] = None
 
 
 # --------------------------------------------------------------------------
@@ -115,8 +179,8 @@ def health() -> dict:
 
 
 @app.get("/api/vagas", response_model=List[Vaga])
-def listar_vagas() -> List[Vaga]:
-    """Devolve as vagas ativas registradas no Firestore."""
+def listar_vagas(db=Depends(get_db)) -> List[Vaga]:
+    """Devolve as vagas registradas no Firestore."""
     vagas: List[Vaga] = []
     for doc in db.collection(COLECAO).stream():
         dados = doc.to_dict() or {}
@@ -129,6 +193,9 @@ def listar_vagas() -> List[Vaga]:
                 data_coleta=str(dados.get("data_coleta", "")),
                 descricao=dados.get("descricao", ""),
                 salario=dados.get("salario", ""),
+                fonte=dados.get("fonte") or "companhia_estagios",
+                via=dados.get("via") or "",
+                logo=dados.get("logo") or "",
             )
         )
     return vagas
@@ -137,8 +204,8 @@ def listar_vagas() -> List[Vaga]:
 # --------------------------------------------------------------------------
 # Coleta
 # --------------------------------------------------------------------------
-def _remover_expiradas(agora: datetime) -> int:
-    """Apaga em lote as vagas cuja data de expiracao ja passou."""
+def _remover_expiradas(db, agora: datetime) -> int:
+    """Apaga em lote as vagas (de qualquer fonte) cuja data de expiracao ja passou."""
     expiradas = db.collection(COLECAO).where(
         filter=FieldFilter("data_expiracao", "<", agora)
     ).stream()
@@ -158,121 +225,23 @@ def _remover_expiradas(agora: datetime) -> int:
     return total
 
 
-def _links_existentes() -> Dict[str, str]:
-    """Mapa link -> id do documento, lido em uma unica varredura.
-
-    Substitui a consulta por vaga que existia antes (uma leitura do Firestore
-    por card processado).
-    """
-    mapa: Dict[str, str] = {}
-    for doc in db.collection(COLECAO).select(["link"]).stream():
-        link = (doc.to_dict() or {}).get("link")
-        if link:
-            mapa[link] = doc.id
-    return mapa
-
-
-def _extrair_cards(html: str) -> List[dict]:
-    """Le o HTML do portal e devolve os cards de vaga ainda abertos."""
-    sopa = BeautifulSoup(html, "html.parser")
-    slider = sopa.find("div", class_="vagas__slider")
-    if not slider:
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail="Estrutura do portal mudou: 'div.vagas__slider' nao encontrada.",
-        )
-
-    cards = []
-    for card in slider.find_all("article", class_="vagas__card"):
-        if "--expired" in card.get("class", []):
-            continue
-
-        ancora = card.find("a", class_="vagas__card__link")
-        href = ancora.get("href") if ancora else None
-        if not href:
-            continue
-        link = href if href.startswith("http") else f"{PORTAL_BASE}{href}"
-
-        titulo_tag = card.find("h2", class_="headline--xs")
-        titulo = titulo_tag.get_text(strip=True) if titulo_tag else "Programa de Estagio"
-
-        img = card.find("img", class_="vagas__card__brand__image")
-        empresa = (img.get("alt", "") if img else "").replace("Logo ", "").strip()
-
-        cards.append(
-            {"link": link, "titulo": titulo, "empresa": empresa or "Companhia de Estagios"}
-        )
-    return cards
-
-
 @app.post(
     "/api/coleta",
     response_model=ResultadoColeta,
     dependencies=[Depends(exigir_token)],
 )
-def executar_coleta() -> ResultadoColeta:
-    """Remove vagas expiradas e coleta as vagas abertas do portal."""
+def executar_coleta(db=Depends(get_db)) -> ResultadoColeta:
+    """Remove vagas expiradas e coleta vagas novas pela SerpApi."""
     agora = datetime.now(timezone.utc)
-    validade = agora + timedelta(days=VAGA_TTL_DIAS)
-    hoje = agora.date().isoformat()
 
-    removidas = _remover_expiradas(agora)
+    removidas = _remover_expiradas(db, agora)
     log.info("Limpeza concluida: %s vagas expiradas removidas.", removidas)
 
-    try:
-        resposta = requests.get(
-            PORTAL_URL, headers={"User-Agent": USER_AGENT}, timeout=HTTP_TIMEOUT
-        )
-        resposta.raise_for_status()
-    except requests.RequestException as erro:
-        log.exception("Falha ao acessar o portal.")
-        raise HTTPException(
-            status_code=status.HTTP_502_BAD_GATEWAY,
-            detail=f"Portal inacessivel: {erro}",
-        ) from erro
-
-    cards = _extrair_cards(resposta.text)
-    log.info("Cards abertos encontrados: %s", len(cards))
-
-    conhecidos = _links_existentes()
-    lote = db.batch()
-    novas = renovadas = pendentes = 0
-
-    for card in cards:
-        doc_id = conhecidos.get(card["link"])
-        if doc_id:
-            lote.update(
-                db.collection(COLECAO).document(doc_id),
-                {"data_expiracao": validade, "data_ultima_verificacao": hoje},
-            )
-            renovadas += 1
-        else:
-            lote.set(
-                db.collection(COLECAO).document(),
-                {
-                    **card,
-                    "data_coleta": hoje,
-                    "data_ultima_verificacao": hoje,
-                    "data_expiracao": validade,
-                    "descricao": "Vaga mapeada no portal da Companhia de Estagios.",
-                    "salario": "A combinar",
-                },
-            )
-            novas += 1
-
-        pendentes += 1
-        if pendentes == 400:
-            lote.commit()
-            lote = db.batch()
-            pendentes = 0
-
-    if pendentes:
-        lote.commit()
-
-    log.info("Coleta finalizada: %s novas, %s renovadas.", novas, renovadas)
+    resultado = serpapi.coletar(db, agora=agora)
     return ResultadoColeta(
         vagas_expiradas_removidas=removidas,
-        vagas_novas=novas,
-        vagas_renovadas=renovadas,
-        cards_encontrados=len(cards),
+        vagas_novas=resultado.vagas_novas,
+        vagas_renovadas=resultado.vagas_renovadas,
+        cards_encontrados=resultado.vagas_unicas,
+        serpapi=resultado,
     )

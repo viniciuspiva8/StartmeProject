@@ -1,0 +1,30 @@
+# Ambiente LOCAL do coletor: Firestore EMULADO + coletor. Nao toca no Firebase real
+# e nao precisa de credenciais.json.
+#
+#   docker compose -f docker-compose.local.yml up --build -d
+#   curl http://localhost:8000/health
+#   docker compose -f docker-compose.local.yml down        # os dados do emulador somem
+#
+# Le SERPAPI_KEY e SCRAPER_TOKEN de ./.env (copie de .env.example).
+services:
+  firestore:
+    image: mtlynch/firestore-emulator
+    environment:
+      FIRESTORE_PROJECT_ID: startme-local
+      PORT: "8080"
+    # O emulador roda numa JVM; o teto evita que ela consuma a maquina inteira.
+    mem_limit: 768m
+    # Sem "ports": so o coletor, na rede do compose, precisa alcancar o emulador.
+
+  coletor:
+    build: .
+    image: startme-coletor
+    env_file: .env
+    environment:
+      FIRESTORE_EMULATOR_HOST: firestore:8080
+      GOOGLE_CLOUD_PROJECT: startme-local
+    ports:
+      - "8000:8000"
+    depends_on:
+      - firestore
+    mem_limit: 256m
