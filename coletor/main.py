@@ -9,12 +9,14 @@ Nenhum segredo e versionado.
 """
 import logging
 import os
+import threading
+import time
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import firebase_admin
-from fastapi import Depends, FastAPI, Header, HTTPException, status
+from fastapi import Depends, FastAPI, Header, HTTPException, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import credentials, firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
@@ -64,6 +66,11 @@ def _origens_permitidas(bruto: Optional[str]) -> List[str]:
 
 ALLOWED_ORIGINS = _origens_permitidas(os.getenv("ALLOWED_ORIGINS"))
 COLECAO = serpapi.COLECAO_VAGAS
+
+# Cache em memoria de GET /api/vagas (segundos; 0 desliga). Os dados so mudam quando a coleta
+# roda, entao um TTL de 1 a 5 minutos e semanticamente gratuito e poupa a cota do Firestore
+# (50 mil leituras/dia no plano gratuito; sem cache, cada requisicao le a colecao inteira).
+VAGAS_CACHE_TTL = int(os.getenv("VAGAS_CACHE_TTL", "120"))
 
 # Variavel vazia nao e "desligada" para a biblioteca do Firestore: remove-a.
 if "FIRESTORE_EMULATOR_HOST" in os.environ and not os.environ["FIRESTORE_EMULATOR_HOST"].strip():
@@ -178,9 +185,8 @@ def health() -> dict:
     return {"status": "ok", "colecao": COLECAO}
 
 
-@app.get("/api/vagas", response_model=List[Vaga])
-def listar_vagas(db=Depends(get_db)) -> List[Vaga]:
-    """Devolve as vagas registradas no Firestore."""
+def _ler_vagas(db) -> List[Vaga]:
+    """Le a colecao inteira do Firestore (uma leitura por documento)."""
     vagas: List[Vaga] = []
     for doc in db.collection(COLECAO).stream():
         dados = doc.to_dict() or {}
@@ -198,6 +204,63 @@ def listar_vagas(db=Depends(get_db)) -> List[Vaga]:
                 logo=dados.get("logo") or "",
             )
         )
+    return vagas
+
+
+class CacheVagas:
+    """Cache em memoria da lista de vagas, com TTL.
+
+    * Uma unica leitura do Firestore por janela de TTL, mesmo com muitas requisicoes.
+    * `invalidar()` e chamado quando os dados mudam (coleta); a copia vencida fica guardada.
+    * Se o Firestore falhar (cota estourada, rede), serve a copia vencida em vez de dar erro.
+    * Um processo, uma instancia: com varias replicas cada uma teria o seu cache.
+    """
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self.limpar()
+
+    def limpar(self) -> None:
+        self._vagas: Optional[List[Vaga]] = None
+        self._expira = 0.0
+        self.hits = 0
+        self.misses = 0
+
+    def invalidar(self) -> None:
+        with self._lock:
+            self._expira = 0.0
+
+    def obter(self, db) -> Tuple[List[Vaga], str]:
+        """Devolve (vagas, estado) com estado em HIT, MISS ou STALE."""
+        with self._lock:
+            if VAGAS_CACHE_TTL > 0 and self._vagas is not None and time.monotonic() < self._expira:
+                self.hits += 1
+                return self._vagas, "HIT"
+            try:
+                vagas = _ler_vagas(db)
+            except Exception:
+                if self._vagas is None:
+                    raise
+                log.warning("Firestore indisponivel: servindo a copia vencida das vagas.")
+                return self._vagas, "STALE"
+            self.misses += 1
+            self._vagas = vagas
+            self._expira = time.monotonic() + VAGAS_CACHE_TTL
+            log.info("Vagas lidas do Firestore: %s documentos (cache: %s acertos, %s leituras).",
+                     len(vagas), self.hits, self.misses)
+            return vagas, "MISS"
+
+
+cache_vagas = CacheVagas()
+
+
+@app.get("/api/vagas", response_model=List[Vaga])
+def listar_vagas(response: Response, db=Depends(get_db)) -> List[Vaga]:
+    """Devolve as vagas registradas no Firestore (com cache em memoria de VAGAS_CACHE_TTL s)."""
+    vagas, estado = cache_vagas.obter(db)
+    response.headers["X-Cache"] = estado  # HIT/MISS/STALE: evidencia para o ensaio de carga
+    if VAGAS_CACHE_TTL > 0:
+        response.headers["Cache-Control"] = f"public, max-age={min(VAGAS_CACHE_TTL, 60)}"
     return vagas
 
 
@@ -234,10 +297,12 @@ def executar_coleta(db=Depends(get_db)) -> ResultadoColeta:
     """Remove vagas expiradas e coleta vagas novas pela SerpApi."""
     agora = datetime.now(timezone.utc)
 
-    removidas = _remover_expiradas(db, agora)
-    log.info("Limpeza concluida: %s vagas expiradas removidas.", removidas)
-
-    resultado = serpapi.coletar(db, agora=agora)
+    try:
+        removidas = _remover_expiradas(db, agora)
+        log.info("Limpeza concluida: %s vagas expiradas removidas.", removidas)
+        resultado = serpapi.coletar(db, agora=agora)
+    finally:
+        cache_vagas.invalidar()  # os dados mudaram (ou podem ter mudado): a proxima leitura vai ao Firestore
     return ResultadoColeta(
         vagas_expiradas_removidas=removidas,
         vagas_novas=resultado.vagas_novas,

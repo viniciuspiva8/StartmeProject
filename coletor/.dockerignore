@@ -9,3 +9,5 @@ tests/
 pytest.ini
 requirements-dev.txt
 docker-compose*.yml
+scripts/
+firestore.rules

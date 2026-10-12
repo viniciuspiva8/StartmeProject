@@ -125,6 +125,31 @@ testar gastando 1, defina `SERPAPI_QUERIES` e `SERPAPI_LOCALIZACOES` com um úni
 valor. Fora do compose, `FIRESTORE_EMULATOR_HOST` também ativa o emulador;
 em produção essa variável deve estar ausente.
 
+**Cache de `GET /api/vagas`.** A lista fica em memória por `VAGAS_CACHE_TTL` segundos (padrão 120),
+então uma rajada de requisições custa uma única leitura do Firestore (ADR-001: a cota gratuita é de
+50 mil leituras por dia, e sem cache cada requisição lê a coleção inteira). Uma coleta invalida o cache;
+se o Firestore falhar (rede, cota), serve a cópia vencida. Os cabeçalhos `X-Cache` (HIT, MISS ou STALE) e
+`Cache-Control` permitem medir o efeito nos ensaios de carga.
+
+**Conectar ao Firestore real** (passos que só quem tem a conta pode fazer):
+
+1. No [console do Firebase](https://console.firebase.google.com), crie um projeto (de preferência na
+   conta do grupo) e ative o **Firestore** em modo de produção, região `southamerica-east1`, no plano
+   gratuito (sem faturamento).
+2. Em *Configurações do projeto → Contas de serviço → Gerar nova chave privada*, salve o JSON como
+   `coletor/credenciais.json`. O arquivo é ignorado pelo git e pelo Docker; **nunca o envie por chat, e-mail ou commit**.
+3. Em *Firestore → Regras*, cole o conteúdo de `coletor/firestore.rules` (negar tudo a clientes: só o backend,
+   com a conta de serviço, lê e escreve) e publique.
+4. Rode o teste de conexão (grava, lê e apaga um documento temporário; deixe `FIRESTORE_EMULATOR_HOST` ausente):
+
+```bash
+cd coletor
+python scripts/testar_firestore.py     # esperado: "Destino: Firestore REAL | projeto: <id>" e "OK: ..."
+```
+
+Em produção, `FIRESTORE_EMULATOR_HOST` deve estar ausente, o `credenciais.json` entra por volume ou segredo
+(nunca na imagem) e `ALLOWED_ORIGINS` lista só o domínio real do frontend.
+
 Testes (não chamam a SerpApi nem o Firebase):
 
 ```bash

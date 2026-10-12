@@ -16,6 +16,7 @@ CAMPOS_ORIGINAIS = {"id", "titulo", "empresa", "link", "data_coleta", "descricao
 def client(fake_db, monkeypatch):
     monkeypatch.setattr(main, "SCRAPER_TOKEN", TOKEN)
     main.app.dependency_overrides[main.get_db] = lambda: fake_db
+    main.cache_vagas.limpar()
     yield TestClient(main.app)  # sem "with": nao dispara o lifespan (credencial do Firebase)
     main.app.dependency_overrides.clear()
 
@@ -202,3 +203,94 @@ def test_get_db_sem_emulador_exige_a_credencial(monkeypatch, tmp_path):
     monkeypatch.setattr(main, "CRED_PATH", str(tmp_path / "nao-existe.json"))
     with pytest.raises(RuntimeError, match="Credencial do Firebase nao encontrada"):
         main.get_db()
+
+
+# --------------------------------------------------------------------------
+# Cache de GET /api/vagas (poupa a cota de leituras do Firestore)
+# --------------------------------------------------------------------------
+def semear(fake_db, n=3):
+    for i in range(n):
+        fake_db.collection("vagas").document(f"v{i}").set({
+            "titulo": f"Estagio {i}", "empresa": "ACME", "link": f"https://acme.test/{i}", "data_coleta": "2026-10-12",
+        })
+
+
+def test_varias_requisicoes_geram_uma_unica_leitura_do_firestore(client, fake_db):
+    semear(fake_db, 5)
+
+    estados = [client.get("/api/vagas").headers["X-Cache"] for _ in range(20)]
+
+    assert estados == ["MISS"] + ["HIT"] * 19
+    assert fake_db.collection("vagas").leituras == 5  # sem cache seriam 100
+
+
+def test_cache_expira_apos_o_ttl(client, fake_db, monkeypatch):
+    semear(fake_db, 2)
+    relogio = {"t": 1000.0}
+    monkeypatch.setattr(main.time, "monotonic", lambda: relogio["t"])
+    monkeypatch.setattr(main, "VAGAS_CACHE_TTL", 120)
+
+    assert client.get("/api/vagas").headers["X-Cache"] == "MISS"
+    relogio["t"] += 119
+    assert client.get("/api/vagas").headers["X-Cache"] == "HIT"
+    relogio["t"] += 2  # 121 s: venceu
+    assert client.get("/api/vagas").headers["X-Cache"] == "MISS"
+    assert fake_db.collection("vagas").leituras == 4
+
+
+def test_ttl_zero_desliga_o_cache(client, fake_db, monkeypatch):
+    semear(fake_db, 2)
+    monkeypatch.setattr(main, "VAGAS_CACHE_TTL", 0)
+
+    respostas = [client.get("/api/vagas") for _ in range(3)]
+
+    assert [r.headers["X-Cache"] for r in respostas] == ["MISS"] * 3
+    assert all("cache-control" not in r.headers for r in respostas)
+    assert fake_db.collection("vagas").leituras == 6
+
+
+def test_resposta_traz_cache_control_curto_para_navegador_e_cdn(client, fake_db):
+    resposta = client.get("/api/vagas")
+    assert resposta.headers["cache-control"] == "public, max-age=60"  # TTL 120, mas o navegador fica em 60
+
+
+def test_coleta_invalida_o_cache(client, fake_db, resposta_serpapi, serpapi_http, monkeypatch):
+    monkeypatch.setenv("SERPAPI_KEY", CHAVE_FALSA)
+    serpapi_http.responder = lambda params: FakeResposta(resposta_serpapi())
+    assert client.get("/api/vagas").json() == []  # vazio, agora em cache
+    assert client.get("/api/vagas").headers["X-Cache"] == "HIT"
+
+    client.post("/api/coleta", headers={"X-Scraper-Token": TOKEN})
+
+    depois = client.get("/api/vagas")
+    assert depois.headers["X-Cache"] == "MISS"  # a coleta invalidou
+    assert len(depois.json()) == 7  # e a lista nova ja aparece
+
+
+def test_firestore_fora_do_ar_serve_a_copia_vencida(client, fake_db, monkeypatch):
+    semear(fake_db, 2)
+    assert client.get("/api/vagas").headers["X-Cache"] == "MISS"
+    main.cache_vagas.invalidar()  # venceu, mas a copia continua guardada
+
+    def quebrado(_):
+        raise RuntimeError("429 Quota exceeded")
+
+    monkeypatch.setattr(main, "_ler_vagas", quebrado)
+    resposta = client.get("/api/vagas")
+
+    assert resposta.status_code == 200 and len(resposta.json()) == 2
+    assert resposta.headers["X-Cache"] == "STALE"
+
+
+def test_firestore_fora_do_ar_sem_copia_devolve_erro(fake_db, monkeypatch):
+    main.app.dependency_overrides[main.get_db] = lambda: fake_db
+    main.cache_vagas.limpar()
+
+    def quebrado(_):
+        raise RuntimeError("fora do ar")
+
+    monkeypatch.setattr(main, "_ler_vagas", quebrado)
+    try:
+        assert TestClient(main.app, raise_server_exceptions=False).get("/api/vagas").status_code == 500
+    finally:
+        main.app.dependency_overrides.clear()

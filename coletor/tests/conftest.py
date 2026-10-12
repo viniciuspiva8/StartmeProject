@@ -69,6 +69,7 @@ class FakeCollection:
     def __init__(self):
         self.dados = {}
         self._auto = 0
+        self.leituras = 0  # documentos lidos por stream(): o que o Firestore cobraria
 
     def document(self, doc_id=None):
         if doc_id is None:
@@ -78,6 +79,7 @@ class FakeCollection:
 
     def stream(self):
         for doc_id, dados in list(self.dados.items()):
+            self.leituras += 1
             yield FakeSnap(doc_id, dados, FakeDoc(self, doc_id))
 
     def where(self, filter):  # noqa: A002 - mesmo nome do argumento real
