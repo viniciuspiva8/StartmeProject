@@ -3,6 +3,7 @@
 import { DADOS_NAO, DADOS_SIM } from '../data/mock.js';
 import { useApp } from '../state/AppContext.jsx';
 import Icone from '../components/Icone.jsx';
+import Logo from '../components/Logo.jsx';
 
 export default function Consent() {
   const { a } = useApp();
@@ -12,7 +13,9 @@ export default function Consent() {
         <div className="flex items-center gap-3" aria-hidden="true">
           <span className="grid size-11 place-items-center rounded-xl border-2 border-azul font-serif font-bold text-azul">PA</span>
           <span className="h-px w-8 bg-linha-forte" />
-          <span className="grid size-11 place-items-center rounded-xl bg-azul font-serif text-xl font-bold text-white">S</span>
+          <span className="grid size-11 place-items-center rounded-xl border-2 border-linha-forte bg-white">
+            <Logo size={30} />
+          </span>
         </div>
         <h1 className="mt-6 max-w-[28ch] font-serif text-[28px] leading-tight font-bold text-tinta sm:text-[32px]">
           O Portal Acadêmico vai compartilhar quatro dados seus com o StartMe

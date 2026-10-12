@@ -1,0 +1,534 @@
+{
+  "search_metadata": {
+    "id": "6ac928b33047f31d62b587f1",
+    "status": "Success",
+    "json_endpoint": "https://serpapi.com/searches/RMdCfKW6kgzlOEYKcKto7_TepRb1byOsBi2Yk51a72g/6ac928b33047f31d62b587f1.json",
+    "markdown_endpoint": "https://serpapi.com/searches/RMdCfKW6kgzlOEYKcKto7_TepRb1byOsBi2Yk51a72g/6ac928b33047f31d62b587f1.md",
+    "created_at": "2026-10-09 17:47:31 UTC",
+    "processed_at": "2026-10-09 17:47:31 UTC",
+    "google_jobs_url": "https://www.google.com/search?q=est%C3%A1gio+desenvolvedor&uule=w+CAIQICIjU2FvIFBhdWxvLFN0YXRlIG9mIFNhbyBQYXVsbyxCcmF6aWw&hl=pt-br&gl=br&udm=8",
+    "raw_html_file": "https://serpapi.com/searches/RMdCfKW6kgzlOEYKcKto7_TepRb1byOsBi2Yk51a72g/6ac928b33047f31d62b587f1.html",
+    "total_time_taken": 7.05
+  },
+  "search_parameters": {
+    "q": "estágio desenvolvedor",
+    "engine": "google_jobs",
+    "location_requested": "São Paulo, State of São Paulo, Brazil",
+    "location_used": "Sao Paulo,State of Sao Paulo,Brazil",
+    "google_domain": "google.com",
+    "hl": "pt-br",
+    "gl": "br"
+  },
+  "filters": [
+    {
+      "name": "Remoto",
+      "parameters": {
+        "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4r6mmoLkMLYSkC2PEO9iYiq4vTmHJZBkAO0I7xCrakW7RPm2JU7K1P-hg_RhuPU_cPFJPU44QQsuEbvt44tJ0RmpTvEfoeXZrXoOPhiaORwMqh7yPBbSETQ-yuuQsNG-mJ5dGC8D6BcH179sYXdUO7ItuZvg7A8m0ir9m1jXzlD_Mc8G3z",
+        "q": "estágio desenvolvedor remoto"
+      },
+      "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+remoto&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4r6mmoLkMLYSkC2PEO9iYiq4vTmHJZBkAO0I7xCrakW7RPm2JU7K1P-hg_RhuPU_cPFJPU44QQsuEbvt44tJ0RmpTvEfoeXZrXoOPhiaORwMqh7yPBbSETQ-yuuQsNG-mJ5dGC8D6BcH179sYXdUO7ItuZvg7A8m0ir9m1jXzlD_Mc8G3z&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQxKsJKAB6BAgXEAE&ictx=0",
+      "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+remoto&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4r6mmoLkMLYSkC2PEO9iYiq4vTmHJZBkAO0I7xCrakW7RPm2JU7K1P-hg_RhuPU_cPFJPU44QQsuEbvt44tJ0RmpTvEfoeXZrXoOPhiaORwMqh7yPBbSETQ-yuuQsNG-mJ5dGC8D6BcH179sYXdUO7ItuZvg7A8m0ir9m1jXzlD_Mc8G3z"
+    },
+    {
+      "name": "Data de publicação",
+      "options": [
+        {
+          "name": "Ontem",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rJh9Ri_XUuBPa1fXW9rjaDAVqXsrviMZFtmqzMNrgJ3Q9rLS9r05oFAdV7fArLSzaulZXkPQwQPYOsQafWPqX3vfSBkDUYBZEpE5c5V-ifstctPrhzlmGHi5TYqf8jF8REcL7VaQFBTcVU3pb7jB1ewbyJh1PKErMRIWFtZXQiuFZGIzWBUDNoy9bSJCTpkUDUQcfbJFPBpP1F5XBxJRxiS-byiPu0oDARwqtEy5I8hKHFs6F068BejhHm9k9kREZthkr-moAy4vga-JUn3me7DhtbB3exq61Z-lyv6n3Nbt4kkI6RSDM4a3nGH7ZzWY_CQerW6pH8gL_a9HJes-aZroTahR-MjhuJOGxd-itA3mCx9wEhy6imiYJ2j_DXmzg8o9L3g",
+            "q": "estágio desenvolvedor desde ontem"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+desde+ontem&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJh9Ri_XUuBPa1fXW9rjaDAVqXsrviMZFtmqzMNrgJ3Q9rLS9r05oFAdV7fArLSzaulZXkPQwQPYOsQafWPqX3vfSBkDUYBZEpE5c5V-ifstctPrhzlmGHi5TYqf8jF8REcL7VaQFBTcVU3pb7jB1ewbyJh1PKErMRIWFtZXQiuFZGIzWBUDNoy9bSJCTpkUDUQcfbJFPBpP1F5XBxJRxiS-byiPu0oDARwqtEy5I8hKHFs6F068BejhHm9k9kREZthkr-moAy4vga-JUn3me7DhtbB3exq61Z-lyv6n3Nbt4kkI6RSDM4a3nGH7ZzWY_CQerW6pH8gL_a9HJes-aZroTahR-MjhuJOGxd-itA3mCx9wEhy6imiYJ2j_DXmzg8o9L3g&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAC",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+desde+ontem&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJh9Ri_XUuBPa1fXW9rjaDAVqXsrviMZFtmqzMNrgJ3Q9rLS9r05oFAdV7fArLSzaulZXkPQwQPYOsQafWPqX3vfSBkDUYBZEpE5c5V-ifstctPrhzlmGHi5TYqf8jF8REcL7VaQFBTcVU3pb7jB1ewbyJh1PKErMRIWFtZXQiuFZGIzWBUDNoy9bSJCTpkUDUQcfbJFPBpP1F5XBxJRxiS-byiPu0oDARwqtEy5I8hKHFs6F068BejhHm9k9kREZthkr-moAy4vga-JUn3me7DhtbB3exq61Z-lyv6n3Nbt4kkI6RSDM4a3nGH7ZzWY_CQerW6pH8gL_a9HJes-aZroTahR-MjhuJOGxd-itA3mCx9wEhy6imiYJ2j_DXmzg8o9L3g"
+        },
+        {
+          "name": "Nos últimos 3 dias",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4ruvZncv1iwOV6RdoVuBUAgy1-6cXcR9fy49uAfu4PYE_ezemygTgYJr5Bxub14YBvLfC4lQqr8YquYUFAdNqEfNQJWfVK9s5StOMgtVtP4gAjaJNU7oiJkDcU-r91cEzCzTBN8Sdj7ZfZ47PxuyUC-nuVZO4ZCmFhsCQKp3eduUibstTtbZuSQcCbyD6mLEPs1OKPhbtA8IGqq7TZBzDbzwd_z3AMTigZGHokug1yWI25XD5hfJFu-ULsX3I3mIWpcdJ7W42CUOavtNvZmYgoARmDB5esvbVd_j0tuvQjkA0gdpaoVHv4Bx7-6AjQdkRk2-uNxx2gNLKiZCEVcT1t_TUWGAjSuF98RobKmgPmDoANha1KF7NB_MitolCaVK3wsPvMbA",
+            "q": "estágio desenvolvedor nos últimos 3 dias"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+nos+%C3%BAltimos+3+dias&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4ruvZncv1iwOV6RdoVuBUAgy1-6cXcR9fy49uAfu4PYE_ezemygTgYJr5Bxub14YBvLfC4lQqr8YquYUFAdNqEfNQJWfVK9s5StOMgtVtP4gAjaJNU7oiJkDcU-r91cEzCzTBN8Sdj7ZfZ47PxuyUC-nuVZO4ZCmFhsCQKp3eduUibstTtbZuSQcCbyD6mLEPs1OKPhbtA8IGqq7TZBzDbzwd_z3AMTigZGHokug1yWI25XD5hfJFu-ULsX3I3mIWpcdJ7W42CUOavtNvZmYgoARmDB5esvbVd_j0tuvQjkA0gdpaoVHv4Bx7-6AjQdkRk2-uNxx2gNLKiZCEVcT1t_TUWGAjSuF98RobKmgPmDoANha1KF7NB_MitolCaVK3wsPvMbA&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAD",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+nos+%C3%BAltimos+3+dias&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4ruvZncv1iwOV6RdoVuBUAgy1-6cXcR9fy49uAfu4PYE_ezemygTgYJr5Bxub14YBvLfC4lQqr8YquYUFAdNqEfNQJWfVK9s5StOMgtVtP4gAjaJNU7oiJkDcU-r91cEzCzTBN8Sdj7ZfZ47PxuyUC-nuVZO4ZCmFhsCQKp3eduUibstTtbZuSQcCbyD6mLEPs1OKPhbtA8IGqq7TZBzDbzwd_z3AMTigZGHokug1yWI25XD5hfJFu-ULsX3I3mIWpcdJ7W42CUOavtNvZmYgoARmDB5esvbVd_j0tuvQjkA0gdpaoVHv4Bx7-6AjQdkRk2-uNxx2gNLKiZCEVcT1t_TUWGAjSuF98RobKmgPmDoANha1KF7NB_MitolCaVK3wsPvMbA"
+        },
+        {
+          "name": "Semana passada",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rTGFjtmTP_iRVRK1BxM_muU1saC5sJ-3o0yxiUVXpipM2m4SIEuRj4gUIxBoLinlCL7UXSlCdR1olgd7CXhcTkl3bcn6evu187hblpuNG65Im2ZEVhNAC3f-f-os_XVwqPknuvQZOqGxjiyvosF3uMaUtRDfp4TpE3NEqrsrS1QSv8Pg_DLOQB2AXCR17xOzCbXud0qtWuJqucWCQnFDClsnxsMr2S3qAAfY3PTu0pv54hVIJ9U2VNVzcRuDTjnIBWkc24RI_Z0Y8l7EaJ0CJLZA_Qil3bOHRaN0J-m9dkJmh76cdnLspEMhrnoUfsiwxexEk8w_9FWQBbx-pCetwAgUbhwC9H5ZcIzYqo7GvNk6nNq-DkQ6r-TtjG6V-SgQLZoVUAQ",
+            "q": "estágio desenvolvedor na última semana"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+na+%C3%BAltima+semana&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rTGFjtmTP_iRVRK1BxM_muU1saC5sJ-3o0yxiUVXpipM2m4SIEuRj4gUIxBoLinlCL7UXSlCdR1olgd7CXhcTkl3bcn6evu187hblpuNG65Im2ZEVhNAC3f-f-os_XVwqPknuvQZOqGxjiyvosF3uMaUtRDfp4TpE3NEqrsrS1QSv8Pg_DLOQB2AXCR17xOzCbXud0qtWuJqucWCQnFDClsnxsMr2S3qAAfY3PTu0pv54hVIJ9U2VNVzcRuDTjnIBWkc24RI_Z0Y8l7EaJ0CJLZA_Qil3bOHRaN0J-m9dkJmh76cdnLspEMhrnoUfsiwxexEk8w_9FWQBbx-pCetwAgUbhwC9H5ZcIzYqo7GvNk6nNq-DkQ6r-TtjG6V-SgQLZoVUAQ&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAE",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+na+%C3%BAltima+semana&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rTGFjtmTP_iRVRK1BxM_muU1saC5sJ-3o0yxiUVXpipM2m4SIEuRj4gUIxBoLinlCL7UXSlCdR1olgd7CXhcTkl3bcn6evu187hblpuNG65Im2ZEVhNAC3f-f-os_XVwqPknuvQZOqGxjiyvosF3uMaUtRDfp4TpE3NEqrsrS1QSv8Pg_DLOQB2AXCR17xOzCbXud0qtWuJqucWCQnFDClsnxsMr2S3qAAfY3PTu0pv54hVIJ9U2VNVzcRuDTjnIBWkc24RI_Z0Y8l7EaJ0CJLZA_Qil3bOHRaN0J-m9dkJmh76cdnLspEMhrnoUfsiwxexEk8w_9FWQBbx-pCetwAgUbhwC9H5ZcIzYqo7GvNk6nNq-DkQ6r-TtjG6V-SgQLZoVUAQ"
+        },
+        {
+          "name": "Mês passado",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rJ7C_oDwvFglOqm_ceaPuief8ue76-wCayB-ke3TT78u7_alLs_5__2Fd84KqN4HG44jNxlZEiw4F9gWj00U6meDTzvhwq2tfk_qMIVPKtGtw_33FkqjiamDFnwMLzY8ecN2xaOcC8xK_QOobSqG6dYoCeSss8vFrold42O__nEIt5nq0Nqku6vuAO6ak4MB3y_-iUqds8R4bX9Pzc7jJruI_k22IhWSCLPtkKd50YRpKUQgZBvBuX-uaxLnrbiuQ6Rq-jpaT1Ykzfvb2-xcApLeYDO7455_jNNaieOsJ3G9obvqQ6HUIUub1j8FRay_S6WnEgkiTOWXE3JTpBQ0CVxLMwgXtcDRPZs5T2ezVVQbhY1vG15tpNPu0TM9qXD4RunyhWQ",
+            "q": "estágio desenvolvedor no último mês"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+no+%C3%BAltimo+m%C3%AAs&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJ7C_oDwvFglOqm_ceaPuief8ue76-wCayB-ke3TT78u7_alLs_5__2Fd84KqN4HG44jNxlZEiw4F9gWj00U6meDTzvhwq2tfk_qMIVPKtGtw_33FkqjiamDFnwMLzY8ecN2xaOcC8xK_QOobSqG6dYoCeSss8vFrold42O__nEIt5nq0Nqku6vuAO6ak4MB3y_-iUqds8R4bX9Pzc7jJruI_k22IhWSCLPtkKd50YRpKUQgZBvBuX-uaxLnrbiuQ6Rq-jpaT1Ykzfvb2-xcApLeYDO7455_jNNaieOsJ3G9obvqQ6HUIUub1j8FRay_S6WnEgkiTOWXE3JTpBQ0CVxLMwgXtcDRPZs5T2ezVVQbhY1vG15tpNPu0TM9qXD4RunyhWQ&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAF",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+no+%C3%BAltimo+m%C3%AAs&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJ7C_oDwvFglOqm_ceaPuief8ue76-wCayB-ke3TT78u7_alLs_5__2Fd84KqN4HG44jNxlZEiw4F9gWj00U6meDTzvhwq2tfk_qMIVPKtGtw_33FkqjiamDFnwMLzY8ecN2xaOcC8xK_QOobSqG6dYoCeSss8vFrold42O__nEIt5nq0Nqku6vuAO6ak4MB3y_-iUqds8R4bX9Pzc7jJruI_k22IhWSCLPtkKd50YRpKUQgZBvBuX-uaxLnrbiuQ6Rq-jpaT1Ykzfvb2-xcApLeYDO7455_jNNaieOsJ3G9obvqQ6HUIUub1j8FRay_S6WnEgkiTOWXE3JTpBQ0CVxLMwgXtcDRPZs5T2ezVVQbhY1vG15tpNPu0TM9qXD4RunyhWQ"
+        }
+      ]
+    },
+    {
+      "name": "Data de publicação",
+      "options": [
+        {
+          "name": "Ontem",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rJh9Ri_XUuBPa1fXW9rjaDAVqXsrviMZFtmqzMNrgJ3Q9rLS9r05oFAdV7fArLSzaulZXkPQwQPYOsQafWPqX3vfSBkDUYBZEpE5c5V-ifstctPrhzlmGHi5TYqf8jF8REcL7VaQFBTcVU3pb7jB1ewbyJh1PKErMRIWFtZXQiuFZGIzWBUDNoy9bSJCTpkUDUQcfbJFPBpP1F5XBxJRxiS-byiPu0oDARwqtEy5I8hKHFs6F068BejhHm9k9kREZthkr-moAy4vga-JUn3me7DhtbB3exq61Z-lyv6n3Nbt4kkI6RSDM4a3nGH7ZzWY_CQerW6pH8gL_a9HJes-aZroTahR-MjhuJOGxd-itA3mCx9wEhy6imiYJ2j_DXmzg8o9L3g",
+            "q": "estágio desenvolvedor desde ontem"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+desde+ontem&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJh9Ri_XUuBPa1fXW9rjaDAVqXsrviMZFtmqzMNrgJ3Q9rLS9r05oFAdV7fArLSzaulZXkPQwQPYOsQafWPqX3vfSBkDUYBZEpE5c5V-ifstctPrhzlmGHi5TYqf8jF8REcL7VaQFBTcVU3pb7jB1ewbyJh1PKErMRIWFtZXQiuFZGIzWBUDNoy9bSJCTpkUDUQcfbJFPBpP1F5XBxJRxiS-byiPu0oDARwqtEy5I8hKHFs6F068BejhHm9k9kREZthkr-moAy4vga-JUn3me7DhtbB3exq61Z-lyv6n3Nbt4kkI6RSDM4a3nGH7ZzWY_CQerW6pH8gL_a9HJes-aZroTahR-MjhuJOGxd-itA3mCx9wEhy6imiYJ2j_DXmzg8o9L3g&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAC",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+desde+ontem&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJh9Ri_XUuBPa1fXW9rjaDAVqXsrviMZFtmqzMNrgJ3Q9rLS9r05oFAdV7fArLSzaulZXkPQwQPYOsQafWPqX3vfSBkDUYBZEpE5c5V-ifstctPrhzlmGHi5TYqf8jF8REcL7VaQFBTcVU3pb7jB1ewbyJh1PKErMRIWFtZXQiuFZGIzWBUDNoy9bSJCTpkUDUQcfbJFPBpP1F5XBxJRxiS-byiPu0oDARwqtEy5I8hKHFs6F068BejhHm9k9kREZthkr-moAy4vga-JUn3me7DhtbB3exq61Z-lyv6n3Nbt4kkI6RSDM4a3nGH7ZzWY_CQerW6pH8gL_a9HJes-aZroTahR-MjhuJOGxd-itA3mCx9wEhy6imiYJ2j_DXmzg8o9L3g"
+        },
+        {
+          "name": "Nos últimos 3 dias",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4ruvZncv1iwOV6RdoVuBUAgy1-6cXcR9fy49uAfu4PYE_ezemygTgYJr5Bxub14YBvLfC4lQqr8YquYUFAdNqEfNQJWfVK9s5StOMgtVtP4gAjaJNU7oiJkDcU-r91cEzCzTBN8Sdj7ZfZ47PxuyUC-nuVZO4ZCmFhsCQKp3eduUibstTtbZuSQcCbyD6mLEPs1OKPhbtA8IGqq7TZBzDbzwd_z3AMTigZGHokug1yWI25XD5hfJFu-ULsX3I3mIWpcdJ7W42CUOavtNvZmYgoARmDB5esvbVd_j0tuvQjkA0gdpaoVHv4Bx7-6AjQdkRk2-uNxx2gNLKiZCEVcT1t_TUWGAjSuF98RobKmgPmDoANha1KF7NB_MitolCaVK3wsPvMbA",
+            "q": "estágio desenvolvedor nos últimos 3 dias"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+nos+%C3%BAltimos+3+dias&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4ruvZncv1iwOV6RdoVuBUAgy1-6cXcR9fy49uAfu4PYE_ezemygTgYJr5Bxub14YBvLfC4lQqr8YquYUFAdNqEfNQJWfVK9s5StOMgtVtP4gAjaJNU7oiJkDcU-r91cEzCzTBN8Sdj7ZfZ47PxuyUC-nuVZO4ZCmFhsCQKp3eduUibstTtbZuSQcCbyD6mLEPs1OKPhbtA8IGqq7TZBzDbzwd_z3AMTigZGHokug1yWI25XD5hfJFu-ULsX3I3mIWpcdJ7W42CUOavtNvZmYgoARmDB5esvbVd_j0tuvQjkA0gdpaoVHv4Bx7-6AjQdkRk2-uNxx2gNLKiZCEVcT1t_TUWGAjSuF98RobKmgPmDoANha1KF7NB_MitolCaVK3wsPvMbA&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAD",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+nos+%C3%BAltimos+3+dias&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4ruvZncv1iwOV6RdoVuBUAgy1-6cXcR9fy49uAfu4PYE_ezemygTgYJr5Bxub14YBvLfC4lQqr8YquYUFAdNqEfNQJWfVK9s5StOMgtVtP4gAjaJNU7oiJkDcU-r91cEzCzTBN8Sdj7ZfZ47PxuyUC-nuVZO4ZCmFhsCQKp3eduUibstTtbZuSQcCbyD6mLEPs1OKPhbtA8IGqq7TZBzDbzwd_z3AMTigZGHokug1yWI25XD5hfJFu-ULsX3I3mIWpcdJ7W42CUOavtNvZmYgoARmDB5esvbVd_j0tuvQjkA0gdpaoVHv4Bx7-6AjQdkRk2-uNxx2gNLKiZCEVcT1t_TUWGAjSuF98RobKmgPmDoANha1KF7NB_MitolCaVK3wsPvMbA"
+        },
+        {
+          "name": "Semana passada",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rTGFjtmTP_iRVRK1BxM_muU1saC5sJ-3o0yxiUVXpipM2m4SIEuRj4gUIxBoLinlCL7UXSlCdR1olgd7CXhcTkl3bcn6evu187hblpuNG65Im2ZEVhNAC3f-f-os_XVwqPknuvQZOqGxjiyvosF3uMaUtRDfp4TpE3NEqrsrS1QSv8Pg_DLOQB2AXCR17xOzCbXud0qtWuJqucWCQnFDClsnxsMr2S3qAAfY3PTu0pv54hVIJ9U2VNVzcRuDTjnIBWkc24RI_Z0Y8l7EaJ0CJLZA_Qil3bOHRaN0J-m9dkJmh76cdnLspEMhrnoUfsiwxexEk8w_9FWQBbx-pCetwAgUbhwC9H5ZcIzYqo7GvNk6nNq-DkQ6r-TtjG6V-SgQLZoVUAQ",
+            "q": "estágio desenvolvedor na última semana"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+na+%C3%BAltima+semana&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rTGFjtmTP_iRVRK1BxM_muU1saC5sJ-3o0yxiUVXpipM2m4SIEuRj4gUIxBoLinlCL7UXSlCdR1olgd7CXhcTkl3bcn6evu187hblpuNG65Im2ZEVhNAC3f-f-os_XVwqPknuvQZOqGxjiyvosF3uMaUtRDfp4TpE3NEqrsrS1QSv8Pg_DLOQB2AXCR17xOzCbXud0qtWuJqucWCQnFDClsnxsMr2S3qAAfY3PTu0pv54hVIJ9U2VNVzcRuDTjnIBWkc24RI_Z0Y8l7EaJ0CJLZA_Qil3bOHRaN0J-m9dkJmh76cdnLspEMhrnoUfsiwxexEk8w_9FWQBbx-pCetwAgUbhwC9H5ZcIzYqo7GvNk6nNq-DkQ6r-TtjG6V-SgQLZoVUAQ&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAE",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+na+%C3%BAltima+semana&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rTGFjtmTP_iRVRK1BxM_muU1saC5sJ-3o0yxiUVXpipM2m4SIEuRj4gUIxBoLinlCL7UXSlCdR1olgd7CXhcTkl3bcn6evu187hblpuNG65Im2ZEVhNAC3f-f-os_XVwqPknuvQZOqGxjiyvosF3uMaUtRDfp4TpE3NEqrsrS1QSv8Pg_DLOQB2AXCR17xOzCbXud0qtWuJqucWCQnFDClsnxsMr2S3qAAfY3PTu0pv54hVIJ9U2VNVzcRuDTjnIBWkc24RI_Z0Y8l7EaJ0CJLZA_Qil3bOHRaN0J-m9dkJmh76cdnLspEMhrnoUfsiwxexEk8w_9FWQBbx-pCetwAgUbhwC9H5ZcIzYqo7GvNk6nNq-DkQ6r-TtjG6V-SgQLZoVUAQ"
+        },
+        {
+          "name": "Mês passado",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rJ7C_oDwvFglOqm_ceaPuief8ue76-wCayB-ke3TT78u7_alLs_5__2Fd84KqN4HG44jNxlZEiw4F9gWj00U6meDTzvhwq2tfk_qMIVPKtGtw_33FkqjiamDFnwMLzY8ecN2xaOcC8xK_QOobSqG6dYoCeSss8vFrold42O__nEIt5nq0Nqku6vuAO6ak4MB3y_-iUqds8R4bX9Pzc7jJruI_k22IhWSCLPtkKd50YRpKUQgZBvBuX-uaxLnrbiuQ6Rq-jpaT1Ykzfvb2-xcApLeYDO7455_jNNaieOsJ3G9obvqQ6HUIUub1j8FRay_S6WnEgkiTOWXE3JTpBQ0CVxLMwgXtcDRPZs5T2ezVVQbhY1vG15tpNPu0TM9qXD4RunyhWQ",
+            "q": "estágio desenvolvedor no último mês"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+no+%C3%BAltimo+m%C3%AAs&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJ7C_oDwvFglOqm_ceaPuief8ue76-wCayB-ke3TT78u7_alLs_5__2Fd84KqN4HG44jNxlZEiw4F9gWj00U6meDTzvhwq2tfk_qMIVPKtGtw_33FkqjiamDFnwMLzY8ecN2xaOcC8xK_QOobSqG6dYoCeSss8vFrold42O__nEIt5nq0Nqku6vuAO6ak4MB3y_-iUqds8R4bX9Pzc7jJruI_k22IhWSCLPtkKd50YRpKUQgZBvBuX-uaxLnrbiuQ6Rq-jpaT1Ykzfvb2-xcApLeYDO7455_jNNaieOsJ3G9obvqQ6HUIUub1j8FRay_S6WnEgkiTOWXE3JTpBQ0CVxLMwgXtcDRPZs5T2ezVVQbhY1vG15tpNPu0TM9qXD4RunyhWQ&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIHBAF",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+no+%C3%BAltimo+m%C3%AAs&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rJ7C_oDwvFglOqm_ceaPuief8ue76-wCayB-ke3TT78u7_alLs_5__2Fd84KqN4HG44jNxlZEiw4F9gWj00U6meDTzvhwq2tfk_qMIVPKtGtw_33FkqjiamDFnwMLzY8ecN2xaOcC8xK_QOobSqG6dYoCeSss8vFrold42O__nEIt5nq0Nqku6vuAO6ak4MB3y_-iUqds8R4bX9Pzc7jJruI_k22IhWSCLPtkKd50YRpKUQgZBvBuX-uaxLnrbiuQ6Rq-jpaT1Ykzfvb2-xcApLeYDO7455_jNNaieOsJ3G9obvqQ6HUIUub1j8FRay_S6WnEgkiTOWXE3JTpBQ0CVxLMwgXtcDRPZs5T2ezVVQbhY1vG15tpNPu0TM9qXD4RunyhWQ"
+        }
+      ]
+    },
+    {
+      "name": "Tipo de vaga",
+      "options": [
+        {
+          "name": "Tempo integral",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rpHusyZpq3j8GM2p8Pq9jTkCp6ezTtf0Sf5-Fm1VuqB3K16Wj6IwLpPtLQfAUE5DspKxvAS5E64WlVk_TL02VfGRivYgiema51zU5pH15NdYJq9MwvxFMbM6V0HPhYMXe6evxHGLmpabovdJaealE96QJTmxpYotQTv4uiLjKkabSqXedEKyH9xEli1dw1xd1rxbBOu6_ad0PZsUwU1Jo67-zte0B2y_R5_lrmm0ue0p6bz-gsTH1-SHYZ06RSb8UluCJAeyG3ywt5aA5EGoeQBP0HG6y1VM_0BbFKLu6fZi0y5uTvWVVoJHgHEydGi-oK6J2mKy_O0YnHDMBj_F729-fufA",
+            "q": "estágio desenvolvedor tempo integral"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+tempo+integral&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rpHusyZpq3j8GM2p8Pq9jTkCp6ezTtf0Sf5-Fm1VuqB3K16Wj6IwLpPtLQfAUE5DspKxvAS5E64WlVk_TL02VfGRivYgiema51zU5pH15NdYJq9MwvxFMbM6V0HPhYMXe6evxHGLmpabovdJaealE96QJTmxpYotQTv4uiLjKkabSqXedEKyH9xEli1dw1xd1rxbBOu6_ad0PZsUwU1Jo67-zte0B2y_R5_lrmm0ue0p6bz-gsTH1-SHYZ06RSb8UluCJAeyG3ywt5aA5EGoeQBP0HG6y1VM_0BbFKLu6fZi0y5uTvWVVoJHgHEydGi-oK6J2mKy_O0YnHDMBj_F729-fufA&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAC",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+tempo+integral&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rpHusyZpq3j8GM2p8Pq9jTkCp6ezTtf0Sf5-Fm1VuqB3K16Wj6IwLpPtLQfAUE5DspKxvAS5E64WlVk_TL02VfGRivYgiema51zU5pH15NdYJq9MwvxFMbM6V0HPhYMXe6evxHGLmpabovdJaealE96QJTmxpYotQTv4uiLjKkabSqXedEKyH9xEli1dw1xd1rxbBOu6_ad0PZsUwU1Jo67-zte0B2y_R5_lrmm0ue0p6bz-gsTH1-SHYZ06RSb8UluCJAeyG3ywt5aA5EGoeQBP0HG6y1VM_0BbFKLu6fZi0y5uTvWVVoJHgHEydGi-oK6J2mKy_O0YnHDMBj_F729-fufA"
+        },
+        {
+          "name": "Meio período",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rOlXwN1Kkg1slxefdo_4jCK8FGg8Ikt06lxmqHyD1rsez2DCrxDjIJMIULyvEJulEbQCI2zBQqPusmdQIMM9M8VR0abTJi-0UoihXG6ioPREVVa6gOAjU1DlJiDK_kyhQ0MRI0cToZAoFsZlBDm2kHLtcs7c2p09h-0kQFdzjxZKSHuPsA08sRhjEhMJLhq8_ckpgv0EHQxuQzWAnSv2_o_p6oWWbFDjxAV-YqbA8XFu0UsKWs5O0EKcEAnrcA2U6bLj366DFmu7IaIhMpvcEpkwTX5YdkMS_qw5IYy4U_go1gkaIDuJsy0z3X1sa18RjtyYh8_J0QT_7uRTY3avqJ0a0rhQ",
+            "q": "estágio desenvolvedor meio período"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+meio+per%C3%ADodo&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rOlXwN1Kkg1slxefdo_4jCK8FGg8Ikt06lxmqHyD1rsez2DCrxDjIJMIULyvEJulEbQCI2zBQqPusmdQIMM9M8VR0abTJi-0UoihXG6ioPREVVa6gOAjU1DlJiDK_kyhQ0MRI0cToZAoFsZlBDm2kHLtcs7c2p09h-0kQFdzjxZKSHuPsA08sRhjEhMJLhq8_ckpgv0EHQxuQzWAnSv2_o_p6oWWbFDjxAV-YqbA8XFu0UsKWs5O0EKcEAnrcA2U6bLj366DFmu7IaIhMpvcEpkwTX5YdkMS_qw5IYy4U_go1gkaIDuJsy0z3X1sa18RjtyYh8_J0QT_7uRTY3avqJ0a0rhQ&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAD",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+meio+per%C3%ADodo&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rOlXwN1Kkg1slxefdo_4jCK8FGg8Ikt06lxmqHyD1rsez2DCrxDjIJMIULyvEJulEbQCI2zBQqPusmdQIMM9M8VR0abTJi-0UoihXG6ioPREVVa6gOAjU1DlJiDK_kyhQ0MRI0cToZAoFsZlBDm2kHLtcs7c2p09h-0kQFdzjxZKSHuPsA08sRhjEhMJLhq8_ckpgv0EHQxuQzWAnSv2_o_p6oWWbFDjxAV-YqbA8XFu0UsKWs5O0EKcEAnrcA2U6bLj366DFmu7IaIhMpvcEpkwTX5YdkMS_qw5IYy4U_go1gkaIDuJsy0z3X1sa18RjtyYh8_J0QT_7uRTY3avqJ0a0rhQ"
+        },
+        {
+          "name": "Contrato",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rdhuh-bDQ7lZYgbJV6OMYLl6Oq9eEpmdrhe7xtEQ5Q1DNByXID-U7PoMrES2iG80ayJ14HnQRYM_wcjvh6qd7-3LsA8lLBsePaRfeHfzMK-kv0z39PW373EP4H5SJ1YO-5cFIbBS97FculyTr2gLv2EIToYxKvGBE09joOPmuD0EPJwWBijKOXx5JLD22j6y3EjvEoFnIF1_SaPuETFyHl3iDG6ngvK0BeUuWPYcaxiR6oYcGWpQsbXDnKB35-vNIfGY7UoS8KPx07AppTgY5XSF7KK4QfNLgAgfHzC9aqSdV6cnQLABqEX83i4C695a6SkeVlUKS49dKO0Vdg68xCUYyjeY",
+            "q": "estágio desenvolvedor contrato"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+contrato&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rdhuh-bDQ7lZYgbJV6OMYLl6Oq9eEpmdrhe7xtEQ5Q1DNByXID-U7PoMrES2iG80ayJ14HnQRYM_wcjvh6qd7-3LsA8lLBsePaRfeHfzMK-kv0z39PW373EP4H5SJ1YO-5cFIbBS97FculyTr2gLv2EIToYxKvGBE09joOPmuD0EPJwWBijKOXx5JLD22j6y3EjvEoFnIF1_SaPuETFyHl3iDG6ngvK0BeUuWPYcaxiR6oYcGWpQsbXDnKB35-vNIfGY7UoS8KPx07AppTgY5XSF7KK4QfNLgAgfHzC9aqSdV6cnQLABqEX83i4C695a6SkeVlUKS49dKO0Vdg68xCUYyjeY&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAE",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+contrato&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rdhuh-bDQ7lZYgbJV6OMYLl6Oq9eEpmdrhe7xtEQ5Q1DNByXID-U7PoMrES2iG80ayJ14HnQRYM_wcjvh6qd7-3LsA8lLBsePaRfeHfzMK-kv0z39PW373EP4H5SJ1YO-5cFIbBS97FculyTr2gLv2EIToYxKvGBE09joOPmuD0EPJwWBijKOXx5JLD22j6y3EjvEoFnIF1_SaPuETFyHl3iDG6ngvK0BeUuWPYcaxiR6oYcGWpQsbXDnKB35-vNIfGY7UoS8KPx07AppTgY5XSF7KK4QfNLgAgfHzC9aqSdV6cnQLABqEX83i4C695a6SkeVlUKS49dKO0Vdg68xCUYyjeY"
+        },
+        {
+          "name": "Estágio",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4r34-BB0Q1nf0q0Ggmvoio010VTFpvlBenBJEHctBy12HTp80oocrRqSlJudoEXtWscx0E-FY8H_mice8V1bUrtvn-fJZKAy8THZQzKvtk7Zm822KGSASFSmsPPWyxTZ-jsxmHdYWjs-rpZ4TIZRSTI8i9GHv2iT3irAc3LcT_SCLswT6ArTQ7VBfYcBZdRZ7lZsMvCiKkJwP92RFWlw8Iej0rfWdOJFKROfAwucaCrwlsA8BBSJD9tD7ZSa_2uq0IDPS6asuATx2uVzbyKWHql595PCRdjyyNTElduvHn_-vI7si15UZcCpR_ffkfNuPAYeFCcVNuC_pHllt2y59YaOsKF6s",
+            "q": "estágio desenvolvedor estágio"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+est%C3%A1gio&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4r34-BB0Q1nf0q0Ggmvoio010VTFpvlBenBJEHctBy12HTp80oocrRqSlJudoEXtWscx0E-FY8H_mice8V1bUrtvn-fJZKAy8THZQzKvtk7Zm822KGSASFSmsPPWyxTZ-jsxmHdYWjs-rpZ4TIZRSTI8i9GHv2iT3irAc3LcT_SCLswT6ArTQ7VBfYcBZdRZ7lZsMvCiKkJwP92RFWlw8Iej0rfWdOJFKROfAwucaCrwlsA8BBSJD9tD7ZSa_2uq0IDPS6asuATx2uVzbyKWHql595PCRdjyyNTElduvHn_-vI7si15UZcCpR_ffkfNuPAYeFCcVNuC_pHllt2y59YaOsKF6s&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAF",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+est%C3%A1gio&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4r34-BB0Q1nf0q0Ggmvoio010VTFpvlBenBJEHctBy12HTp80oocrRqSlJudoEXtWscx0E-FY8H_mice8V1bUrtvn-fJZKAy8THZQzKvtk7Zm822KGSASFSmsPPWyxTZ-jsxmHdYWjs-rpZ4TIZRSTI8i9GHv2iT3irAc3LcT_SCLswT6ArTQ7VBfYcBZdRZ7lZsMvCiKkJwP92RFWlw8Iej0rfWdOJFKROfAwucaCrwlsA8BBSJD9tD7ZSa_2uq0IDPS6asuATx2uVzbyKWHql595PCRdjyyNTElduvHn_-vI7si15UZcCpR_ffkfNuPAYeFCcVNuC_pHllt2y59YaOsKF6s"
+        }
+      ]
+    },
+    {
+      "name": "Tipo de vaga",
+      "options": [
+        {
+          "name": "Tempo integral",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rpHusyZpq3j8GM2p8Pq9jTkCp6ezTtf0Sf5-Fm1VuqB3K16Wj6IwLpPtLQfAUE5DspKxvAS5E64WlVk_TL02VfGRivYgiema51zU5pH15NdYJq9MwvxFMbM6V0HPhYMXe6evxHGLmpabovdJaealE96QJTmxpYotQTv4uiLjKkabSqXedEKyH9xEli1dw1xd1rxbBOu6_ad0PZsUwU1Jo67-zte0B2y_R5_lrmm0ue0p6bz-gsTH1-SHYZ06RSb8UluCJAeyG3ywt5aA5EGoeQBP0HG6y1VM_0BbFKLu6fZi0y5uTvWVVoJHgHEydGi-oK6J2mKy_O0YnHDMBj_F729-fufA",
+            "q": "estágio desenvolvedor tempo integral"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+tempo+integral&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rpHusyZpq3j8GM2p8Pq9jTkCp6ezTtf0Sf5-Fm1VuqB3K16Wj6IwLpPtLQfAUE5DspKxvAS5E64WlVk_TL02VfGRivYgiema51zU5pH15NdYJq9MwvxFMbM6V0HPhYMXe6evxHGLmpabovdJaealE96QJTmxpYotQTv4uiLjKkabSqXedEKyH9xEli1dw1xd1rxbBOu6_ad0PZsUwU1Jo67-zte0B2y_R5_lrmm0ue0p6bz-gsTH1-SHYZ06RSb8UluCJAeyG3ywt5aA5EGoeQBP0HG6y1VM_0BbFKLu6fZi0y5uTvWVVoJHgHEydGi-oK6J2mKy_O0YnHDMBj_F729-fufA&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAC",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+tempo+integral&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rpHusyZpq3j8GM2p8Pq9jTkCp6ezTtf0Sf5-Fm1VuqB3K16Wj6IwLpPtLQfAUE5DspKxvAS5E64WlVk_TL02VfGRivYgiema51zU5pH15NdYJq9MwvxFMbM6V0HPhYMXe6evxHGLmpabovdJaealE96QJTmxpYotQTv4uiLjKkabSqXedEKyH9xEli1dw1xd1rxbBOu6_ad0PZsUwU1Jo67-zte0B2y_R5_lrmm0ue0p6bz-gsTH1-SHYZ06RSb8UluCJAeyG3ywt5aA5EGoeQBP0HG6y1VM_0BbFKLu6fZi0y5uTvWVVoJHgHEydGi-oK6J2mKy_O0YnHDMBj_F729-fufA"
+        },
+        {
+          "name": "Meio período",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rOlXwN1Kkg1slxefdo_4jCK8FGg8Ikt06lxmqHyD1rsez2DCrxDjIJMIULyvEJulEbQCI2zBQqPusmdQIMM9M8VR0abTJi-0UoihXG6ioPREVVa6gOAjU1DlJiDK_kyhQ0MRI0cToZAoFsZlBDm2kHLtcs7c2p09h-0kQFdzjxZKSHuPsA08sRhjEhMJLhq8_ckpgv0EHQxuQzWAnSv2_o_p6oWWbFDjxAV-YqbA8XFu0UsKWs5O0EKcEAnrcA2U6bLj366DFmu7IaIhMpvcEpkwTX5YdkMS_qw5IYy4U_go1gkaIDuJsy0z3X1sa18RjtyYh8_J0QT_7uRTY3avqJ0a0rhQ",
+            "q": "estágio desenvolvedor meio período"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+meio+per%C3%ADodo&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rOlXwN1Kkg1slxefdo_4jCK8FGg8Ikt06lxmqHyD1rsez2DCrxDjIJMIULyvEJulEbQCI2zBQqPusmdQIMM9M8VR0abTJi-0UoihXG6ioPREVVa6gOAjU1DlJiDK_kyhQ0MRI0cToZAoFsZlBDm2kHLtcs7c2p09h-0kQFdzjxZKSHuPsA08sRhjEhMJLhq8_ckpgv0EHQxuQzWAnSv2_o_p6oWWbFDjxAV-YqbA8XFu0UsKWs5O0EKcEAnrcA2U6bLj366DFmu7IaIhMpvcEpkwTX5YdkMS_qw5IYy4U_go1gkaIDuJsy0z3X1sa18RjtyYh8_J0QT_7uRTY3avqJ0a0rhQ&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAD",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+meio+per%C3%ADodo&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rOlXwN1Kkg1slxefdo_4jCK8FGg8Ikt06lxmqHyD1rsez2DCrxDjIJMIULyvEJulEbQCI2zBQqPusmdQIMM9M8VR0abTJi-0UoihXG6ioPREVVa6gOAjU1DlJiDK_kyhQ0MRI0cToZAoFsZlBDm2kHLtcs7c2p09h-0kQFdzjxZKSHuPsA08sRhjEhMJLhq8_ckpgv0EHQxuQzWAnSv2_o_p6oWWbFDjxAV-YqbA8XFu0UsKWs5O0EKcEAnrcA2U6bLj366DFmu7IaIhMpvcEpkwTX5YdkMS_qw5IYy4U_go1gkaIDuJsy0z3X1sa18RjtyYh8_J0QT_7uRTY3avqJ0a0rhQ"
+        },
+        {
+          "name": "Contrato",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4rdhuh-bDQ7lZYgbJV6OMYLl6Oq9eEpmdrhe7xtEQ5Q1DNByXID-U7PoMrES2iG80ayJ14HnQRYM_wcjvh6qd7-3LsA8lLBsePaRfeHfzMK-kv0z39PW373EP4H5SJ1YO-5cFIbBS97FculyTr2gLv2EIToYxKvGBE09joOPmuD0EPJwWBijKOXx5JLD22j6y3EjvEoFnIF1_SaPuETFyHl3iDG6ngvK0BeUuWPYcaxiR6oYcGWpQsbXDnKB35-vNIfGY7UoS8KPx07AppTgY5XSF7KK4QfNLgAgfHzC9aqSdV6cnQLABqEX83i4C695a6SkeVlUKS49dKO0Vdg68xCUYyjeY",
+            "q": "estágio desenvolvedor contrato"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+contrato&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rdhuh-bDQ7lZYgbJV6OMYLl6Oq9eEpmdrhe7xtEQ5Q1DNByXID-U7PoMrES2iG80ayJ14HnQRYM_wcjvh6qd7-3LsA8lLBsePaRfeHfzMK-kv0z39PW373EP4H5SJ1YO-5cFIbBS97FculyTr2gLv2EIToYxKvGBE09joOPmuD0EPJwWBijKOXx5JLD22j6y3EjvEoFnIF1_SaPuETFyHl3iDG6ngvK0BeUuWPYcaxiR6oYcGWpQsbXDnKB35-vNIfGY7UoS8KPx07AppTgY5XSF7KK4QfNLgAgfHzC9aqSdV6cnQLABqEX83i4C695a6SkeVlUKS49dKO0Vdg68xCUYyjeY&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAE",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+contrato&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4rdhuh-bDQ7lZYgbJV6OMYLl6Oq9eEpmdrhe7xtEQ5Q1DNByXID-U7PoMrES2iG80ayJ14HnQRYM_wcjvh6qd7-3LsA8lLBsePaRfeHfzMK-kv0z39PW373EP4H5SJ1YO-5cFIbBS97FculyTr2gLv2EIToYxKvGBE09joOPmuD0EPJwWBijKOXx5JLD22j6y3EjvEoFnIF1_SaPuETFyHl3iDG6ngvK0BeUuWPYcaxiR6oYcGWpQsbXDnKB35-vNIfGY7UoS8KPx07AppTgY5XSF7KK4QfNLgAgfHzC9aqSdV6cnQLABqEX83i4C695a6SkeVlUKS49dKO0Vdg68xCUYyjeY"
+        },
+        {
+          "name": "Estágio",
+          "parameters": {
+            "uds": "AJ5uw1_a2D0D09lxm8gpKKOTUn4r34-BB0Q1nf0q0Ggmvoio010VTFpvlBenBJEHctBy12HTp80oocrRqSlJudoEXtWscx0E-FY8H_mice8V1bUrtvn-fJZKAy8THZQzKvtk7Zm822KGSASFSmsPPWyxTZ-jsxmHdYWjs-rpZ4TIZRSTI8i9GHv2iT3irAc3LcT_SCLswT6ArTQ7VBfYcBZdRZ7lZsMvCiKkJwP92RFWlw8Iej0rfWdOJFKROfAwucaCrwlsA8BBSJD9tD7ZSa_2uq0IDPS6asuATx2uVzbyKWHql595PCRdjyyNTElduvHn_-vI7si15UZcCpR_ffkfNuPAYeFCcVNuC_pHllt2y59YaOsKF6s",
+            "q": "estágio desenvolvedor estágio"
+          },
+          "link": "https://www.google.com/search?sca_esv=d9a0b2731d9ca0d5&gl=br&hl=pt-br&sxsrf=APpeQnuSSdM8W-S0HAplta_7cD736z7WVg:1791568058186&q=est%C3%A1gio+desenvolvedor+est%C3%A1gio&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4r34-BB0Q1nf0q0Ggmvoio010VTFpvlBenBJEHctBy12HTp80oocrRqSlJudoEXtWscx0E-FY8H_mice8V1bUrtvn-fJZKAy8THZQzKvtk7Zm822KGSASFSmsPPWyxTZ-jsxmHdYWjs-rpZ4TIZRSTI8i9GHv2iT3irAc3LcT_SCLswT6ArTQ7VBfYcBZdRZ7lZsMvCiKkJwP92RFWlw8Iej0rfWdOJFKROfAwucaCrwlsA8BBSJD9tD7ZSa_2uq0IDPS6asuATx2uVzbyKWHql595PCRdjyyNTElduvHn_-vI7si15UZcCpR_ffkfNuPAYeFCcVNuC_pHllt2y59YaOsKF6s&udm=8&sa=X&ved=2ahUKEwi_ncqNv62XAxXeIDQIHQstGmwQkbEKegQIGxAF",
+          "serpapi_link": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&q=est%C3%A1gio+desenvolvedor+est%C3%A1gio&uds=AJ5uw1_a2D0D09lxm8gpKKOTUn4r34-BB0Q1nf0q0Ggmvoio010VTFpvlBenBJEHctBy12HTp80oocrRqSlJudoEXtWscx0E-FY8H_mice8V1bUrtvn-fJZKAy8THZQzKvtk7Zm822KGSASFSmsPPWyxTZ-jsxmHdYWjs-rpZ4TIZRSTI8i9GHv2iT3irAc3LcT_SCLswT6ArTQ7VBfYcBZdRZ7lZsMvCiKkJwP92RFWlw8Iej0rfWdOJFKROfAwucaCrwlsA8BBSJD9tD7ZSa_2uq0IDPS6asuATx2uVzbyKWHql595PCRdjyyNTElduvHn_-vI7si15UZcCpR_ffkfNuPAYeFCcVNuC_pHllt2y59YaOsKF6s"
+        }
+      ]
+    }
+  ],
+  "jobs_results": [
+    {
+      "title": "Estágio – Home Office – Desenvolvedor Web – São Paulo – Sp | Vaga #34645058",
+      "company_name": "Divulga Vagas",
+      "location": "Qualquer lugar",
+      "via": "Divulga Vagas",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=5IyaaUI-QvdvlovPAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_02OPQrCQBSEsfUIVg-sFElEE5HYKtopBLQMm-Rls7LJW_M2wcLCO3gC8SgeRPAk_jU2AzMw80370WrXC7b3q1QEz_MFVlQgrLNMJfj1c2QsG9INplTBDuNvGt5vBBtR618pNHCCrZACumNv4vlDfxqAQT7UigWkCFiYCiUxlARLIqmxM8utNRy4LrN2JFthVeIkVLhUYkxHd08xfyTiXFRotLAYjfzh0TGl7Pfmqqn1m_eBvleRLYKmROjg79sAws0LlOC8S-IAAAA&shmds=v1_ARwrE20gx5Dm1eAj0Ryl6GEPiJzVQ8uO6BRNbEAiFtLPbXYYBQ&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=5IyaaUI-QvdvlovPAAAAAA%3D%3D",
+      "thumbnail": "https://serpapi.com/searches/6ac928b33047f31d62b587f1/images/OlyGMz_fsP6cerQhhDZ1bBFGsSIb1mOSvoUDnMj8QT8.jpeg",
+      "extensions": [
+        "há 7 dias",
+        "R$ 1,5 mil por mês",
+        "Trabalho de casa",
+        "Estágio"
+      ],
+      "source_link": "https://divulgavagas.com.br/vaga-de-emprego/estagio-home-office-desenvolvedor-web-sao-paulo-sp-34645058",
+      "job_title": "Estágio – Home Office – Desenvolvedor Web – São Paulo – Sp | Vaga #34645058",
+      "description": "Atribuições de acordo com o cargo.",
+      "apply_options": [
+        {
+          "title": "Divulga Vagas",
+          "link": "https://divulgavagas.com.br/vaga-de-emprego/estagio-home-office-desenvolvedor-web-sao-paulo-sp-34645058?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJFc3TDoWdpbyDigJMgSG9tZSBPZmZpY2Ug4oCTIERlc2Vudm9sdmVkb3IgV2ViIOKAkyBTw6NvIFBhdWxvIOKAkyBTcCB8IFZhZ2EgIzM0NjQ1MDU4IiwiY29tcGFueV9uYW1lIjoiRGl2dWxnYSBWYWdhcyIsImh0aWRvY2lkIjoiNUl5YWFVSS1RdmR2bG92UEFBQUFBQT09IiwidXVsZSI6IncrQ0FJUUlDSWpVMkZ2SUZCaGRXeHZMRk4wWVhSbElHOW1JRk5oYnlCUVlYVnNieXhDY21GNmFXdyIsImdsIjoiYnIiLCJobCI6InB0LWJyIiwiZmMiOiJFc3dCQ293QlFVcHBWRFIwU1VoT1JFZG5ha1paWVcxME9GUndNR3hGTUV0RU5ucG1kMXBaV2t0SmRVeHdjMHBNTWpKVFVVcGFWbkZHY0hOVFVUaHJkVk51UldKT2VFWm1UVFpKUTJGa2ExVTFURVp4WTAwd2VrZGpNbGhJTmtwR01FTjZiM1JzVEVWYVZXOVZSamx6YW5kYVFURXpObWhXZVZWZlZHWlhSVnB2VmpVeE0yOHlZMmcxYlZKU01GQjVXRmtTRjNWcGFrcGhjbDlaUTJRM1FqQlFSVkJwT1hKdk5FRlpHaUpCUkhOeU9XWlVaR1ZPTWpoMlJubDRZelp6YUhsTE5URkVjbFU0YmxZMldsQjMiLCJmY3YiOiIzIiwiZmNfaWQiOiI1SXlhYVVJLVF2ZHZsb3ZQQUFBQUFBPT0ifQ=="
+    },
+    {
+      "title": "Visagio Talentos - Estágio: Desenvolvedor(a) Automação / Low-Code SP",
+      "company_name": "v(dev)",
+      "location": "São Paulo, SP",
+      "via": "Indeed",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=Kw3QLI5eiPMnOIplAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xWOMW7CQBBFlZYjpBqlgih4IyQaUyGC0qRAAqVFgz1aHK33L56xw3WiFBzEXU6VpfnS-8XTm_w9TPxno-wb0IGDRIPSnLZq40_-SnoTlTggDFKjm_KM1r2h5fE2_oIcfeB7vkEttN-VlEQvfZZRZmlTJz7LIugd8EEeV2ezpKVzqqHwamxNVVRoHaKccHVfOOl9jnrmTlJgk-Ni-XotUvTPT8O0lmFGUdSEAioOJe3vETvuA15ywD-nQl-BzQAAAA&shmds=v1_ARwrE22A9p65uktcTa99V0vQN7GYRhqbGnXkfKdh1TC1aakSgg&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=Kw3QLI5eiPMnOIplAAAAAA%3D%3D",
+      "extensions": [
+        "Estágio"
+      ],
+      "source_link": "https://br.indeed.com/viewjob?jk=671507d980c4c9b4",
+      "job_title": "Visagio Talentos - Estágio: Desenvolvedor(a) Automação / Low-Code SP",
+      "description": "Destinado a universitários dos cursos de Ciência da Computação, Engenharias, Sistemas de Informação e demais cursos de exatas, que desejam se desenvolver especificamente na área de Automação de Processos.\n\n\n Nossa equipe atua em contextos variados, sempre com o objetivo de aprimorar a tomada de decisões e a eficiência operacional através do uso inteligente e inovador dos dados.\n\n\n\n   Responsabilidades e atribuições\n \n\n \n  Criar, desenvolver e evoluir automações / ambientes de orquestração;\n  Mapear processos, desenhar soluções e apoiar na seleção de ferramentas de automação para diferentes casos de uso;\n  Contribuir para a documentação dos processos e fluxos de automação;\n  Colaborar com equipes multidisciplinares para entender e atender às necessidades de automação do negócio;\n  Participar da criação de soluções de automação conectadas com AI;\n  Acompanhar a gestão de projetos através de metodologias ágeis, como Kanban e Scrum.\n \n \n Requisitos e qualificações\n \n\n \n  Pessoas em graduação - a partir do 3º ano dos cursos de Ciência da Computação, Engenharias, Sistemas de Informação e afins;\n  Estamos buscando pessoas com ou sem experiência, então fique tranquilo, nosso time está aqui para lhe ajudar na formação ;)\n  Desejável conhecimento básico em metodologias ágeis, padrões de projeto e arquitetura de sistemas;\n  Dado que atuamos em diferentes clientes e ambientes, não há nenhum requisito mínimo de conhecimento de stack, mas é desejável conhecimento básico em pelo menos uma linguagem de programação (ex: Python, Javascript, C#, VBS, etc) e/ou plataforma de automação (UiPath, Power Automate, BluePrism, Automation Anywhere, Power Apps e afins);\n  É um diferencial o conhecimento de modelos de AI/Gen AI e cloud.\n \n \n Informações adicionais\n \n\n    Conforme necessidade, alguns candidatos, que concluírem todas as etapas online, poderão ser convocados antecipadamente para a etapa de entrevistas.\n\n\n \n\n   Somos uma empresa do Grupo Visagio focada em desenvolver soluções digitais de alto impacto que transformam e evoluem o negócio de nossos clientes. Através de um ambiente de alta dinamicidade e engajamento com propósito, missão e cultura genuínos, buscamos pessoas apaixonadas por resolver problemas complexos por meio de inovação e tecnologia.\n\n\n \n\n\n \n\n   Aqui estamos comprometidos com a diversidade e inclusão em todas as áreas de nosso negócio. Valorizamos a diversidade de pensamento, perspectivas e experiências em nosso local de trabalho. Comprometemo-nos a criar um ambiente de trabalho inclusivo e justo para todos, independentemente de sua origem geográfica, raça, etnia, idade, gênero, orientação sexual, ou deficiência, para que possam contribuir com todo o seu potencial.\n\n\n \n\n\n \n\n   Se você busca realizar feitos grandiosos em um ambiente colaborativo e de crescimento acelerado, seu lugar é aqui!\n\n\n \n\n\n \n\n   Para nos conhecer um pouco mais, acesse o nosso site: http://www.v-dev.io",
+      "apply_options": [
+        {
+          "title": "Indeed",
+          "link": "https://br.indeed.com/viewjob?jk=671507d980c4c9b4&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Glassdoor",
+          "link": "https://www.glassdoor.com.br/job-listing/visagio-talentos-est%C3%A1gio-desenvolvedor-a-automa%C3%A7%C3%A3o-low-code-sp-v-dev-JV_IC2479061_KO0,62_KE63,68.htm?jl=1010145387207&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Metaintro",
+          "link": "https://www.metaintro.com/job/visagio-talentos-recem-formados-desenvolvedor-a-automacao-low-code-sp-d2b15af4-fbf8-5612-a353-a3ee5acc3669?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Recruit.net",
+          "link": "https://www.recruit.net/job/visagio-talentos-estagio-desenvolvedor-automacao-jobs/A7A6E2F224451BB4?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJWaXNhZ2lvIFRhbGVudG9zIC0gRXN0w6FnaW86IERlc2Vudm9sdmVkb3IoYSkgQXV0b21hw6fDo28gLyBMb3ctQ29kZSBTUCIsImNvbXBhbnlfbmFtZSI6InYoZGV2KSIsImh0aWRvY2lkIjoiS3czUUxJNWVpUE1uT0lwbEFBQUFBQT09IiwidXVsZSI6IncrQ0FJUUlDSWpVMkZ2SUZCaGRXeHZMRk4wWVhSbElHOW1JRk5oYnlCUVlYVnNieXhDY21GNmFXdyIsImdsIjoiYnIiLCJobCI6InB0LWJyIiwiZmMiOiJFc3dCQ293QlFVcHBWRFIwUzBwd05UQk1XVk5hV2xsa05TMVZTVVJRUmtGemRHNUdiV0U0TFZNMlFVWnlPR0pxVUZBdGVVaDZVR0ZmUzBkQ05VaGFhVmxJWWkxWk9FVjVUMnBUUTNoME5sSm1kazVmWW5kWGFIUjBaVU5QU1hoSmRVdEVXQzF2VGxOdFVFRlVWaTFNY2xsNFpVMUJORlpRWmxwSmRuUlVlRkIyZG0xWmNEVm5iVFJhVUMxVFNqWnZXRVVTRjNWcGFrcGhjbDlaUTJRM1FqQlFSVkJwT1hKdk5FRlpHaUpCUkhOeU9XWlJZWEJXVFY5VmJHdzFPRVpRVW10aFNqWjNjM05aVDNsRmNucEIiLCJmY3YiOiIzIiwiZmNfaWQiOiJLdzNRTEk1ZWlQTW5PSXBsQUFBQUFBPT0ifQ=="
+    },
+    {
+      "title": "Estágio em Programação C#",
+      "company_name": "PEKUS",
+      "location": "São Paulo, SP",
+      "via": "Catho",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=tSB7m6aHlYuOfjjsAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXNsQrCMBCAYVz7CE4nbiKNCC7VTYqDS6A4l2s90kiai7kU-jSCOPggfTHt8k8f_NlrkZ1KSdPbWAbqQUc2EXucvtOH4bwuIJA8BysId_qDEMmwgGe4MBtHy2OXUpBCKRGXG0mYbJu33Cv21PCoHtzInFo6jBQcJqr3h92YB282K11ebxV4kkTguEVXQDWPNQ6Ot1DpH_k11o2hAAAA&shmds=v1_ARwrE231O_DB_OW808PLnP4FvKHzHBBUOlEUMavpDoC4oCzSxg&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=tSB7m6aHlYuOfjjsAAAAAA%3D%3D",
+      "thumbnail": "https://serpapi.com/images/i/iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAALVBMVEXg4OAyMjLNzc1CQkKMjIyFhYWenp739_d4eHgcHBxwcHC7u7tYWFgSEhIoKCiplEJAAAAApElEQVRIie2X3QrDIAxG82O02m3v_7jLoFYHg8VAYYOcC_HmEPM1FYQCLpxaEAS_DVXs3NdEZETm14KLIhI0TLDjsghlw1x0s3Qj6VFTunFLwrrpCFnE3iOfMfHDJIpoRdm0ohwwWsQPPaJR1FTzW6o2ceqxEuTaLhfdR3WHM38Ogl3y9eGMkVur6B-A8VvRwXKP55BbxHF1TNTvYhAEf4j3-fAENRcEkZRnXx0AAAAASUVORK5CYII.png",
+      "extensions": [
+        "R$ 2 mil por mês",
+        "Estágio"
+      ],
+      "source_link": "https://www.catho.com.br/vagas/estagio-em-programacao-c/36735418/",
+      "job_title": "Estágio em Programação C#",
+      "description": "Vaga de Estágio na área de Programação Web em C#/ASP.NET/Blazor, onde o candidato realizará: programação de sistemas, correção de bugs, implementação de novas funcionalidades em sistemas criados pela empresa, testes dos aplicativos, com possibilidade de aprender tecnologias. VAGA EXCLUSIVA PARA RESIDENTES NA CIDADE DE SÃO PAULO.### Requisitos Obrigatórios\nConhecimento em Lógica de Programação\nNoções de C# e .NET (Core ou Framework).\nFamiliaridade com HTML, CSS e JavaScript básico.\n\n### Requisitos Desejáveis\nConhecimento em **ASP.NET** (WebForms ou Core).\nNoções de SQL ou banco de dados relacional.\nNoções de testes Unitários ou APIs REST (diferencial).\nInglês técnico para leitura de documentações.\n\n### Perfil\nVontade de aprender novas tecnologias.\nResponsabilidade para testar o próprio código.Deverá estar cursando: Análise e Desenvolvimento de Sistemas, Ciência da Computação ou correlatas.",
+      "apply_options": [
+        {
+          "title": "Catho",
+          "link": "https://www.catho.com.br/vagas/estagio-em-programacao-c/36735418/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Indeed",
+          "link": "https://br.indeed.com/viewjob?jk=c50ea068a468bf2f&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Adzuna",
+          "link": "https://www.adzuna.com.br/details/5917370343?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Curriculum",
+          "link": "https://www.curriculum.com.br/vagas/vaga/1284019/de-Estagio-Em-Programacao-SP/em-SP/em-Sao-Paulo?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "SimplyHired",
+          "link": "https://www.simplyhired.com.br/job/7BN0CdIIJ_d_mGSseKSGmBxJmhPe3LhS_r9Y1_1-OeFrrdCo3ueDXg?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Jooble",
+          "link": "https://br.jooble.org/jdp/-7175623712942494277?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Trabajo.org",
+          "link": "https://br.trabajo.org/emprego-4037-b86104b558a44db33397e36b5a73b2ae?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Euspert",
+          "link": "https://br.euspert.com/ofertas-de-emprego/estagio-em-programacao-sp-34749995.html?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJFc3TDoWdpbyBlbSBQcm9ncmFtYcOnw6NvIEMjIiwiY29tcGFueV9uYW1lIjoiUEVLVVMiLCJodGlkb2NpZCI6InRTQjdtNmFIbFl1T2ZqanNBQUFBQUE9PSIsInV1bGUiOiJ3K0NBSVFJQ0lqVTJGdklGQmhkV3h2TEZOMFlYUmxJRzltSUZOaGJ5QlFZWFZzYnl4Q2NtRjZhV3ciLCJnbCI6ImJyIiwiaGwiOiJwdC1iciIsImZjIjoiRXN3QkNvd0JRVXBwVkRSMFNqazNZbVJ0U25sd1puWmhWMFpKZUhwMVNWY3pPVkZDVlVsS2JWSnNXalZwVURkSU4xQTNWR3R5VXpaVVNGWmplbFo1TkZCemRsSnBXWFZ3WmpORFRXSXdiVmsxU25wTmJFTklWMWhsYVdSSGJqVkNPR3Q0WkZFdFZ5MWtMVTlJUldSTVFrNUxTblJhWjFkV05GZFZSRjl5TlZSSWVuWnNPWEZIZVd3eVZVMTBZVUZvWlZjU0YzVnBha3BoY2w5WlEyUTNRakJRUlZCcE9YSnZORUZaR2lKQlJITnlPV1pVU2pWZlpGZzJhbFUwYkVkeVMzbHlkbTV0ZDFGTVNHZEliUzFuIiwiZmN2IjoiMyIsImZjX2lkIjoidFNCN202YUhsWXVPZmpqc0FBQUFBQT09In0="
+    },
+    {
+      "title": "Estagio Desenvolvedor Remoto (PYTHON)",
+      "company_name": "INSI",
+      "location": "São Paulo, SP",
+      "via": "PrimeiraVagaTech",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=pVI0ZhCEks2ZQG4sAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXMMQ6CQBAF0NhyBKsp1RgwJjbYSpQGidhYkRUmC2bZvzIL4T4mXsSLqc0rX_CeBUkiXukWdGBhO8KMXKOnC3fwoEV-u57O2TImx_IcWlFUM3HnetYQsqAjoA3P9433TuIoEjGh_pW-rcIKXQTLd0zRA3f5U0qjenZGeS63u80UOqtXlGZFSpbFMxlUysRUfF6gXA0GayryL3LV0QOpAAAA&shmds=v1_ARwrE22bBwwqm2SgRjLaaKm738volxOXXbzYNYMAt_KaYc5z5A&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=pVI0ZhCEks2ZQG4sAAAAAA%3D%3D",
+      "extensions": [
+        "há 3 dias",
+        "Tempo integral"
+      ],
+      "source_link": "https://www.primeiravagatech.com.br/vaga/estagio-desenvolvedor-remoto-python-brasil-9dd066",
+      "job_title": "Estagio Desenvolvedor Remoto (PYTHON)",
+      "description": "Sobre a vaga de Estágio em Desenvolvimento RPA, Dados e IA na Insi (Remoto)\nA Insi é uma consultoria global especializada em evolução digital e transformação tecnológica de grande escala, contando com mais de três décadas de história, 2.700 colaboradores e presença em 27 países. Reconhecida como uma das melhores empresas para se trabalhar no Brasil pelo Great Place to Work e destaque no ranking da revista TIME, a Insi conecta diagnóstico estratégico e execução técnica para impulsionar a eficiência operacional e a competitividade de mais de 200 grandes corporações ao redor do mundo.\n\nEsta oportunidade de Estágio para Desenvolvedor(a) de RPA, Dados e Inteligência Artificial (Código da vaga: PUXJ88) adota o modelo de trabalho 100% Remoto (Home Office) para estudantes de qualquer região do Brasil. É a posição perfeita para quem está iniciando a carreira em TI, possui sólidos fundamentos de lógica de programação e deseja aprender na prática sobre automação de processos robóticos e ciência de dados sob a mentoria de profissionais experientes.\n\nDesafios, Automação de Processos e Inteligência Artificial\nO estagiário atuará no suporte e desenvolvimento de soluções automatizadas para otimizar fluxos de trabalho internos e de clientes globais da Insi. Suas atribuições envolvem acompanhar o ciclo de vida completo de desenvolvimento de robôs de software (bots), desde a identificação de processos repetitivos até a validação técnica, testes de qualidade e implantação em produção.\n\nA rotina diária de aprendizado engloba a utilização de tecnologias e plataformas líderes de RPA como UiPath, Microsoft Power Automate e scripts em Python, além da integração com bancos de dados e modelos de Inteligência Artificial. O profissional auxiliará na manutenção preventiva e corretiva de robôs em operação, atuará na elaboração e atualização de documentações técnicas de processos e participará ativamente de reuniões de alinhamento com equipes multidisciplinares.\n\nRequisitos técnicos obrigatórios e Diferenciais\nPara concorrer a esta oportunidade na Insi, a consultoria busca talentos em formação que apresentem o seguinte perfil e qualificações:\n* Formação em Andamento: Cursando ensino técnico ou superior na área de Tecnologia da Informação (Ciência da Computação, Engenharia de Software, Sistemas de Informação ou áreas correlatas).\n* Lógica de Programação: Domínio e sólida compreensão dos conceitos de lógica de programação e estruturação de algoritmos.\n* Perfil Pessoal: Interesse genuíno em aprender e desenvolver competências em Automação de Processos Robóticos (RPA), proatividade e capacidade de trabalho em equipe.\n\nSerão considerados diferenciais competitivos ter conhecimentos prévios em ferramentas de RPA (UiPath, Power Automate), manipulação de banco de dados (SQL) ou conceitos iniciais de Inteligência Artificial e Machine Learning.\n\nCultura e Vantagens de ser um Insider\nA Insi oferece um ambiente corporativo orientado pela autonomia, diversidade, inclusão e excelência operacional. Os estagiários contam com oportunidade de aprendizado acelerado, participação direta em projetos internacionais desafiadores e flexibilidade para atuar de qualquer lugar do Brasil.",
+      "apply_options": [
+        {
+          "title": "PrimeiraVagaTech",
+          "link": "https://www.primeiravagatech.com.br/vaga/estagio-desenvolvedor-remoto-python-brasil-9dd066?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJFc3RhZ2lvIERlc2Vudm9sdmVkb3IgUmVtb3RvIChQWVRIT04pIiwiY29tcGFueV9uYW1lIjoiSU5TSSIsImh0aWRvY2lkIjoicFZJMFpoQ0VrczJaUUc0c0FBQUFBQT09IiwidXVsZSI6IncrQ0FJUUlDSWpVMkZ2SUZCaGRXeHZMRk4wWVhSbElHOW1JRk5oYnlCUVlYVnNieXhDY21GNmFXdyIsImdsIjoiYnIiLCJobCI6InB0LWJyIiwiZmMiOiJFc3dCQ293QlFVcHBWRFIwU3psTFNWVkxSbEJOU1c0NFNURjRkRlZtT1VKd05XMTNTRzlNVVRSTmJrTkRiR0V5VWxSbWFsa3labk5FZVhwR01tMHlVMDVVTUdrd1UxWTRUVkl3UVc1cWRGTkxZa2MyY2twNGRrbFRhRnB6TXprMVpWWndNRkozTTJOWGNVODVaa1phYzBkWFpteGxlRlJWY0VWdWVUbHdWVzFvTWxOaFpXMXlNRkF5TVRjME1XcG9PWG9TRjNWcGFrcGhjbDlaUTJRM1FqQlFSVkJwT1hKdk5FRlpHaUpCUkhOeU9XWlJTRTlKUTJONlJrUm9NR1ZJV0dwbWEwTTVaWEF0YzBFeVVHcDMiLCJmY3YiOiIzIiwiZmNfaWQiOiJwVkkwWmhDRWtzMlpRRzRzQUFBQUFBPT0ifQ=="
+    },
+    {
+      "title": "Estagiário Desenvolvedor Back-End| Pesquisa & Desenvolvimento | Tecnologia",
+      "company_name": "TARGIT Brasil",
+      "location": "São Paulo, SP",
+      "via": "Vagas Para São Paulo",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=OAdrehZbMwCqGP0WAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_0XNsWoCQRCHcdL6CKmmEhKSuxBIc1aRiNgd8XoZ94Z149z-NzurWPgyIY_iM_g-ahHSfNUPvtH5brSdWWEfTj85gD7EJO6he-mRacpu-zyL_ZFase9dMKbxPwmDxAI6UicuQuEDN5T-YC8kQ8riYRRBc8Cr3E82pSRr6tpMK38dl-Aqh6FGlDUO9RfWdsvKNpwlKRdZvb69HKoU_eND9_45X3Q0zWxBKYoVIYVjbWh5-gW1vFM80bK9AAN2uNnYAAAA&shmds=v1_ARwrE20EegU_4SJSucgBbeHe4gsYYUgYXE3gB24QuI66m0CuXw&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=OAdrehZbMwCqGP0WAAAAAA%3D%3D",
+      "extensions": [
+        "Estágio"
+      ],
+      "source_link": "https://vagasparasp.com.br/external/candidata-ai/vaga/95e7bc79-79bb-43b6-a8b5-cb80fa2d3114/estagiario-desenvolvedor-back-end-pesquisa-desenvolvimento-tecnologia",
+      "job_title": "Estagiário Desenvolvedor Back-End| Pesquisa & Desenvolvimento | Tecnologia",
+      "description": "Buscamos um(a)Estagiário(a) de Desenvolvimento Back-Endcom conhecimentos em lógica de programação, Python, APIs (FastAPI, Flask ou Django), bancos de dados SQL e Git. Familiaridade com HTML e CSS é um diferencial.Procuramos alguém curioso, organizado e com vontade de aprender, que tenha boa capacidade de resolver problemas, trabalhar em equipe e contribuir com soluções de qualidade, demonstrando colaboração, responsabilidade e foco em resultados.\n\nResolução de ProblemasCapacidade de identificar problemas, dividi-los em partes menores e buscar soluções lógicas.Atenção aos DetalhesHabilidade para identificar pequenos erros no código, evitando bugs e inconsistências.Colaboração e Trabalho em EquipeComunicação clara e disposição para trabalhar de forma colaborativa, ajudando colegas e aprendendo com desenvolvedores mais experientes.Adaptabilidade e Aprendizado RápidoCapacidade de aprender novas tecnologias e linguagens rapidamente, adaptando-se às necessidades do projeto.Organização e Gestão de TempoHabilidade para gerenciar o tempo, priorizar tarefas e manter prazos em um ambiente de desenvolvimento dinâmico.Data-DrivenCapacidade de tomar decisões baseadas em dados concretos e análises, em vez de depender de intuições ou suposições.Comunicação Técnica BásicaCompetência para documentar código e explicar conceitos técnicos para colegas e superiores.",
+      "apply_options": [
+        {
+          "title": "Vagas Para São Paulo",
+          "link": "https://vagasparasp.com.br/external/candidata-ai/vaga/95e7bc79-79bb-43b6-a8b5-cb80fa2d3114/estagiario-desenvolvedor-back-end-pesquisa-desenvolvimento-tecnologia?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Vagas De Emprego Para Home Office",
+          "link": "https://vagasparahomeoffice.com/external/candidata-ai/vaga/95e7bc79-79bb-43b6-a8b5-cb80fa2d3114/estagiario-desenvolvedor-back-end-pesquisa-desenvolvimento-tecnologia?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJFc3RhZ2nDoXJpbyBEZXNlbnZvbHZlZG9yIEJhY2stRW5kfCBQZXNxdWlzYSBcdTAwMjYgRGVzZW52b2x2aW1lbnRvIHwgVGVjbm9sb2dpYSIsImNvbXBhbnlfbmFtZSI6IlRBUkdJVCBCcmFzaWwiLCJodGlkb2NpZCI6Ik9BZHJlaFpiTXdDcUdQMFdBQUFBQUE9PSIsInV1bGUiOiJ3K0NBSVFJQ0lqVTJGdklGQmhkV3h2TEZOMFlYUmxJRzltSUZOaGJ5QlFZWFZzYnl4Q2NtRjZhV3ciLCJnbCI6ImJyIiwiaGwiOiJwdC1iciIsImZjIjoiRXN3QkNvd0JRVXBwVkRSMFMwNUxhRVowY0VNNVFVdGZNR1ZuWjNKbFlYa3dNRWRIU2kxb1JIUnFkazFrYUY5M1RXdG9PVTVMVW1wSGVsaGxXbEZQVEVGemRFWjNNMTlJZDJGcllXcDZVWHBZVEZjeFRtVm9lVUpvTkRReVdrMHhUV3BUVEVZNE0wRnFZMmx1T1ZCWmRsaHJPVlJLU3padVdGcHNNbTlCWDJKMWMyTnBaVWhHZERoaFRrVk5kR05JTXpNU0YzVnBha3BoY2w5WlEyUTNRakJRUlZCcE9YSnZORUZaR2lKQlJITnlPV1pVT0U5SVgxVndlRkY1Y21oSWVGRlNTbkYzVGw5RFFWVlVaREozIiwiZmN2IjoiMyIsImZjX2lkIjoiT0FkcmVoWmJNd0NxR1AwV0FBQUFBQT09In0="
+    },
+    {
+      "title": "ESTÁGIO - Desenvolvedor Full Stack",
+      "company_name": "AFIC - i9 Empregos",
+      "location": "Santo André, SP",
+      "via": "Recrutei",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=qeT6hDGbD5Wo-tJMAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_z3NMQ6CQBBA0dhyBKupjbLExEKsCAKh0gR7ssIE0GVn3VkIrcex9wZcTG1sfvm-9154cVJc5meWn2ADR2TUI6kRa7KQDkpB4WR1D8EgP4aOJdQI2BuLDTFogoyoUbg8tM4ZDoVgVn7DTrqu8ivqBWm80iRudOVfSm6lRaOkw3K7Cybf6GYVRGkef-_dHpI_jewQFFVShVBI7QgiXdv5tYbi_AHjYlYgtwAAAA&shmds=v1_ARwrE22T-GvnT6S-2UoZHpGG1YCrH5l5r8iJ1DgrFCNq-WR0CQ&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=qeT6hDGbD5Wo-tJMAAAAAA%3D%3D",
+      "thumbnail": "https://serpapi.com/searches/6ac928b33047f31d62b587f1/images/R78hkVyc26XPli_Dlih16OX6jERLtf4TESeO5_Kuxwo.jpeg",
+      "extensions": [
+        "Estágio"
+      ],
+      "source_link": "https://jobs.recrutei.com.br/afic-i9-empregos/vacancy/91361-estagio-desenvolvedor-full-stack",
+      "job_title": "ESTÁGIO - Desenvolvedor Full Stack",
+      "description": "Somos a AFIC (Associação Familiar de Integração e Cidadania) e o nosso projeto i9 Empregos, visa ajuda-lo na conquista do seu primeiro emprego ou na recolocação no mercado de trabalho, através de parcerias com empresas na divulgação de vagas abertas como também com instituições de ensino com ofertas de bolsas de estudos para auxiliar na qualificação profissional.\n\nTemos um time muito unido em torno da missão que é: Educar para Transformar.\n\n\r\n\n\n\r\n*ESTÁGIO - DESENVOLVEDOR FULL STACK*\n\n\r\n\n\n\r\nSuas principais atividades serão:\n\n\r\n\r\nAuxiliar no desenvolvimento e manutenção de sites e aplicativos, com foco em performance e usabilidade.\r\nAjudar na criação de layouts e artes para o site e ações comerciais, em colaboração com o time de design.\r\nApoiar na implementação e manutenção de sistemas de CRM, ajudando na integração e automação de processos.\r\nParticipar ativamente das reuniões de planejamento e desenvolvimento de novos projetos.\r\nAuxiliar na otimização e melhorias contínuas dos sistemas existentes. \r\n\r\nPara essa posição esperamos que você tenha:\n\n\r\n\r\nConhecimentos básicos em linguagens de programação como HTML, CSS, JavaScript (frameworks como React, Vue ou Angular são um plus).\r\nNoções de desenvolvimento back-end (Node.js, Python, PHP ou outras linguagens).\r\nNoções de design gráfico e ferramentas como Figma, Photoshop ou Illustrator.\r\nVontade de aprender e crescer no campo do desenvolvimento web e mobile.\r\nBoa comunicação e disposição para trabalhar em equipe.\r\n\r\nJornada de trabalho:\n\n\r\n\r\n30 horas semanais\r\nSegunda a sábado\r\n\r\nBenefícios:\n\n\r\n\r\nSeguro de Vida\r\nVT\r\nBonificações\r\nBolsa de estudos\r\n\r\nCandidate-se agora mesmo!!",
+      "apply_options": [
+        {
+          "title": "Recrutei",
+          "link": "https://jobs.recrutei.com.br/afic-i9-empregos/vacancy/91361-estagio-desenvolvedor-full-stack?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Adzuna",
+          "link": "https://www.adzuna.com.br/details/5031045956?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Infojobs",
+          "link": "https://www.infojobs.com.br/vaga-de-desenvolvedor-full-stack-pleno-em-sao-paulo__11813364.aspx?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "BeBee",
+          "link": "https://bebee.com/br/jobs/estagio-desenvolvedor-full-stack-afic-santo-andre--ss-br-ovnz2l?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Jobs Brasil",
+          "link": "https://www.jobsbrasil.com.br/job/afic-i9-empregos/91361-estagio-desenvolvedor-full-stack?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Trabajo.org",
+          "link": "https://br.trabajo.org/emprego-4037-303961c7d6f4c42eb5ad32847308d1a5?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "I9 Empregos",
+          "link": "https://i9empregos.com.br/job/estagio-desenvolvedor-full-stack-2/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJFU1TDgUdJTyAtIERlc2Vudm9sdmVkb3IgRnVsbCBTdGFjayIsImNvbXBhbnlfbmFtZSI6IkFGSUMgLSBpOSBFbXByZWdvcyIsImh0aWRvY2lkIjoicWVUNmhER2JENVdvLXRKTUFBQUFBQT09IiwidXVsZSI6IncrQ0FJUUlDSWpVMkZ2SUZCaGRXeHZMRk4wWVhSbElHOW1JRk5oYnlCUVlYVnNieXhDY21GNmFXdyIsImdsIjoiYnIiLCJobCI6InB0LWJyIiwiZmMiOiJFc3dCQ293QlFVcHBWRFIwUzBOU01rUlNlbkJWTW10cVNrZE5SeloxWkdvNWNtSTRRVXBSTlRRdFdqSnJaR05IYmpsc05FZ3dZekEzZUZSWVgwWlhaMUpIUzNBelRVTkhNR2RNYjNvdGFtMHlWWEF0Y0RKNFpIcGxWM1JqVWsxeU4zaDJVakJUY0hWNE9XbGpSRkkwVjNkSWFTMWtNa2RuWDJWVFZYbG9OamhuTWxwSmIwOVdRbVJ6V0ZWWmJGSkNjVjhTRjNWcGFrcGhjbDlaUTJRM1FqQlFSVkJwT1hKdk5FRlpHaUpCUkhOeU9XWlVRbXh5UW1kRVdqTnlia0ptYkcwd0xXRnJjRE14Ylc5VVJGOVIiLCJmY3YiOiIzIiwiZmNfaWQiOiJxZVQ2aERHYkQ1V28tdEpNQUFBQUFBPT0ifQ=="
+    },
+    {
+      "title": "Backend Desenvolvedor(a) NodeJS",
+      "company_name": "PushStart",
+      "location": "São Paulo, SP",
+      "via": "Kolab",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=dNx3B7XqcSsNdd8MAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXEQQrCMBAAQLz2CZ72IqhII4KXehBEEDxIIQ8oa7Kk1TQbs2npf8SX-DFxDlN8ZsXxhOZJwcKZhMLIfiTLaYkruLGlq64gkryGThAsAfUxkWOBwHBhdp7mhzbnKJVSIr50kjF3pjTcKw5050k9-C7_GmkxUfSYqdntt1MZg1sv6kFanTFlCCSZwLNBX4H-vhlqHDxvQNc_bgnxa6gAAAA&shmds=v1_ARwrE21Y2W0jtiJK8ersnbV6V5BcQOIap8HOiGY5fzuiWnE0FA&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=dNx3B7XqcSsNdd8MAAAAAA%3D%3D",
+      "extensions": [
+        "há 1 dia",
+        "Tempo integral e Estágio"
+      ],
+      "source_link": "https://kolab.com.br/jobs/desenvolvedor-back-end",
+      "job_title": "Backend Desenvolvedor(a) NodeJS",
+      "description": "Você é uma pessoa desenvolvedora backend apaixonada por criar sistemas excepcionais que impactam diretamente a vida das pessoas? Se sim, a Kolab está à procura de um profissional experiente para integrar nosso time e contribuir para o sucesso de um produto inovador no mercado de RH 🚀",
+      "apply_options": [
+        {
+          "title": "Kolab",
+          "link": "https://kolab.com.br/jobs/desenvolvedor-back-end?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJCYWNrZW5kIERlc2Vudm9sdmVkb3IoYSkgTm9kZUpTIiwiY29tcGFueV9uYW1lIjoiUHVzaFN0YXJ0IiwiaHRpZG9jaWQiOiJkTngzQjdYcWNTc05kZDhNQUFBQUFBPT0iLCJ1dWxlIjoidytDQUlRSUNJalUyRnZJRkJoZFd4dkxGTjBZWFJsSUc5bUlGTmhieUJRWVhWc2J5eENjbUY2YVd3IiwiZ2wiOiJiciIsImhsIjoicHQtYnIiLCJmYyI6IkVzd0JDb3dCUVVwcFZEUjBTVkpvWTNWMkxYQkZTVkJKZVUweWMxTnlVMnhoWWpSME4xZERRMnRWVlZWM2FFcFZOVkUxVWtSSE5HUXlhbVkwU25OalR6VlZTMmhtTmpkNVRrSXlXak13Y2xsM2NFeFdXSFkwU25wWU5FSlBlalJ1U2trMldWQkRhVlUzV1dJMFJrRlRSVmxOWkU1Vk1WaERTamxGYWxwaFFUZHhSRUpNWWs5UGJFZFVVMXBvUW1VelpqWVNGM1ZwYWtwaGNsOVpRMlEzUWpCUVJWQnBPWEp2TkVGWkdpSkJSSE55T1daVGNVUnpaVUZWZVhKYVEzcEtkRWs1TlhwbGRsY3Rhekp6TVVwUiIsImZjdiI6IjMiLCJmY19pZCI6ImROeDNCN1hxY1NzTmRkOE1BQUFBQUE9PSJ9"
+    },
+    {
+      "title": "Estágio em Desenvolvimento de Sistemas | Tecnologia",
+      "company_name": "INERA RESULTADOS HUMANOS",
+      "location": "São Paulo, SP",
+      "via": "Catho",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=YKufx5wIVPEyUaexAAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xWOuwrCMBRAce0nON1ZpBXRpU6FFhV8Yeosab2kkSQ3emNx8GfET-nkX2mXc5YznOg7iMqCQ_dWmgAt5MjoWjKttugCwQVBaA5oJcMLSqwdGVJapuCRbw_Nsk_Q-jsqYnAESyJlcLhoQvCcJgmziRUHGXQd12QTcljRM7lSxT3O3Mg7eiMDnqfzyTP2To1m611xzOBYiNOmzPK9gNVpm-3-dvifAUO1NCmI7kNwkA9DYxCHH05XlpvMAAAA&shmds=v1_ARwrE20Mcmf2m5D4Op0dJwLef2Wb14QUwMWtvowkyK_ohPh2NA&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=YKufx5wIVPEyUaexAAAAAA%3D%3D",
+      "thumbnail": "https://serpapi.com/images/i/_9j_4AAQSkZJRgABAQAAAQABAAD_2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys_RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N__AABEIADgAOAMBEQACEQEDEQH_xAAZAAEAAwEBAAAAAAAAAAAAAAAAAwQHBgX_xAAnEAABAwQCAQMFAQAAAAAAAAAAAQIRAwQSEwUUITFRYRVScZHwMv_EABkBAQEAAwEAAAAAAAAAAAAAAAACAwUGBP_EACYRAQABAwQABQUAAAAAAAAAAAABAhESAxMhMQRBUWGRI0JxgeH_2gAMAwEAAhEDEQA_ANwAAAAAAAAAAAAAAAAAK3fs-z1uzS345YZJMEblGWN-WTZ1MM8ZsslsYAAAAK_Ib1sbhLTHfrXXl6TBNeWM49smlhnGfV-WWp9O-lI1Eb28Ptd65_qcf6TR_T2_f-us-vvX-39enz27zkFvG23CZq7d2ae_TMf5WZ-PybTUztp37vz8Oe0tqatW3Vptf8w8225Tn22zaj2731rR9RjNEKxzXR591iVgw06uvjEzzePR6q_D-EmqYibWqiO-4mEtK-5i5W1o29yrd1aq3dUtV8NRqKkoqJ5mfTwVGpq1Wime7-SKtHw1GVVUdRHF_O_PqsUuSv05ulbKlZ1FazqNTOkiJCN8OlE8Svys_Bcate7FPlezHOhpbE18Xtfv36dGetrQCHqW3Z7Oinvxx2YplHtJOFOWVuV7leOF-PRMUgAAAAAAAAAAAAAAAAAAAAB__9k.jpeg",
+      "extensions": [
+        "R$ 2 mil por mês",
+        "Estágio"
+      ],
+      "source_link": "https://www.catho.com.br/vagas/estagio-em-desenvolvimento-de-sistemas-tecnologia/37526719/",
+      "job_title": "Estágio em Desenvolvimento de Sistemas | Tecnologia",
+      "description": "Atuar junto ao time de desenvolvimento realizando toda a parte de projetos e testes usando linguagens de programação e demais ferramentas para criar soluções de softwares e aplicativos para os clientes.\n\nDesenvolver funcionalidades de baixa e média complexidade;\nCorrigir bugs simples;\nCriar e realizar testes simples;\nApoiar documentação dos projetos. Exemplos: atas de reuniões, especificações de novas funcionalidades, diagramas de entidade e relacionamento, classes etc;\nCriar o próprio planejamento e informar semanalmente.Estar no penúltimo ou último ano da graduação.\nFormação: Cursando Engenharia, Ciência da Computação ou áreas correlatas.\nPrevisão de conclusão: Entre 2027 e 2028.\nBuscamos candidatos que já tenham cursado pelo menos 2 anos da graduação e estejam em fase de conclusão do curso.\nInglês: Nível intermediário a avançado.\nLocalização: Residir na capital de São Paulo ou na Grande São Paulo.Deverá estar cursando: Ciência da Computação; Sistemas da Informação; Engenharia de Software e áreas correlatas.",
+      "apply_options": [
+        {
+          "title": "Catho",
+          "link": "https://www.catho.com.br/vagas/estagio-em-desenvolvimento-de-sistemas-tecnologia/37526719/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Glassdoor",
+          "link": "https://www.glassdoor.com.br/job-listing/est%C3%A1gio-desenvolvimento-de-sistemas-secretaria-do-verde-e-meio-ambiente-svma-JV_IC2479061_KO0,35_KE36,76.htm?jl=1010262722420&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Indeed",
+          "link": "https://br.indeed.com/viewjob?jk=41dfdd26cdd58af0&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "SimplyHired",
+          "link": "https://www.simplyhired.com.br/job/LY5qaWFwKQ1y0zmBdHVk2DvFUjDinj-limGjnhaOapxTh4VksqEXag?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Divulga Vagas",
+          "link": "https://divulgavagas.com.br/vaga-de-emprego/estagio-em-analise-e-desenvolvimento-de-sistemas-87832-34676691?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Jobijoba Brasil",
+          "link": "https://www.jobijoba.com.br/detail/97/3028a33cf6aa391997db48625fd10c65?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJFc3TDoWdpbyBlbSBEZXNlbnZvbHZpbWVudG8gZGUgU2lzdGVtYXMgfCBUZWNub2xvZ2lhIiwiY29tcGFueV9uYW1lIjoiSU5FUkEgUkVTVUxUQURPUyBIVU1BTk9TIiwiaHRpZG9jaWQiOiJZS3VmeDV3SVZQRXlVYWV4QUFBQUFBPT0iLCJ1dWxlIjoidytDQUlRSUNJalUyRnZJRkJoZFd4dkxGTjBZWFJsSUc5bUlGTmhieUJRWVhWc2J5eENjbUY2YVd3IiwiZ2wiOiJiciIsImhsIjoicHQtYnIiLCJmYyI6IkVzd0JDb3dCUVVwcFZEUjBTVFUwYWpOdE1uTkthbFZDVkZKUVkxWmtWa3hYV1ZScFRrWjNjVlJrZGxNNE5GRnhjbU13YTJscFdUQjFWM0JVTVZRekxXSlRNMDF5WWw5M2JXaHdZakl6TXpaU2NtaEJMWEZOYlV3eFNqUjFTMlpEUldwUFFuVlJNbE51T1ZwQmQzVjVjWEkzVlhJMldYUnZRbnBLTTFwc1UyNUlMWGhTU0VNeGN5MVZObEV3UVhBek1Ib1NGM1ZwYWtwaGNsOVpRMlEzUWpCUVJWQnBPWEp2TkVGWkdpSkJSSE55T1daU2FXMWZOakk1WDJSTlgxSk9UMHhNV0haaldqVk9ibVI0YlRsMyIsImZjdiI6IjMiLCJmY19pZCI6IllLdWZ4NXdJVlBFeVVhZXhBQUFBQUE9PSJ9"
+    },
+    {
+      "title": "Desenvolvedor backend python sênior",
+      "company_name": "Netvagas",
+      "location": "São Paulo, SP",
+      "via": "BeBee",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=Dt8IT2aW6UZFUn-6AAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xXMMQ6CQBAAwNjyBKstrIzhjIkNtiZ2hoQHkOXYHOhxe94uBN9jpd_gY2oz5WTvVXY-k1CY2E_UcoIG7Z1CC_GpHQeQ5RN6TgVEksfYC0JLQENM5FggMFyYnaf1qVONUhgj4nMnitrb3PJgOFDDs7lxI39q6TBR9KhUH477OY_BbTdX0gkd_kISJfBs0RdQLS-GEkfPO6jKLydBVp-sAAAA&shmds=v1_ARwrE21HxXsTtxCaOOMAJT9tTH6eI8fNkQaz-08UZl-x048j8w&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=Dt8IT2aW6UZFUn-6AAAAAA%3D%3D",
+      "thumbnail": "https://serpapi.com/searches/6ac928b33047f31d62b587f1/images/eZP63erjgqNrRMmYYllU-67uKiggEm8_-lTgK_a_OF4.jpeg",
+      "extensions": [
+        "há 7 dias",
+        "Estágio"
+      ],
+      "source_link": "https://bebee.com/br/jobs/desenvolvedor-backend-python-senior-netvagas-vila-guilherme--talent-635290153769110162",
+      "job_title": "Desenvolvedor backend python sênior",
+      "description": "Na byx, acreditamos que a tecnologia tem o poder de aproximar pessoas, impulsionar negócios e ampliar oportunidades.\n\n\nConstruímos soluções que conectam renda, empresas e capital, tornando o mercado de crédito mais eficiente, seguro e escalável.\n\n\nPara isso, buscamos pessoas curiosas, protagonistas e apaixonadas por transformar ideias em oportunidades. Valorizamos profissionais que utilizam a Inteligência Artificial de forma ética e responsável para potencializar a criatividade, a produtividade e a capacidade de análise.\n\n\nVem ser byx e conhecer mais sobre o desafio no time de Tecnologia.\n\n\nResponsabilidades e atribuições\n· Desenvolver e manter aplicações e APIs utilizando Python.\n\n\n· Definir soluções técnicas simples, escaláveis e seguras.\n\n\n· Atuar em integrações com sistemas internos, parceiros e serviços externos.\n\n\n· Participar da modelagem de dados e evolução de bancos relacionais e não relacionais.\n\n\n· Apoiar decisões de arquitetura, organização de código e padrões de desenvolvimento.\n\n\n· Criar e manter testes automatizados.\n\n\n· Realizar revisão de código e apoiar o desenvolvimento técnico do time.\n\n\n· Acompanhar aplicações em produção, analisando logs, métricas e incidentes.\n\n\n· Contribuir com pipelines de CI/CD, containers e publicação em ambientes de nuvem.\n\n\n· Participar de refinamentos, estimativas e definição de soluções com Produto e QA.\n\n\n· Atuar na melhoria contínua de desempenho, segurança e qualidade das aplicações.\n\n\n· Documentar APIs, decisões técnicas e fluxos relevantes.\n\n\nHabilidades e pré-requisitos\n\n\n· Experiência sólida com Python e desenvolvimento de aplicações backend.\n\n\n· Experiência com frameworks como Django, FastAPI ou Flask.\n\n\n· Experiência com criação e consumo de APIs REST.\n\n\n· Conhecimento de arquitetura de software, boas práticas e padrões de projeto.\n\n\n· Experiência com bancos de dados PostgreSQL ou MySQL.\n\n\n· Conhecimento de Redis, filas ou processamento assíncrono.\n\n\n· Experiência com testes unitários e testes de integração.\n\n\n· Experiência com Git e revisão de código.\n\n\n· Conhecimento de Docker e ambientes Linux.\n\n\n· Conhecimento de CI/CD e serviços em nuvem, preferencialmente AWS.\n\n\n· Experiência com observabilidade, logs e monitoramento de aplicações.\n\n\n· Capacidade de atuar com autonomia em todas as etapas do desenvolvimento.\n\n\nDiferenciais\n· Conhecimento em Node.js ou desenvolvimento frontend.\n\n\n· Conhecimento em GoLang.\n\n\n· Experiência com microsserviços e sistemas distribuídos.\n\n\n· Conhecimento de Kubernetes, mensageria ou arquitetura orientada a eventos.\n\n\n· Experiência com aplicações de alto volume e alta disponibilidade.\n\n\n· Conhecimento de segurança aplicada a APIs e dados sensíveis.\n\n\n· Vivência em fintechs, banking, crédito, meios de pagamento ou ambientes regulados.\n\n\nO que você pode esperar da gente?\n\n\n✔ Ambiente colaborativo, conhecimento compartilhado e conquistas celebradas.\n\n\n✔ Autonomia para propor, testar e transformar boas ideias em resultados.\n\n\n✔ Tecnologia e IA como aliadas para potencializar seu trabalho.\n\n\n✔ Aprendizado contínuo, desafios e oportunidades reais de crescimento.\n\n\n✔ Projetos estratégicos com impacto para clientes, parceiros e mercado.\n\n\n✔ Cultura guiada por inovação, protagonismo, execução, integridade, colaboração e impacto social.\n\n\nNossos benefícios\nVale refeição/alimentação flexível\nPlano de saúde\nPlano odontológico\n✅ Seguro de vida\n\n\nVale transporte\nGympass / Wellhub\nSesc\nAuxílio creche\nBônus\nAqui, acreditamos que grandes transformações acontecem quando pessoas, tecnologia e propósito caminham juntos. Se você quer construir soluções que fazem a diferença, seu próximo desafio pode começar aqui.\n\n\n#vemserbyxer\n\n\nNosso escritório fica localizado em São Paulo (SP), na região da Vila Olímpia.",
+      "apply_options": [
+        {
+          "title": "BeBee",
+          "link": "https://bebee.com/br/jobs/desenvolvedor-backend-python-senior-netvagas-vila-guilherme--talent-635290153769110162?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Indeed",
+          "link": "https://br.indeed.com/viewjob?jk=4e366684a62a968e&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Selecty Jobs",
+          "link": "https://selecty.jobs/vaga/307571?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Nômades Digitais",
+          "link": "https://nomadesdigitais.com/vaga/158745-desenvolvedor-python-senior?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Trabajo.org",
+          "link": "https://br.trabajo.org/emprego-5470-41754dff5cbc5f2e2538dd5e853e23f5?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Expertini",
+          "link": "https://sopaulo.br.expertini.com/job/desenvolvedor-python-senior-sao-paulo-gol-linhas-aereas-98-199971612/?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Jobilize",
+          "link": "https://www.jobilize.com/job/br-s-o-paulo-desenvolvedor-python-nior-prime-class-dho-hiring-now?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJEZXNlbnZvbHZlZG9yIGJhY2tlbmQgcHl0aG9uIHPDqm5pb3IiLCJjb21wYW55X25hbWUiOiJOZXR2YWdhcyIsImh0aWRvY2lkIjoiRHQ4SVQyYVc2VVpGVW4tNkFBQUFBQT09IiwidXVsZSI6IncrQ0FJUUlDSWpVMkZ2SUZCaGRXeHZMRk4wWVhSbElHOW1JRk5oYnlCUVlYVnNieXhDY21GNmFXdyIsImdsIjoiYnIiLCJobCI6InB0LWJyIiwiZmMiOiJFc3dCQ293QlFVcHBWRFIwVERGemNVWmphRGgwWWxaelRsWkplbkJDUm1sM1NqSlllRWhxUjJ0RllVSXlTRTR0VW1sWmRHNTZVazlLYzFka1IwbDRNVlkyYzFKWmRWZFdOVTFuVW5OSmFFZzBjalp6ZVV0a1dYaGpNMUpmTWpCUlVUZ3pVRWxhZG1KaVZGWk5kM05TVjFoNWRIbERSRGQ0UXpOS1pHZzNkbTV1WVU5WU5EWXphekZLY2pGWFZGVnZNbTRTRjNWcGFrcGhjbDlaUTJRM1FqQlFSVkJwT1hKdk5FRlpHaUpCUkhOeU9XWlNWVzlyWW0xS1VIRjVjV0pKVjNadlZrdHJSbmxKYzFkRFFXUm4iLCJmY3YiOiIzIiwiZmNfaWQiOiJEdDhJVDJhVzZVWkZVbi02QUFBQUFBPT0ifQ=="
+    },
+    {
+      "title": "Estágio em Desenvolvimento de Software",
+      "company_name": "APPRADIO.PRO",
+      "location": "Santos, SP",
+      "via": "Glassdoor",
+      "share_link": "https://www.google.com/search?ibp=htl;jobs&q=est%C3%A1gio+desenvolvedor&htidocid=a1ZvZ40LyOZbvNz1AAAAAA%3D%3D&hl=pt-BR&shem=epsd1,esd2e,rimspwouoe,sdpie&shndl=37&shmd=H4sIAAAAAAAA_xWOMQ6CQBAAY8sTrLawMuYwJjZYmWCIFQQeQA5cjzPH7cmuyHfs_YUfE5oppphM9F1F2YXl9zGWAHtIkdGP5EbboxeCG0JFd3nrARMIyM-XZb1Y7MOAhhg8QUZkHK5PnUjgJI6ZnTIsWmyrWupj8tjQFD-o4QU1d3MuOC1YH477SQVvtptzUZTn9JqroszBIwuCo1a7BCo9n_AOquIPfLU1mq8AAAA&shmds=v1_ARwrE21vKHw0BOQhEm4gmCSvoKeU1DBe7I2wrXVJFTZzfhjC4A&source=sh/x/job/li/m1/1#fpstate=tldetail&htivrt=jobs&htiq=est%C3%A1gio+desenvolvedor&htidocid=a1ZvZ40LyOZbvNz1AAAAAA%3D%3D",
+      "extensions": [
+        "há 5 dias",
+        "R$ 700 por mês",
+        "Tempo integral"
+      ],
+      "source_link": "https://www.glassdoor.com.br/job-listing/jv?jl=1010254333210",
+      "job_title": "Estágio em Desenvolvimento de Software",
+      "description": "Estamos procurando um(a) estagiário(a) para apoiar nossa equipe de desenvolvimento no desenvolvimento de software para Smartphone (celular), SmartTV e WEB . A oportunidade é ideal para estudantes realmente gostam de programação e desejam colocar em prática seus conhecimentos em programação, especialmente utilizando IA para melhorar a produtividade.\n\nResponsabilidades:\n\nAtuar no desenvolvimento de aplicativos nas principais plataformas de mercado (Android, iOS e Web).Apoiar na correção de bugs e melhoria contínua dos Aplicativos existentes.Participar da implementação de novas funcionalidades em projetos em andamentoEscrever código limpo, organizado e bem documentadoColaborar com a equipe de desenvolvimento em tarefas diárias e projetos de curto e médio prazoRequisitos:\n\nEstar cursando área de Tecnologia/Inovação de Ensino Superior e ou Técnico em Tecnologia da Informação como: Ciência da Computação, Sistemas de Informação, Engenharia da Computação Processamento de Dados, TI ou áreas relacionadasEsta capacitado em desenvolvimento de sistemas com IA e Agentes.Noções em ferramentas de automação N8N, Antigravity, CursorConhecimento básico em Python, Android e/ou SwiftDiferenciais:\n\nConhecimento em controle de versão (Git)Ter habilidade de resolver problemasSaber desenvolvimento de sistema utilizando agentes e IA.Ter conhecimento em utilização de Inteligência Artificial.Benefícios:\n\nSeguro de vidaVale-transporteEscolaridade:\n\nEnsino Superior cursando ou interrompido (preferencialmente)Tipo de vaga: Estágio\n\nPagamento: R$700,00 - R$1.000,00 por mês\n\nBenefícios:\n\nSeguro de vidaVale-transportePagamento: a partir de R$700,00 por mês\n\nBenefícios:\n\nCelular da empresaConvênios e descontos comerciaisEstacionamento gratuitoPergunta(s) de seleção:\n\nVocê entende o atual cenário de TI com Inteligência Artificial ?  Você consegue demonstrar algum projeto para demonstrar sua habilidade com IA? Você consegue desenvolver sistemas escaláveis com ferramentas de IA? Local do trabalho: Presencial",
+      "apply_options": [
+        {
+          "title": "Glassdoor",
+          "link": "https://www.glassdoor.com.br/job-listing/jv?jl=1010254333210&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        },
+        {
+          "title": "Glassdoor",
+          "link": "https://www.glassdoor.com/job-listing/est%C3%A1gio-em-desenvolvimento-de-software-appradio-pro-JV_IC2464116_KO0,38_KE39,51.htm?jl=1010254333210&utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"
+        }
+      ],
+      "job_id": "eyJqb2JfdGl0bGUiOiJFc3TDoWdpbyBlbSBEZXNlbnZvbHZpbWVudG8gZGUgU29mdHdhcmUiLCJjb21wYW55X25hbWUiOiJBUFBSQURJTy5QUk8iLCJodGlkb2NpZCI6ImExWnZaNDBMeU9aYnZOejFBQUFBQUE9PSIsInV1bGUiOiJ3K0NBSVFJQ0lqVTJGdklGQmhkV3h2TEZOMFlYUmxJRzltSUZOaGJ5QlFZWFZzYnl4Q2NtRjZhV3ciLCJnbCI6ImJyIiwiaGwiOiJwdC1iciIsImZjIjoiRXN3QkNvd0JRVXBwVkRSMFRHMDNOMDVTYjFORFpFRnRSRlpsU2pkQ1NWcGZZMVIzWTBGd01GWkdWMUJCTFhadGFrcGtWRzFrUmpKdGVVUkpRVFl0Y0ZkcE1uQjRWRlJJWDE5TmNIaDNNMmhIZERaSmIxWjJVVTlPYkRKVVZ6QkJXSE4zVm1JM1F6RlJTRXRaVGxwSWJYTlpWeTFKY1VSelpXVjBVaTFXU1hvMGVIUmhNa2wzVDJ0bFlXRTNMVzlLVkZFU0YzVnBha3BoY2w5WlEyUTNRakJRUlZCcE9YSnZORUZaR2lKQlJITnlPV1pSU2pSaFdrZzNaV3hXWDE5aFJtWjRUVTVuTWpGcldHUm5kbmwzIiwiZmN2IjoiMyIsImZjX2lkIjoiYTFadlo0MEx5T1pidk56MUFBQUFBQT09In0="
+    }
+  ],
+  "serpapi_pagination": {
+    "next_page_token": "eyJmYyI6IkV1SURDcUlEUVVwcFZEUjBURWRQZEdnNFdYVTRUamROYmpGRFlWWnhORVZCY0c1b2MyaEJWWEpSYTJ0NFJuTTBaSEF4VWxJd1JtNVVNWEl4YXpac1FrMXlNMW90U0c5cGIyRnBaa041ZFMxWWRGbHFRbXMwWDA5U1RtNU9WR00yWWtOVFZuVjRlbHBsTlRaTlRVVm9NV3hKTVRWM04zbEJkMGxOVlZGc2NqSkZTV3RGZFRCQ1JtNXZkRUY0YjBsSlYxRnViR2xXTkZkT1NrdG1lRmQ1VFZSMlowcHBSMjFRYWtkTE5GQnNhWGxwTm1ObE9HMWlYMjQxYW5ZME1XeGthRXRRU0hkeVFYUjNlV0pEWlZkaVFWb3RXbXREVW5KQ1RqVXlaRzkzY2pKa2IxRjBhREl5YTNVMFNrZ3hlbGhKYWxOcWIydFJSMkpLV0dkSWFYRlJMV3M0TUVoaVdrdFNNRlJaYjJwSFp6UjNXRTVzWHpCSWRVMTVaMnQ2YkZKdk1FdERiblZWZDBsSU1WQlpRVGR6WTFSdGN5MU9jR04zV1V4R1drWjZVbmN5UldOMFMyMUVNMW95TFcxeFpGZEtjSGhqZFRKRVFVbHdaa2RIVnpOcmNqVldUaTFKV0doRlRGaGhTVzlEU2xKaFVVOTZTbWxFTWs5TlpYQkVUV2hqVTNWSWVFb3dRaTFoV1RObFExcEpXVWd5ZGxWVVJEZFdibG80Y21oS05IVk5Obkk1U1c1Slp4SVhkV2xxU21GeVgxbERaRGRDTUZCRlVHazVjbTgwUVZrYUlrRkVjM0k1WmxSc2VHSktMVXhPTWtwRlJGaDJjMU5FUkMxd2JqQTBaRk52YkVFIiwiZmN2IjoiMyJ9",
+    "next": "https://serpapi.com/search.json?engine=google_jobs&gl=br&google_domain=google.com&hl=pt-br&location=S%C3%A3o+Paulo%2C+State+of+S%C3%A3o+Paulo%2C+Brazil&next_page_token=eyJmYyI6IkV1SURDcUlEUVVwcFZEUjBURWRQZEdnNFdYVTRUamROYmpGRFlWWnhORVZCY0c1b2MyaEJWWEpSYTJ0NFJuTTBaSEF4VWxJd1JtNVVNWEl4YXpac1FrMXlNMW90U0c5cGIyRnBaa041ZFMxWWRGbHFRbXMwWDA5U1RtNU9WR00yWWtOVFZuVjRlbHBsTlRaTlRVVm9NV3hKTVRWM04zbEJkMGxOVlZGc2NqSkZTV3RGZFRCQ1JtNXZkRUY0YjBsSlYxRnViR2xXTkZkT1NrdG1lRmQ1VFZSMlowcHBSMjFRYWtkTE5GQnNhWGxwTm1ObE9HMWlYMjQxYW5ZME1XeGthRXRRU0hkeVFYUjNlV0pEWlZkaVFWb3RXbXREVW5KQ1RqVXlaRzkzY2pKa2IxRjBhREl5YTNVMFNrZ3hlbGhKYWxOcWIydFJSMkpLV0dkSWFYRlJMV3M0TUVoaVdrdFNNRlJaYjJwSFp6UjNXRTVzWHpCSWRVMTVaMnQ2YkZKdk1FdERiblZWZDBsSU1WQlpRVGR6WTFSdGN5MU9jR04zV1V4R1drWjZVbmN5UldOMFMyMUVNMW95TFcxeFpGZEtjSGhqZFRKRVFVbHdaa2RIVnpOcmNqVldUaTFKV0doRlRGaGhTVzlEU2xKaFVVOTZTbWxFTWs5TlpYQkVUV2hqVTNWSWVFb3dRaTFoV1RObFExcEpXVWd5ZGxWVVJEZFdibG80Y21oS05IVk5Obkk1U1c1Slp4SVhkV2xxU21GeVgxbERaRGRDTUZCRlVHazVjbTgwUVZrYUlrRkVjM0k1WmxSc2VHSktMVXhPTWtwRlJGaDJjMU5FUkMxd2JqQTBaRk52YkVFIiwiZmN2IjoiMyJ9&q=est%C3%A1gio+desenvolvedor"
+  }
+}

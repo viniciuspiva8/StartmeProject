@@ -34,7 +34,7 @@ export default function Detalhe({ v, telaCheia = false, aoFechar = null }) {
       <div className="flex flex-1 flex-col gap-6 px-5 py-6 sm:px-8 sm:py-8">
         <header className="flex flex-col gap-5">
           <div className="flex items-start gap-4">
-            <Monograma letra={v.monograma} grande />
+            <Monograma letra={v.monograma} logo={v.logo} grande />
             <div className="min-w-0 flex-1">
               <h1 ref={tituloRef} tabIndex={-1} className="font-serif text-[26px] leading-[1.2] font-bold text-tinta focus:outline-none sm:text-[30px]">
                 {v.titulo}

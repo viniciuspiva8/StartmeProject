@@ -4,6 +4,7 @@
 // Ordem de leitura pensada para a decisão rápida: o que é a vaga → vale a pena? →
 // por que não? → quanto paga, onde e desde quando. O item inteiro é clicável
 // (padrão "stretched button"); o marcador de salvar fica acima dele.
+import { useState } from 'react';
 import { useApp } from '../state/AppContext.jsx';
 import Icone from './Icone.jsx';
 import { TriagemCompacta } from './Triagem.jsx';
@@ -27,7 +28,7 @@ export default function VagaCard({ v, selecionada = false, variante = 'lista' })
           className={`absolute inset-y-0 left-0 w-1 rounded-r-full transition-colors ${selecionada ? 'bg-azul' : 'bg-transparent'}`}
         />
       )}
-      <Monograma letra={v.monograma} />
+      <Monograma letra={v.monograma} logo={v.logo} />
 
       <div className="flex min-w-0 flex-1 flex-col gap-2.5">
         <div className="pr-9">
@@ -112,7 +113,7 @@ function VagaAmpla({ v }) {
     <article className="group relative rounded-2xl border border-linha bg-white p-5 transition-[border-color,box-shadow] hover:border-azul-300 hover:shadow-painel sm:p-6">
       <div className="flex gap-4">
         {/* No celular o monograma sai para o título ganhar largura. */}
-        <div className="hidden sm:block"><Monograma letra={v.monograma} /></div>
+        <div className="hidden sm:block"><Monograma letra={v.monograma} logo={v.logo} /></div>
         <div className="min-w-0 flex-1">
           <div className="grid gap-x-8 gap-y-3 pr-10 md:grid-cols-[minmax(0,1fr)_15rem]">
             <div className="min-w-0">
@@ -174,7 +175,21 @@ function VagaAmpla({ v }) {
   );
 }
 
-export function Monograma({ letra, grande = false }) {
+/**
+ * Identificação da empresa: o logo, quando o coletor trouxe um, ou a inicial dela.
+ * Se a imagem falhar ao carregar, volta para a inicial.
+ */
+export function Monograma({ letra, logo = '', grande = false }) {
+  const [falhou, setFalhou] = useState(''); // qual imagem falhou: outra vaga reaproveitando o componente não herda a falha
+  const tamanho = grande ? 'size-14' : 'size-10';
+
+  if (logo && falhou !== logo) {
+    return (
+      <div aria-hidden="true" className={`grid flex-none place-items-center overflow-hidden rounded-xl border border-linha bg-white ${tamanho}`}>
+        <img src={logo} alt="" draggable={false} onError={() => setFalhou(logo)} className="size-full object-contain p-0.5" />
+      </div>
+    );
+  }
   return (
     <div
       aria-hidden="true"

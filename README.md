@@ -11,7 +11,7 @@ Em 02/09/2026 as duas foram consolidadas neste repositório:
 
 | Módulo | Origem | Papel |
 |---|---|---|
-| `coletor/` | pasta "MVP" | **Tronco do projeto.** Python + FastAPI, coleta as vagas do portal Companhia de Estágios e persiste no Google Cloud Firestore. É o módulo que implementa a arquitetura descrita na monografia. |
+| `coletor/` | pasta "MVP" | **Tronco do projeto.** Python + FastAPI, coleta vagas de estágio, trainee e júnior em TI pela SerpApi (Google Jobs) e persiste no Google Cloud Firestore. É o módulo que implementa a arquitetura descrita na monografia. |
 | `cadastro/` | pasta "startme-projeto-v1" | Node.js + Express sobre MySQL. Modelo relacional de Instituição, Curso, Aluno, Empresa e Vaga. |
 
 Os dois módulos juntos materializam a **persistência poliglota** (Sadalage;
@@ -23,7 +23,9 @@ integridade referencial, e ficam no relacional.
 
 ```
 coletor/              serviço de coleta (Python / FastAPI / Firestore)
-  main.py             API e motor de scraping
+  main.py             rotas da API e limpeza de vagas expiradas
+  fontes/serpapi.py   fonte de vagas: busca, filtro, normalização, cota e upsert
+  tests/              testes pytest (sem rede; fixture de resposta real da SerpApi)
   Dockerfile          imagem de execução
   .env.example        configuração de referência
   web/                interface de listagem das vagas (legada — ver "Frontend v1.1" abaixo)
@@ -45,15 +47,17 @@ docs/
 
 ```bash
 cd coletor
-cp .env.example .env            # preencha SCRAPER_TOKEN e o caminho da credencial
+cp .env.example .env            # preencha SCRAPER_TOKEN, SERPAPI_KEY e o caminho da credencial
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn main:app --reload --env-file .env
 ```
 
 A credencial da conta de serviço do Firebase (`credenciais.json`) **não é
 versionada**. Baixe do console do Firebase e aponte
-`GOOGLE_APPLICATION_CREDENTIALS` para ela.
+`GOOGLE_APPLICATION_CREDENTIALS` para ela. O mesmo vale para `SERPAPI_KEY`: só
+por variável de ambiente, nunca em código (a chave vai na query string das
+chamadas, então o coletor redige qualquer `api_key` antes de logar).
 
 Rotas:
 
@@ -62,6 +66,96 @@ Rotas:
 | GET | `/health` | — |
 | GET | `/api/vagas` | — |
 | POST | `/api/coleta` | header `X-Scraper-Token` |
+
+`GET /api/vagas` devolve `id, titulo, empresa, link, data_coleta, descricao,
+salario` e, como campos extras, `fonte` e `via` (portal onde o Google achou a vaga).
+
+**Fonte de vagas: SerpApi.** `POST /api/coleta` remove as vagas expiradas e roda
+`SERPAPI_QUERIES` × `SERPAPI_LOCALIZACOES` (até `SERPAPI_MAX_PAGINAS` páginas
+cada). Entram só vagas de **estágio, trainee e júnior** (regra em
+`fontes/serpapi.py`, constantes `REGRA_*`; "aprendiz" e níveis pleno/sênior ficam
+fora). O upsert usa o `htidocid` do Google (o `job_id` muda a cada busca). Uma
+execução faz no máximo `SERPAPI_MAX_BUSCAS_EXEC` (16) buscas, e o contador mensal
+(coleção `controle_serpapi`) bloqueia novas chamadas ao atingir
+`SERPAPI_LIMITE_MENSAL` (240 do plano gratuito de 250). Falha ou cota esgotada
+não derrubam a rota: o motivo vem em `serpapi.erro` na resposta. Falhas transitórias
+(rede, timeout de `SERPAPI_TIMEOUT`, 5xx) têm 1 nova tentativa; se persistirem, só aquela
+busca é pulada e as demais seguem (3 falhas seguidas interrompem). Chave inválida (401/403)
+e limite de taxa (429) param tudo na hora. O contador local conta também buscas repetidas
+que o SerpApi serviu do cache (grátis), então marca um pouco acima do uso real.
+
+**Região.** Só entram vagas de São Paulo (capital e zonas) e do Grande ABC (Santo
+André, São Bernardo do Campo, São Caetano do Sul, Diadema, Mauá, Ribeirão Pires e
+Rio Grande da Serra), conferidas pelo campo `location` do Google (lista
+`CIDADES_ALVO`). Vagas remotas ("Qualquer lugar") ficam de fora, a menos que
+`SERPAPI_ACEITAR_REMOTO=true`. Salários em "mil" (`R$ 2 mil`) são gravados como
+número (`R$ 2.000`), formato que o frontend lê corretamente.
+
+**Logo da empresa.** O Google Jobs traz um `thumbnail` (56 px) em parte das vagas.
+O coletor baixa a imagem e grava na vaga como data URI no campo `logo` de
+`GET /api/vagas`, então o navegador do aluno não depende da SerpApi, e a imagem
+não expira. Só baixa de `serpapi.com`, só aceita PNG/JPEG/GIF/WebP (nunca SVG, por
+assinatura de bytes), limita o tamanho a 20 KB e descarta o ícone cinza genérico
+de "sem logo" do Google. Sem logo, o campo vai vazio e a interface mostra a letra
+da empresa. Baixar a imagem não gasta a cota de buscas.
+
+**CORS.** Lista explícita em `ALLOWED_ORIGINS` (nunca `*`; barra final é removida).
+O padrão cobre o Vite (`5173` dev, `4173` preview) e o Live Server (`5500`), em
+`localhost` e `127.0.0.1`, e vale para o coletor e para o `cadastro`. Em produção,
+defina só o domínio real do frontend.
+
+**Rodar localmente sem Firebase.** O `docker-compose.local.yml` sobe o coletor
+junto de um emulador do Firestore (nada vai para o Firebase real, sem
+`credenciais.json`):
+
+```bash
+cd coletor
+cp .env.example .env            # preencha SERPAPI_KEY e SCRAPER_TOKEN
+docker compose -f docker-compose.local.yml up --build -d
+curl http://localhost:8000/health
+curl -X POST http://localhost:8000/api/coleta -H "X-Scraper-Token: $SCRAPER_TOKEN"
+docker compose -f docker-compose.local.yml down      # os dados do emulador somem
+```
+
+Os padrões buscam em São Paulo (a busca na capital cobre todas as zonas) e nas 7 cidades do
+Grande ABC: 2 consultas × 8 localidades = **16 buscas por coleta**. Isso não cabe em coleta
+diária (16 × 30 = 480, contra 240 de teto mensal): rode no máximo 2 vezes por semana
+(~128 buscas/mês) ou menos. Para
+testar gastando 1, defina `SERPAPI_QUERIES` e `SERPAPI_LOCALIZACOES` com um único
+valor. Fora do compose, `FIRESTORE_EMULATOR_HOST` também ativa o emulador;
+em produção essa variável deve estar ausente.
+
+**Cache de `GET /api/vagas`.** A lista fica em memória por `VAGAS_CACHE_TTL` segundos (padrão 120),
+então uma rajada de requisições custa uma única leitura do Firestore (ADR-001: a cota gratuita é de
+50 mil leituras por dia, e sem cache cada requisição lê a coleção inteira). Uma coleta invalida o cache;
+se o Firestore falhar (rede, cota), serve a cópia vencida. Os cabeçalhos `X-Cache` (HIT, MISS ou STALE) e
+`Cache-Control` permitem medir o efeito nos ensaios de carga.
+
+**Conectar ao Firestore real** (passos que só quem tem a conta pode fazer):
+
+1. No [console do Firebase](https://console.firebase.google.com), crie um projeto (de preferência na
+   conta do grupo) e ative o **Firestore** em modo de produção, região `southamerica-east1`, no plano
+   gratuito (sem faturamento).
+2. Em *Configurações do projeto → Contas de serviço → Gerar nova chave privada*, salve o JSON como
+   `coletor/credenciais.json`. O arquivo é ignorado pelo git e pelo Docker; **nunca o envie por chat, e-mail ou commit**.
+3. Em *Firestore → Regras*, cole o conteúdo de `coletor/firestore.rules` (negar tudo a clientes: só o backend,
+   com a conta de serviço, lê e escreve) e publique.
+4. Rode o teste de conexão (grava, lê e apaga um documento temporário; deixe `FIRESTORE_EMULATOR_HOST` ausente):
+
+```bash
+cd coletor
+python scripts/testar_firestore.py     # esperado: "Destino: Firestore REAL | projeto: <id>" e "OK: ..."
+```
+
+Em produção, `FIRESTORE_EMULATOR_HOST` deve estar ausente, o `credenciais.json` entra por volume ou segredo
+(nunca na imagem) e `ALLOWED_ORIGINS` lista só o domínio real do frontend.
+
+Testes (não chamam a SerpApi nem o Firebase):
+
+```bash
+pip install -r requirements-dev.txt
+pytest
+```
 
 Com Docker:
 
@@ -154,7 +248,7 @@ DOM, e todo link de origem é validado para aceitar só `http`/`https`
 
 ## Pendências conhecidas
 
-1. Verificar `robots.txt` e os Termos de Uso do portal de origem antes de operar a coleta em produção — está no caminho crítico do cronograma.
+1. Conferir os Termos de Uso da SerpApi/Google Jobs para o uso acadêmico e registrar a decisão de trocar o scraping direto do portal Companhia de Estágios pela SerpApi (a fonte antiga foi removida do coletor).
 2. Não há autenticação de usuário final em nenhum dos módulos.
 3. Os dois módulos ainda não se integram: o `cadastro` não conhece as vagas do `coletor`.
 4. Não há testes automatizados nem esteira de CI.

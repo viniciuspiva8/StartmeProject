@@ -7,11 +7,20 @@ const cors = require('cors');
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
-// Origens autorizadas vêm do ambiente. Sem curinga "*".
-const ORIGENS = (process.env.ALLOWED_ORIGINS || 'http://127.0.0.1:5500,http://localhost:5500')
-    .split(',')
-    .map((o) => o.trim())
-    .filter(Boolean);
+// Origens autorizadas vêm do ambiente. Lista explícita, sem curinga "*".
+// Padrão de desenvolvimento: Vite (dev 5173, preview 4173) e Live Server (5500).
+// Em produção, defina ALLOWED_ORIGINS com o domínio real do frontend.
+const ORIGENS_DEV = [5173, 4173, 5500].flatMap((porta) => [
+    `http://localhost:${porta}`,
+    `http://127.0.0.1:${porta}`,
+]);
+const ORIGENS = process.env.ALLOWED_ORIGINS && process.env.ALLOWED_ORIGINS.trim()
+    ? process.env.ALLOWED_ORIGINS
+        .split(',')
+        // O navegador envia a origem sem "/" no fim; "*" é descartado.
+        .map((o) => o.trim().replace(/\/+$/, ''))
+        .filter((o) => o && o !== '*')
+    : ORIGENS_DEV;
 
 app.use(cors({ origin: ORIGENS }));
 app.use(express.json());
