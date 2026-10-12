@@ -30,6 +30,15 @@ export function diasDesde(dataIso) {
   return Math.max(0, Math.round((Date.now() - d.getTime()) / 86400000));
 }
 
+/**
+ * Logo da empresa vindo do coletor. O coletor grava um data URI de imagem raster (PNG, JPEG, GIF ou WebP);
+ * qualquer outra coisa (URL externa, SVG, texto) é descartada, e a interface mostra a letra da empresa.
+ */
+const LOGO_VALIDO = /^data:image\/(png|jpeg|gif|webp);base64,[A-Za-z0-9+/]+={0,2}$/;
+export function logoSeguro(logo) {
+  return typeof logo === 'string' && logo.length <= 40000 && LOGO_VALIDO.test(logo) ? logo : '';
+}
+
 /** Converte um registro REAL do coletor (Firestore) no formato da interface. */
 export function enriquecerVagaReal(v) {
   const base = `${v.titulo || ''} ${v.descricao || ''}`;
@@ -37,6 +46,7 @@ export function enriquecerVagaReal(v) {
     id: v.id,
     titulo: v.titulo || 'Vaga sem título na origem',
     empresa: v.empresa || 'Empresa não informada',
+    logo: logoSeguro(v.logo),
     link: v.link || '',
     salario: v.salario || '',
     dataColeta: v.data_coleta || '',

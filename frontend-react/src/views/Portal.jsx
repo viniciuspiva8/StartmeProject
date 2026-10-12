@@ -3,6 +3,7 @@
 import { CPF_DEMO, FERRAMENTAS, PORTAIS, SENHA_DEMO } from '../data/mock.js';
 import { useApp } from '../state/AppContext.jsx';
 import Icone from '../components/Icone.jsx';
+import Logo from '../components/Logo.jsx';
 
 export default function Portal() {
   const { s, a } = useApp();
@@ -108,8 +109,9 @@ function Atalhos({ titulo, itens, onClick }) {
               onClick={() => onClick(item)}
               className={`relative flex h-full w-full cursor-pointer flex-col items-start gap-3 rounded-2xl border p-4 text-left transition-colors ${item.novo ? 'border-agua bg-agua-fundo hover:border-agua-texto' : 'border-linha bg-white hover:border-azul-500'}`}
             >
-              <span className={`grid size-10 place-items-center rounded-xl ${item.novo ? 'bg-agua text-white' : 'bg-nevoa text-azul'}`}>
-                <Icone nome={item.icone} size={21} />
+              <span className={`grid size-10 place-items-center rounded-xl ${item.novo ? 'bg-white ring-1 ring-agua' : 'bg-nevoa text-azul'}`}>
+                {/* `novo` só existe no atalho do StartMe: ele mostra a marca em vez de um ícone genérico. */}
+                {item.novo ? <Logo size={27} /> : <Icone nome={item.icone} size={21} />}
               </span>
               <span className="text-sm leading-snug font-semibold text-tinta">{item.nome}</span>
               {item.novo && <span className="absolute top-3 right-3 rounded-pill bg-agua px-2 py-0.5 text-[11px] font-bold text-white">Novo</span>}

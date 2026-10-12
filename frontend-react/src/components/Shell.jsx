@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useApp } from '../state/AppContext.jsx';
 import Icone from './Icone.jsx';
+import Logo from './Logo.jsx';
 import NotasDrawer from './Notas.jsx';
 
 const ABAS = [
@@ -48,7 +49,9 @@ function BarraSuperior() {
     <header className="sticky top-0 z-40 bg-azul text-white print:hidden">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-6 px-4 sm:px-6">
         <button type="button" onClick={() => a.irView('inicio')} className="flex cursor-pointer items-center gap-2.5 rounded-lg">
-          <span aria-hidden="true" className="grid size-9 place-items-center rounded-[10px] bg-white font-serif text-xl font-bold text-azul">S</span>
+          <span aria-hidden="true" className="grid size-10 place-items-center rounded-[10px] bg-white">
+            <Logo size={30} />
+          </span>
           <span className="text-left leading-tight">
             <span className="block text-base font-bold">StartMe</span>
             <span className="block text-[11px] text-white/70">Fundação Santo André</span>

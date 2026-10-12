@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="352" height="352" viewBox="85 80.5 352 352">
+  <title>StartMe — símbolo</title>
+  <desc>Logotipo StartMe em formato vetorial, com fundo transparente.</desc>
+  <defs>
+    <linearGradient id="startmeGradient" x1="105" y1="0" x2="410" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06458A"/>
+      <stop offset="52%" stop-color="#087BB4"/>
+      <stop offset="100%" stop-color="#00A99D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Símbolo -->
+  <g fill="none" stroke="url(#startmeGradient)" stroke-width="46"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 385 L120 128 L210 230 L292 128 L292 252 Q292 285 327 285 L375 285"/>
+  </g>
+
+  <!-- Cabeça da seta -->
+  <path d="M370 235 L425 290 L370 345 Z"
+        fill="url(#startmeGradient)" stroke="none"/>
+</svg>

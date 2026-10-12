@@ -77,6 +77,15 @@ modal; navegação inferior no celular; item de lista inteiro clicável; foco vi
 **Notas de design.** O botão "Notas de design" abre um painel com a decisão e o porquê de cada tela,
 para a monografia e a banca.
 
+## Logo
+
+O logo oficial está em `design-reference/logo/StartMe_logo_vetorizada.svg` (sem alteração). Em `public/` ficam
+dois recortes do mesmo desenho, que só mudam o `viewBox` (o original tem muita margem vazia):
+`logo-startme.svg` (símbolo + "StartMe", só vale a partir de ~96 px de altura) e `logo-startme-simbolo.svg`
+(só o símbolo, usado no favicon, na barra superior, no consentimento e no atalho do portal).
+O componente `src/components/Logo.jsx` aplica os dois. O texto "Start" e a ponta esquerda do símbolo têm a cor do
+cabeçalho (`#042D5C`), então sobre fundo azul o símbolo vai num chip branco.
+
 ## Estrutura
 
 ```
