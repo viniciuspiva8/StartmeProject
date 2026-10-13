@@ -20,3 +20,6 @@ venv/
 
 # Cache local da Firebase CLI
 .firebase/
+
+# Documentação de desenvolvimento (uso interno da equipe; não vai para a entrega)
+docs/execucao/
