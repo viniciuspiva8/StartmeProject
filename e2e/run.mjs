@@ -31,15 +31,18 @@ const PEPPER = 'pepper-de-cpf-e2e-com-mais-de-32-bytes';
 
 const MODOS = {
   'arquivo-demo': {
+    MODO_DEMONSTRACAO: 'true',
     AUTH_MODE: 'demo',
     ACADEMICO_PROVIDER: 'arquivo',
   },
   'sql-demo': {
+    MODO_DEMONSTRACAO: 'true',
     AUTH_MODE: 'demo',
     ACADEMICO_PROVIDER: 'sql',
     ACADEMICO_SQL_URL: 'postgresql+psycopg://fsa:fsa-simulado@localhost:5433/faculdade_sim',
   },
   'http-oidc': {
+    // Entrega: a trava de produção fica LIGADA aqui (sem MODO_DEMONSTRACAO), e o serviço precisa subir assim.
     AUTH_MODE: 'oidc',
     ACADEMICO_PROVIDER: 'http',
     ACADEMICO_HTTP_URL: 'http://localhost:8101/fsa/alunos/{cpf}/vinculo',

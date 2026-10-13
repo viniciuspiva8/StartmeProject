@@ -18,6 +18,22 @@ Só três coisas, por aluno, e **nunca** o CPF na resposta:
 
 Não são usados: notas, histórico, financeiro, RG, matrícula, data de nascimento, endereço.
 
+## Modo apresentação × modo de entrega (a trava)
+
+O serviço tem uma trava, implementada em `coletor/integracao/config.py` (`verificar_modo_producao`):
+
+| Estado | Variável | Quem sobe |
+|---|---|---|
+| **Apresentação** (hoje, em produção) | `MODO_DEMONSTRACAO=true` | login demo e alunos fictícios; a faixa "ambiente simulado" continua |
+| **Entrega** | variável **ausente** (ou diferente de `true`) | só login institucional (`AUTH_MODE=oidc` ou `http`) e fonte da faculdade (`sql` ou `http`) |
+
+Sem a variável, o serviço **não sobe** com o modo demo ou com a fonte de arquivo, e a mensagem de erro diz o que
+ajustar. O padrão é a entrega, então um esquecimento não deixa a demonstração aberta.
+
+**Para sair do modo apresentação na entrega, a única mudança é remover `MODO_DEMONSTRACAO`** do serviço
+(Cloud Run, variáveis de ambiente), junto com as variáveis da faculdade (tabela abaixo). Nenhum código muda.
+Para conferir o modo que está ativo: `GET /api/publico/config` devolve `modo_demonstracao`.
+
 ## Três modos, lado a lado
 
 A mesma aplicação roda nos três. Só mudam estas variáveis (Secret Manager em produção):

@@ -18,6 +18,7 @@ class Config:
     auth_mode: str = "demo"
     provedor: str = "arquivo"
     simulado: bool = True
+    modo_demonstracao: bool = False  # MODO_DEMONSTRACAO=true liga a apresentação; sem ela vale o modo de produção
     termo_versao: str = "2026-10"
     sessao_segredo: bytes | None = None
     cpf_pepper: bytes | None = None
@@ -67,6 +68,31 @@ class Config:
 
     @classmethod
     def do_ambiente(cls, env=os.environ) -> "Config":
+        cfg = cls._ler_ambiente(env)
+        cfg.verificar_modo_producao()
+        return cfg
+
+    def verificar_modo_producao(self) -> None:
+        """Trava de entrega. Fora do modo apresentação, só login institucional e fonte da faculdade.
+
+        Para sair do modo apresentação na entrega: remover MODO_DEMONSTRACAO (ou pôr false), usar
+        AUTH_MODE=oidc (ou http) e ACADEMICO_PROVIDER=sql (ou http). Ver docs/ADOCAO-FSA.md.
+        """
+        if self.modo_demonstracao:
+            return
+        if self.auth_mode == "demo":
+            raise ValueError(
+                "modo de produção: AUTH_MODE=demo não é permitido. "
+                "Para a apresentação, defina MODO_DEMONSTRACAO=true; para a entrega, use AUTH_MODE=oidc."
+            )
+        if self.provedor == "arquivo":
+            raise ValueError(
+                "modo de produção: ACADEMICO_PROVIDER=arquivo (alunos fictícios) não é permitido. "
+                "Para a apresentação, defina MODO_DEMONSTRACAO=true; para a entrega, use sql ou http."
+            )
+
+    @classmethod
+    def _ler_ambiente(cls, env) -> "Config":
         def binario(nome: str) -> bytes | None:
             valor = env.get(nome, "").strip()
             return valor.encode("utf-8") if valor else None
@@ -96,6 +122,7 @@ class Config:
             auth_mode=env.get("AUTH_MODE", "demo").strip() or "demo",
             provedor=env.get("ACADEMICO_PROVIDER", "arquivo").strip() or "arquivo",
             simulado=env.get("SIMULADO", "true").strip().lower() != "false",
+            modo_demonstracao=env.get("MODO_DEMONSTRACAO", "").strip().lower() == "true",
             termo_versao=env.get("TERMO_VERSAO", "2026-10").strip() or "2026-10",
             sessao_segredo=binario("SESSAO_SEGREDO"),
             cpf_pepper=binario("CPF_PEPPER"),
@@ -118,6 +145,7 @@ class Config:
             "modo_auth": self.auth_mode,
             "provedor": self.provedor,
             "simulado": self.simulado,
+            "modo_demonstracao": self.modo_demonstracao,
             "versao_termo": self.termo_versao,
             "sessao_ativa": self.sessao_ativa,
             "oidc": self.auth_mode == "oidc" and self.oidc_issuer is not None,
