@@ -1,0 +1,15 @@
+{
+  "name": "StartMe — Vagas para discentes",
+  "short_name": "StartMe",
+  "description": "Vagas de estágio e júnior em TI para discentes da Fundação Santo André.",
+  "lang": "pt-BR",
+  "start_url": "/#/inicio",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#EBF1FF",
+  "theme_color": "#042D5C",
+  "icons": [
+    { "src": "/logo-startme-simbolo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

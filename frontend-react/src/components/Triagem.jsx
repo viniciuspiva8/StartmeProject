@@ -74,7 +74,7 @@ function Item({ c, vagaId }) {
         <span><span className="sr-only">{c.positivo ? 'Atende: ' : 'Ressalva: '}</span>{c.texto}</span>
         {faltaNoCurriculo && (
           <span>
-            <button type="button" onClick={() => a.abrirHabilidade({ nome: c.termo }, vagaId)} className="btn-claro min-h-9 rounded-lg px-3 text-[13px]">
+            <button type="button" onClick={() => a.abrirHabilidade({ nome: c.termo }, vagaId)} className="btn-claro rounded-lg px-3 text-[13px]">
               Eu sei {c.termo}
             </button>
           </span>

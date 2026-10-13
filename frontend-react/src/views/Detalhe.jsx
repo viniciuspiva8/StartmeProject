@@ -24,7 +24,7 @@ export default function Detalhe({ v, telaCheia = false, aoFechar = null }) {
   return (
     <article className="@container flex min-h-full flex-col [view-transition-name:detalhe]">
       {telaCheia && (
-        <div className="sticky top-0 z-10 flex h-14 items-center border-b border-linha bg-white/95 px-2 backdrop-blur">
+        <div className="sticky top-0 z-10 flex h-14 items-center border-b border-linha bg-white px-2">
           <button type="button" onClick={a.fecharVaga} className="btn-fantasma">
             <Icone nome="voltar" size={20} /> Vagas
           </button>
@@ -49,7 +49,7 @@ export default function Detalhe({ v, telaCheia = false, aoFechar = null }) {
                 onClick={aoFechar}
                 aria-label="Fechar detalhe e voltar à lista"
                 title="Fechar (Esc)"
-                className="grid size-10 flex-none cursor-pointer place-items-center rounded-xl text-tinta-3 hover:bg-nevoa hover:text-azul"
+                className="grid size-11 flex-none cursor-pointer place-items-center rounded-xl text-tinta-3 hover:bg-nevoa hover:text-azul"
               >
                 <Icone nome="fechar" size={20} />
               </button>
@@ -102,7 +102,7 @@ function Acoes({ v, fixa, className = 'flex' }) {
   const { a } = useApp();
   return (
     <div className={fixa
-      ? 'sticky bottom-0 z-10 border-t border-linha bg-white/95 px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] backdrop-blur'
+      ? 'sticky bottom-0 z-10 border-t border-linha bg-white px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] shadow-[0_-8px_16px_-12px_rgba(4,45,92,0.25)]'
       : `${className} flex-col gap-2`}
     >
       <div className={fixa ? 'grid grid-cols-[1fr_auto] gap-2' : 'flex flex-wrap items-center gap-2'}>

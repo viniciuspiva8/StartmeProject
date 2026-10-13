@@ -31,18 +31,20 @@ export default function Lista() {
 
   const aberta = desktop && !!selecionada;
 
-  // Ao abrir: página no topo e o cartão escolhido visível na coluna da esquerda.
-  // Ao fechar: o foco volta ao cartão que estava aberto, e ele volta à vista.
+  // Desktop, ao abrir: página no topo e o cartão escolhido visível na coluna da esquerda.
+  // Ao fechar (desktop e celular): o foco volta ao cartão que estava aberto. No celular a lista
+  // não é rolada (o fundo fica parado atrás do detalhe), então a posição do aluno se mantém.
   const ultimaAberta = useRef(null);
   useEffect(() => {
-    if (!desktop) return;
     if (s.sel) {
       ultimaAberta.current = s.sel;
-      window.scrollTo({ top: 0 });
-      document.querySelector(`[data-vaga-id="${s.sel}"]`)?.scrollIntoView({ block: 'nearest' });
+      if (desktop) {
+        window.scrollTo({ top: 0 });
+        document.querySelector(`[data-vaga-id="${s.sel}"]`)?.scrollIntoView({ block: 'nearest' });
+      }
     } else if (ultimaAberta.current) {
       const botao = document.querySelector(`[data-vaga-id="${ultimaAberta.current}"]`);
-      botao?.scrollIntoView({ block: 'center' });
+      if (desktop) botao?.scrollIntoView({ block: 'center' });
       botao?.focus({ preventScroll: true });
       ultimaAberta.current = null;
     }
@@ -73,6 +75,7 @@ export default function Lista() {
   // --altura-filtros, usada pela lista e pelo detalhe para ocupar o resto da tela.
   const mainRef = useRef(null);
   const barraRef = useRef(null);
+  const gradeRef = useRef(null);
   useEffect(() => {
     const barra = barraRef.current;
     if (!barra || typeof ResizeObserver === 'undefined') return undefined;
@@ -83,6 +86,19 @@ export default function Lista() {
     return () => ro.disconnect();
   }, []);
 
+  // Detalhe em tela cheia é um diálogo modal: o que está por trás (filtros, lista, barra
+  // superior, navegação inferior) fica inerte, sem foco por Tab nem leitura por leitor de tela.
+  useEffect(() => {
+    if (!telaCheia) return undefined;
+    const alvos = [
+      barraRef.current,
+      gradeRef.current,
+      ...document.querySelectorAll('#root > div > header, #root > div > nav, #root > div > a[href="#conteudo"]'),
+    ].filter(Boolean);
+    alvos.forEach((el) => el.setAttribute('inert', ''));
+    return () => alvos.forEach((el) => el.removeAttribute('inert'));
+  }, [telaCheia]);
+
   return (
     <main ref={mainRef} className="[--altura-filtros:4.25rem]">
       <div ref={barraRef} className="sticky top-16 z-30 border-b border-linha bg-white/95 backdrop-blur">
@@ -91,7 +107,7 @@ export default function Lista() {
         </div>
       </div>
 
-      <div className={aberta ? 'mx-auto max-w-[1440px] lg:grid lg:grid-cols-[minmax(380px,460px)_1fr]' : 'mx-auto max-w-[960px] px-4 pb-12 sm:px-6'}>
+      <div ref={gradeRef} className={aberta ? 'mx-auto max-w-[1440px] lg:grid lg:grid-cols-[minmax(380px,460px)_1fr]' : 'mx-auto max-w-[960px] px-4 pb-12 sm:px-6'}>
         <section
           aria-label="Resultados"
           className={aberta
@@ -104,7 +120,7 @@ export default function Lista() {
             </p>
             <label className="flex items-center gap-2 text-[13px] text-tinta-3">
               Ordenar por
-              <select value={s.ord} onChange={(e) => a.setOrd(e.target.value)} className="min-h-9 cursor-pointer rounded-lg bg-transparent pr-1 text-[13px] font-semibold text-tinta hover:text-azul">
+              <select value={s.ord} onChange={(e) => a.setOrd(e.target.value)} className="min-h-11 cursor-pointer rounded-lg bg-transparent pr-1 text-[13px] font-semibold text-tinta hover:text-azul">
                 <option value="compat">Mais indicadas para você</option>
                 <option value="recentes">Coletadas há menos tempo</option>
                 <option value="salario">Maior salário declarado</option>
@@ -157,7 +173,7 @@ export default function Lista() {
       </div>
 
       {telaCheia && (
-        <div role="dialog" aria-modal="true" aria-label={selecionada.titulo} className="fixed inset-0 z-50 animate-sobe overflow-y-auto bg-white">
+        <div role="dialog" aria-modal="true" aria-label={selecionada.titulo} className="fixed inset-0 z-50 animate-sobe overflow-y-auto overscroll-contain bg-white">
           <Detalhe v={selecionada} telaCheia />
         </div>
       )}

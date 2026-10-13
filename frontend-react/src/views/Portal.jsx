@@ -45,7 +45,7 @@ export default function Portal() {
               htmlFor="senha"
               acao={(
                 <button type="button" onClick={a.toggleSenha} aria-label={s.verSenha ? 'Ocultar senha' : 'Mostrar senha'}
-                  aria-controls="senha" className="grid size-10 cursor-pointer place-items-center rounded-lg text-tinta-3 hover:text-azul">
+                  aria-controls="senha" className="grid size-11 cursor-pointer place-items-center rounded-lg text-tinta-3 hover:text-azul">
                   <Icone nome={s.verSenha ? 'olhoFechado' : 'olho'} size={19} />
                 </button>
               )}
@@ -63,7 +63,7 @@ export default function Portal() {
             )}
 
             <button type="submit" disabled={!podeEntrar} className="btn-primario mt-1 min-h-12 text-[15px]">Entrar</button>
-            <button type="button" onClick={a.nadaAinda} className="self-center text-[13px] font-semibold text-azul-700 hover:underline">
+            <button type="button" onClick={a.nadaAinda} className="min-h-11 cursor-pointer self-center px-3 text-[13px] font-semibold text-azul-700 hover:underline">
               Esqueci ou quero trocar a senha
             </button>
           </form>
@@ -71,7 +71,7 @@ export default function Portal() {
           <div className="mt-6 rounded-2xl border border-dashed border-linha-forte p-4">
             <p className="text-[13px] font-semibold text-tinta-2">Credenciais de demonstração</p>
             <p className="mt-1 text-sm text-tinta tabular-nums">CPF {CPF_DEMO}, senha {SENHA_DEMO}</p>
-            <button type="button" onClick={a.preencherDemo} className="btn-claro mt-3 min-h-10 w-full">Preencher para mim</button>
+            <button type="button" onClick={a.preencherDemo} className="btn-claro mt-3 w-full">Preencher para mim</button>
           </div>
         </div>
 
@@ -114,7 +114,7 @@ function Atalhos({ titulo, itens, onClick }) {
                 {item.novo ? <Logo size={27} /> : <Icone nome={item.icone} size={21} />}
               </span>
               <span className="text-sm leading-snug font-semibold text-tinta">{item.nome}</span>
-              {item.novo && <span className="absolute top-3 right-3 rounded-pill bg-agua px-2 py-0.5 text-[11px] font-bold text-white">Novo</span>}
+              {item.novo && <span className="absolute top-3 right-3 rounded-pill bg-agua px-2 py-0.5 text-xs font-bold text-white">Novo</span>}
             </button>
           </li>
         ))}

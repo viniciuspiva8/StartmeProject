@@ -86,7 +86,7 @@ export default function NotasDrawer() {
             <p className="text-[13px] text-agua-claro">Notas de design</p>
             <h2 id="notas-titulo" className="mt-1 font-serif text-2xl leading-tight font-bold">{notas.titulo}</h2>
           </div>
-          <button type="button" onClick={a.fecharNotas} aria-label="Fechar notas" className="grid size-10 flex-none cursor-pointer place-items-center rounded-xl text-white/70 hover:bg-white/10 hover:text-white">
+          <button type="button" onClick={a.fecharNotas} aria-label="Fechar notas" className="grid size-11 flex-none cursor-pointer place-items-center rounded-xl text-white/70 hover:bg-white/10 hover:text-white">
             <Icone nome="fechar" size={20} />
           </button>
         </div>

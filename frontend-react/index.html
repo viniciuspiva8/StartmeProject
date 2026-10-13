@@ -2,9 +2,15 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover faz env(safe-area-inset-*) valer em celulares com entalhe e barra de gestos.
+         Não use user-scalable=no nem maximum-scale: o zoom do usuário é requisito de acessibilidade. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#042D5C" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content="StartMe: vagas de estágio e júnior em TI para discentes da Fundação Santo André." />
     <title>StartMe — Vagas para discentes</title>
     <link rel="icon" type="image/svg+xml" href="/logo-startme-simbolo.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />

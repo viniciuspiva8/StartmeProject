@@ -74,7 +74,7 @@ export default function VagaCard({ v, selecionada = false, variante = 'lista' })
         onClick={() => a.toggleSalvar(v.id)}
         aria-pressed={v.salva}
         aria-label={v.salva ? `Remover ${v.titulo} das salvas` : `Salvar ${v.titulo}`}
-        className={`absolute top-3 right-3 z-10 grid size-10 cursor-pointer place-items-center rounded-full transition-colors hover:bg-nevoa ${v.salva ? 'text-azul' : 'text-tinta-4 hover:text-azul'}`}
+        className={`absolute top-2.5 right-2.5 z-10 grid size-11 cursor-pointer place-items-center rounded-full transition-colors hover:bg-nevoa ${v.salva ? 'text-azul' : 'text-tinta-4 hover:text-azul'}`}
       >
         <Icone nome="marcador" size={19} cheio={v.salva} />
       </button>
@@ -167,7 +167,7 @@ function VagaAmpla({ v }) {
         onClick={() => a.toggleSalvar(v.id)}
         aria-pressed={v.salva}
         aria-label={v.salva ? `Remover ${v.titulo} das salvas` : `Salvar ${v.titulo}`}
-        className={`absolute top-3 right-3 z-10 grid size-10 cursor-pointer place-items-center rounded-full transition-colors hover:bg-nevoa md:top-4 md:right-4 ${v.salva ? 'text-azul' : 'text-tinta-4 hover:text-azul'}`}
+        className={`absolute top-2.5 right-2.5 z-10 grid size-11 cursor-pointer place-items-center rounded-full transition-colors hover:bg-nevoa md:top-4 md:right-4 ${v.salva ? 'text-azul' : 'text-tinta-4 hover:text-azul'}`}
       >
         <Icone nome="marcador" size={19} cheio={v.salva} />
       </button>

@@ -45,7 +45,7 @@ export default function Curriculo() {
       <div role="tablist" aria-label="Modo" className="mt-6 grid grid-cols-2 rounded-xl bg-papel-2 p-1 lg:hidden print:hidden">
         {[['editar', 'Editar'], ['previa', 'Ver como a empresa vê']].map(([id, rot]) => (
           <button key={id} type="button" role="tab" aria-selected={aba === id} onClick={() => setAba(id)}
-            className={`min-h-10 cursor-pointer rounded-lg text-sm font-semibold ${aba === id ? 'bg-white text-azul shadow-painel' : 'text-tinta-3'}`}>
+            className={`min-h-11 cursor-pointer rounded-lg text-sm font-semibold ${aba === id ? 'bg-white text-azul shadow-painel' : 'text-tinta-3'}`}>
             {rot}
           </button>
         ))}
@@ -178,7 +178,7 @@ function Chip({ children, onRemover, tom = 'neutro' }) {
     <li className={`inline-flex min-h-8 items-center gap-1 rounded-pill pr-1 pl-3 text-[13px] font-semibold ${estilos[tom]} ${onRemover ? '' : 'pr-3'}`}>
       {children}
       {onRemover && (
-        <button type="button" onClick={onRemover} aria-label={`Remover ${children}`} className="grid size-7 cursor-pointer place-items-center rounded-full hover:bg-white/70">
+        <button type="button" onClick={onRemover} aria-label={`Remover ${children}`} className="relative grid size-7 cursor-pointer place-items-center rounded-full before:absolute before:-inset-2 hover:bg-white/70">
           <Icone nome="fechar" size={14} />
         </button>
       )}
@@ -223,7 +223,7 @@ function SecaoHabilidades() {
                   {h.onde ? `${h.onde}${h.ano ? `, ${h.ano}` : ''}` : h.nivel ? 'Onde aprendeu não informado' : 'Falta informar o nível'}
                 </span>
               </span>
-              <button type="button" onClick={() => a.abrirHabilidade(h)} className="btn-fantasma min-h-10 px-3 text-[13px]">
+              <button type="button" onClick={() => a.abrirHabilidade(h)} className="btn-fantasma px-3 text-[13px]">
                 Editar<span className="sr-only"> {h.nome}</span>
               </button>
               <Remover rotulo={`Remover ${h.nome}`} onClick={() => a.removerHabilidade(h.id)} />
@@ -318,7 +318,7 @@ function FormHabilidade({ inicial }) {
 
       <Campo rotulo="Certificado (opcional)" largo>
         <input type="file" accept=".pdf,image/*" onChange={(e) => setF({ ...f, arquivo: e.target.files?.[0]?.name || '' })}
-          className="text-sm text-tinta-2 file:mr-3 file:min-h-10 file:cursor-pointer file:rounded-lg file:border-0 file:bg-white file:px-3 file:font-semibold file:text-azul" />
+          className="text-sm text-tinta-2 file:mr-3 file:min-h-11 file:cursor-pointer file:rounded-lg file:border-0 file:bg-white file:px-3 file:font-semibold file:text-azul" />
         <span className="text-xs text-tinta-3">
           {f.arquivo ? `Anexado: ${f.arquivo}. ` : ''}Com certificado, a habilidade conta como comprovada. Nesta versão só o nome do arquivo é guardado.
         </span>
@@ -340,7 +340,7 @@ function Lista({ itens, render, vazio }) {
 
 function Remover({ rotulo, onClick }) {
   return (
-    <button type="button" onClick={onClick} aria-label={rotulo} className="grid size-10 flex-none cursor-pointer place-items-center rounded-xl text-tinta-4 hover:bg-erro-fundo hover:text-erro">
+    <button type="button" onClick={onClick} aria-label={rotulo} className="grid size-11 flex-none cursor-pointer place-items-center rounded-xl text-tinta-4 hover:bg-erro-fundo hover:text-erro">
       <Icone nome="fechar" size={18} />
     </button>
   );
@@ -383,7 +383,7 @@ function SecaoCertificacoes() {
           </Campo>
           <Campo rotulo="Arquivo do certificado (opcional)" largo>
             <input type="file" accept=".pdf,image/*" onChange={(e) => setForm({ ...form, arquivo: e.target.files?.[0]?.name || '' })}
-              className="text-sm text-tinta-2 file:mr-3 file:min-h-10 file:cursor-pointer file:rounded-lg file:border-0 file:bg-nevoa file:px-3 file:font-semibold file:text-azul" />
+              className="text-sm text-tinta-2 file:mr-3 file:min-h-11 file:cursor-pointer file:rounded-lg file:border-0 file:bg-nevoa file:px-3 file:font-semibold file:text-azul" />
             <span className="text-xs text-tinta-3">Nesta versão só o nome do arquivo é guardado; o envio depende do backend.</span>
           </Campo>
           <div className="flex gap-2 sm:col-span-2">
@@ -492,7 +492,7 @@ function RestaurarDemo() {
   return (
     <p className="text-center text-[13px] text-tinta-3">
       Testando a demonstração?{' '}
-      <button type="button" onClick={a.restaurarCurriculo} className="cursor-pointer font-semibold text-azul-700 underline-offset-2 hover:underline">
+      <button type="button" onClick={a.restaurarCurriculo} className="cursor-pointer px-1 py-3.5 font-semibold text-azul-700 underline-offset-2 hover:underline">
         Restaurar o currículo de exemplo
       </button>
     </p>

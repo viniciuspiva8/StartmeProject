@@ -24,7 +24,7 @@ export default function Filtros() {
           value={s.q}
           onChange={(e) => a.setQ(e.target.value)}
           placeholder="Cargo, empresa ou tecnologia"
-          className="min-h-10 min-w-0 flex-1 bg-transparent text-sm text-tinta outline-none placeholder:text-tinta-3"
+          className="min-h-11 min-w-0 flex-1 bg-transparent text-sm text-tinta outline-none placeholder:text-tinta-3"
         />
       </label>
 
@@ -74,7 +74,7 @@ export default function Filtros() {
         </Popover>
 
         {ativos > 0 && (
-          <button type="button" onClick={a.limparFiltros} className="btn-fantasma min-h-10 whitespace-nowrap">
+          <button type="button" onClick={a.limparFiltros} className="btn-fantasma whitespace-nowrap">
             Limpar filtros
           </button>
         )}
@@ -110,7 +110,7 @@ function Popover({ rotulo, valor, children }) {
         <Icone nome="abaixo" size={16} className={`transition-transform ${aberto ? 'rotate-180' : ''}`} />
       </button>
       {aberto && (
-        <div id={id} role="group" aria-label={rotulo} className="fixed inset-x-3 top-auto z-50 mt-2 animate-entra rounded-2xl border border-linha bg-white p-2 shadow-flutuante sm:absolute sm:inset-x-auto sm:left-0 sm:w-72">
+        <div id={id} role="group" aria-label={rotulo} className="fixed inset-x-3 top-auto z-50 mt-2 max-h-[min(70dvh,28rem)] animate-entra overflow-y-auto overscroll-contain rounded-2xl border border-linha bg-white p-2 shadow-flutuante sm:absolute sm:inset-x-auto sm:left-0 sm:w-72">
           {children}
         </div>
       )}

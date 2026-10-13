@@ -53,7 +53,7 @@ export default function Home() {
         <section aria-labelledby="destaques">
           <div className="mb-4 flex items-end justify-between gap-4">
             <h2 id="destaques" className="font-serif text-2xl font-bold text-white">Vale olhar primeiro</h2>
-            <button type="button" onClick={() => a.irView('vagas')} className="hidden text-sm font-semibold text-white/85 hover:text-white hover:underline sm:inline">
+            <button type="button" onClick={() => a.irView('vagas')} className="hidden min-h-11 cursor-pointer items-center px-2 text-sm font-semibold text-white/85 hover:text-white hover:underline sm:inline-flex">
               Ver todas as {s.vagas.length} vagas
             </button>
           </div>
@@ -67,7 +67,7 @@ export default function Home() {
         <section aria-labelledby="curriculo-titulo" className="mt-12">
           <div className="mb-4 flex items-end justify-between gap-4">
             <h2 id="curriculo-titulo" className="font-serif text-2xl font-bold text-tinta">Seu currículo</h2>
-            <button type="button" onClick={() => a.irView('curriculo')} className="text-sm font-semibold whitespace-nowrap text-azul-700 hover:underline">
+            <button type="button" onClick={() => a.irView('curriculo')} className="min-h-11 cursor-pointer px-2 text-sm font-semibold whitespace-nowrap text-azul-700 hover:underline">
               Abrir currículo
             </button>
           </div>
@@ -85,7 +85,7 @@ export default function Home() {
                         <span className="block text-sm font-semibold text-tinta">{f.termo}</span>
                         <span className="block text-[13px] text-tinta-3">Obrigatório em {f.vagas} {f.vagas === 1 ? 'vaga' : 'vagas'}</span>
                       </span>
-                      <button type="button" onClick={() => a.abrirHabilidade({ nome: f.termo })} className="btn-claro min-h-9 rounded-lg px-3 text-[13px]">
+                      <button type="button" onClick={() => a.abrirHabilidade({ nome: f.termo })} className="btn-claro rounded-lg px-3 text-[13px]">
                         Eu sei {f.termo}
                       </button>
                     </li>

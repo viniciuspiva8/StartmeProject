@@ -23,7 +23,8 @@ export default function Shell({ children }) {
         Pular para o conteúdo
       </a>
       {logado && <BarraSuperior />}
-      <div id="conteudo" className={`flex-1 ${logado ? 'pb-20 md:pb-0 print:pb-0' : ''}`}>{children}</div>
+      {/* pb: altura da navegação inferior (4rem) + folga + barra de gestos do aparelho. */}
+      <div id="conteudo" className={`flex-1 ${logado ? 'pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0 print:pb-0' : ''}`}>{children}</div>
       {logado && <NavInferior />}
       {!logado && <BotaoNotasFlutuante />}
       <Toast />
@@ -47,14 +48,14 @@ function BarraSuperior() {
 
   return (
     <header className="sticky top-0 z-40 bg-azul text-white print:hidden">
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-6 px-4 sm:px-6">
-        <button type="button" onClick={() => a.irView('inicio')} className="flex cursor-pointer items-center gap-2.5 rounded-lg">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center gap-6 pr-[max(1rem,env(safe-area-inset-right))] pl-[max(1rem,env(safe-area-inset-left))] sm:pr-[max(1.5rem,env(safe-area-inset-right))] sm:pl-[max(1.5rem,env(safe-area-inset-left))]">
+        <button type="button" onClick={() => a.irView('inicio')} className="flex min-h-11 cursor-pointer items-center gap-2.5 rounded-lg">
           <span aria-hidden="true" className="grid size-10 place-items-center rounded-[10px] bg-white">
             <Logo size={30} />
           </span>
           <span className="text-left leading-tight">
             <span className="block text-base font-bold">StartMe</span>
-            <span className="block text-[11px] text-white/70">Fundação Santo André</span>
+            <span className="block text-xs text-white/70">Fundação Santo André</span>
           </span>
         </button>
 
@@ -81,7 +82,7 @@ function BarraSuperior() {
             type="button"
             onClick={a.toggleNotas}
             aria-expanded={s.notasAbertas}
-            className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm font-semibold text-white/85 hover:bg-white/10 hover:text-white"
+            className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center gap-2 rounded-xl px-3 text-sm font-semibold text-white/85 hover:bg-white/10 hover:text-white"
           >
             <Icone nome="notas" size={18} />
             <span className="hidden lg:inline">Notas de design</span>
@@ -94,7 +95,7 @@ function BarraSuperior() {
               aria-haspopup="menu"
               aria-expanded={s.menuAberto}
               aria-label="Conta de Vinicius"
-              className="flex min-h-10 cursor-pointer items-center gap-2 rounded-xl py-1 pr-2 pl-1 hover:bg-white/10"
+              className="flex min-h-11 min-w-11 cursor-pointer items-center gap-2 rounded-xl py-1 pr-2 pl-1 hover:bg-white/10"
             >
               <span aria-hidden="true" className="grid size-8 place-items-center rounded-full bg-agua-claro text-[13px] font-bold text-azul">VP</span>
               <Icone nome="abaixo" size={16} className="text-white/70" />
@@ -147,7 +148,7 @@ function NavInferior() {
 function Toast() {
   const { s, a } = useApp();
   return (
-    <div aria-live="polite" role="status" className="pointer-events-none print:hidden fixed inset-x-0 bottom-[8.5rem] z-[70] flex justify-center px-4 md:bottom-6">
+    <div aria-live="polite" role="status" className="pointer-events-none print:hidden fixed inset-x-0 bottom-[calc(6.5rem+env(safe-area-inset-bottom))] z-[70] flex justify-center px-4 md:bottom-6">
       {s.toast && (
         <div key={s.toast.id} className="pointer-events-auto flex w-full max-w-xl animate-entra flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl bg-tinta py-3 pr-2 pl-4 text-sm text-white shadow-flutuante sm:w-auto sm:flex-nowrap">
           <span className="min-w-0 flex-[1_1_14rem] leading-snug">{s.toast.texto}</span>
@@ -159,12 +160,12 @@ function Toast() {
                 if (sel) a.abrirVaga(sel); else a.irView(view);
                 a.fecharToast();
               }}
-              className="min-h-10 cursor-pointer rounded-xl px-3 font-bold whitespace-nowrap text-agua-claro hover:bg-white/10"
+              className="min-h-11 cursor-pointer rounded-xl px-3 font-bold whitespace-nowrap text-agua-claro hover:bg-white/10"
             >
               {s.toast.acao.rotulo}
             </button>
           )}
-          <button type="button" onClick={a.fecharToast} aria-label="Fechar aviso" className="grid size-10 cursor-pointer place-items-center rounded-xl text-white/70 hover:bg-white/10 hover:text-white">
+          <button type="button" onClick={a.fecharToast} aria-label="Fechar aviso" className="grid size-11 cursor-pointer place-items-center rounded-xl text-white/70 hover:bg-white/10 hover:text-white">
             <Icone nome="fechar" size={18} />
           </button>
         </div>
@@ -180,7 +181,7 @@ function BotaoNotasFlutuante() {
       type="button"
       onClick={a.toggleNotas}
       aria-expanded={s.notasAbertas}
-      className="fixed right-4 bottom-4 z-40 print:hidden inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-pill bg-tinta px-4 text-sm font-semibold text-white shadow-flutuante hover:bg-tinta-2"
+      className="fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 print:hidden inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-pill bg-tinta px-4 text-sm font-semibold text-white shadow-flutuante hover:bg-tinta-2"
     >
       <Icone nome="notas" size={18} /> Notas de design
     </button>
