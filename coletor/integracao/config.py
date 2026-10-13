@@ -36,6 +36,12 @@ class Config:
     auth_http_url: str | None = None
     cpf_formato: str = "digitos"  # digitos | pontuado
     timeout: float = 5.0
+    # login único (OIDC)
+    oidc_client_id: str | None = None
+    oidc_client_secret: str | None = None
+    oidc_redirect_uri: str | None = None
+    oidc_cpf_claim: str = "cpf"
+    front_url: str = "/"  # para onde o aluno volta depois do login (mesma origem, por padrão)
 
     def __post_init__(self):
         if self.auth_mode not in MODOS_AUTH:
@@ -97,6 +103,11 @@ class Config:
             arquivo_alunos=Path(arquivo) if arquivo else ARQUIVO_PADRAO,
             ambiente_local=env.get("AMBIENTE", "").strip().lower() == "local",
             oidc_issuer=env.get("OIDC_ISSUER", "").strip() or None,
+            oidc_client_id=env.get("OIDC_CLIENT_ID", "").strip() or None,
+            oidc_client_secret=env.get("OIDC_CLIENT_SECRET", "").strip() or None,
+            oidc_redirect_uri=env.get("OIDC_REDIRECT_URI", "").strip() or None,
+            oidc_cpf_claim=env.get("OIDC_CPF_CLAIM", "cpf").strip() or "cpf",
+            front_url=env.get("FRONT_URL", "/").strip() or "/",
         )
 
     def publico(self) -> dict:

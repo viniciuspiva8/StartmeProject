@@ -63,4 +63,12 @@ def construir(config: Config):
         if not config.auth_http_url.startswith("https://") and not config.ambiente_local:
             raise ValueError("AUTH_HTTP_URL precisa usar https: a senha do aluno trafega nela")
         return AutenticadorHttp(config.auth_http_url, config.cpf_formato, config.timeout)
+    if config.auth_mode == "oidc":
+        # Login pela FSA: não há senha para o StartMe verificar. Validação de configuração em oidc.py.
+        for nome, valor in (("OIDC_ISSUER", config.oidc_issuer), ("OIDC_CLIENT_ID", config.oidc_client_id),
+                            ("OIDC_CLIENT_SECRET", config.oidc_client_secret),
+                            ("OIDC_REDIRECT_URI", config.oidc_redirect_uri)):
+            if not valor:
+                raise ValueError(f"{nome} é obrigatória com AUTH_MODE=oidc")
+        return None
     raise NotImplementedError(f"modo de autenticação {config.auth_mode!r} ainda não implementado")
