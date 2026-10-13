@@ -17,7 +17,7 @@ export function mascaraCpf(valor) {
 // --- Rotas ------------------------------------------------------------------
 export const ROTAS = {
   portal: 'portal', autorizacao: 'consent', inicio: 'inicio', vagas: 'vagas', curriculo: 'curriculo',
-  perfil: 'perfil', certificados: 'certificados', excecao: 'excecao',
+  perfil: 'perfil', certificados: 'certificados', excecao: 'excecao', admin: 'admin',
 };
 export const HASH_DA_VIEW = Object.fromEntries(Object.entries(ROTAS).map(([hash, view]) => [view, hash]));
 // Endereço antigo: a aba "Candidaturas" virou "Meu currículo" em 07/10/2026.
