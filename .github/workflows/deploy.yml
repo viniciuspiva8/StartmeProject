@@ -1,0 +1,110 @@
+# CD do StartMe: depois que o CI passa na main, publica o coletor (Cloud Run) e o site (Firebase Hosting).
+#
+# Sem chave guardada: o GitHub se autentica no Google por Workload Identity Federation (OIDC).
+# Usa duas "variaveis de repositorio" (nao sao segredos): GCP_WIF_PROVIDER e GCP_DEPLOYER_SA
+# (Settings > Secrets and variables > Actions > Variables). Enquanto nao existirem, o workflow
+# nao faz nada.
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write   # necessario para o login OIDC no Google
+
+# Um deploy por vez; um novo nao cancela o que ja esta publicando.
+concurrency:
+  group: deploy-producao
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: startme-9111a
+  REGION: southamerica-east1
+  SERVICE: startme-coletor
+  IMAGE: southamerica-east1-docker.pkg.dev/startme-9111a/cloud-run-source-deploy/startme-coletor
+  SITE_URL: https://startme-9111a.web.app
+
+jobs:
+  coletor:
+    name: Coletor (Cloud Run)
+    if: >-
+      vars.GCP_WIF_PROVIDER != '' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Constroi e publica a imagem
+        run: |
+          TAG="${{ github.event.workflow_run.head_sha || github.sha }}"
+          gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+          docker build -t "${IMAGE}:${TAG}" coletor
+          docker push "${IMAGE}:${TAG}"
+          echo "TAG=${TAG}" >> "$GITHUB_ENV"
+
+      # Mantem as variaveis de ambiente, os segredos e a conta de servico ja configurados no servico.
+      - uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE }}:${{ env.TAG }}
+
+      - name: Teste de fumaca
+        run: |
+          for i in 1 2 3 4 5; do
+            curl -fsS "${SITE_URL}/health" && exit 0
+            sleep 5
+          done
+          echo "O coletor nao respondeu em ${SITE_URL}/health" >&2
+          exit 1
+
+  site:
+    name: Site (Firebase Hosting)
+    needs: coletor
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend-react/package-lock.json
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+
+      - name: Build
+        working-directory: frontend-react
+        run: |
+          npm ci
+          npm run build
+        env:
+          VITE_COLETOR_URL: ${{ env.SITE_URL }}
+
+      - name: Publica no Firebase Hosting
+        working-directory: frontend-react
+        run: npx --yes firebase-tools@latest deploy --only hosting --project "${PROJECT_ID}" --non-interactive
+
+      - name: Confere o site no ar
+        run: curl -fsS -o /dev/null "${SITE_URL}/"

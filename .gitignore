@@ -17,3 +17,6 @@ credenciais.json
 venv/
 *.log
 .DS_Store
+
+# Cache local da Firebase CLI
+.firebase/
