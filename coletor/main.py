@@ -101,13 +101,22 @@ def get_db():
         )
         _db = gcf.Client(project=projeto, credentials=AnonymousCredentials())
     if _db is None:
-        if not os.path.exists(CRED_PATH):
+        projeto = os.getenv("GOOGLE_CLOUD_PROJECT")
+        if os.path.exists(CRED_PATH):
+            firebase_admin.initialize_app(credentials.Certificate(CRED_PATH))
+        elif projeto:
+            # Sem chave em arquivo (a organizacao pode bloquear a criacao de chaves): usa as
+            # Application Default Credentials (gcloud auth application-default login, ou a
+            # identidade da maquina em producao).
+            log.warning("Sem '%s': usando Application Default Credentials (projeto '%s').", CRED_PATH, projeto)
+            firebase_admin.initialize_app(credentials.ApplicationDefault(), {"projectId": projeto})
+        else:
             raise RuntimeError(
                 f"Credencial do Firebase nao encontrada em '{CRED_PATH}'. "
-                "Baixe o JSON da conta de servico e aponte GOOGLE_APPLICATION_CREDENTIALS para ele. "
-                "Esse arquivo NUNCA deve ser versionado."
+                "Baixe o JSON da conta de servico e aponte GOOGLE_APPLICATION_CREDENTIALS para ele, "
+                "ou defina GOOGLE_CLOUD_PROJECT para usar as Application Default Credentials. "
+                "Nenhum arquivo de credencial deve ser versionado."
             )
-        firebase_admin.initialize_app(credentials.Certificate(CRED_PATH))
         _db = firestore.client()
     return _db
 

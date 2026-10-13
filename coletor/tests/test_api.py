@@ -185,6 +185,7 @@ def test_get_db_usa_o_emulador_com_credencial_anonima(monkeypatch):
 
     monkeypatch.setattr(main, "_db", None)
     monkeypatch.setenv("FIRESTORE_EMULATOR_HOST", "firestore:8080")
+    monkeypatch.delenv("GOOGLE_CLOUD_PROJECT", raising=False)
     monkeypatch.setattr("google.cloud.firestore.Client", ClienteFalso)
     monkeypatch.setattr(main.firebase_admin, "initialize_app",
                         lambda *a, **k: pytest.fail("nao deve tocar no Firebase real"))
@@ -200,9 +201,26 @@ def test_get_db_usa_o_emulador_com_credencial_anonima(monkeypatch):
 def test_get_db_sem_emulador_exige_a_credencial(monkeypatch, tmp_path):
     monkeypatch.setattr(main, "_db", None)
     monkeypatch.delenv("FIRESTORE_EMULATOR_HOST", raising=False)
+    monkeypatch.delenv("GOOGLE_CLOUD_PROJECT", raising=False)
     monkeypatch.setattr(main, "CRED_PATH", str(tmp_path / "nao-existe.json"))
     with pytest.raises(RuntimeError, match="Credencial do Firebase nao encontrada"):
         main.get_db()
+
+
+def test_get_db_sem_arquivo_usa_application_default_credentials(monkeypatch, tmp_path):
+    inicializacoes = []
+    monkeypatch.setattr(main, "_db", None)
+    monkeypatch.delenv("FIRESTORE_EMULATOR_HOST", raising=False)
+    monkeypatch.setenv("GOOGLE_CLOUD_PROJECT", "projeto-teste")
+    monkeypatch.setattr(main, "CRED_PATH", str(tmp_path / "nao-existe.json"))
+    monkeypatch.setattr(main.credentials, "ApplicationDefault", lambda: "adc")
+    monkeypatch.setattr(main.firebase_admin, "initialize_app",
+                        lambda cred, opcoes=None: inicializacoes.append((cred, opcoes)))
+    monkeypatch.setattr(main.firestore, "client", lambda: "cliente")
+
+    assert main.get_db() == "cliente"
+    assert inicializacoes == [("adc", {"projectId": "projeto-teste"})]
+    monkeypatch.setattr(main, "_db", None)
 
 
 # --------------------------------------------------------------------------

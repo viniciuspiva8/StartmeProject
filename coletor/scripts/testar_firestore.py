@@ -9,7 +9,9 @@ de vagas e acessivel. Nao altera nenhuma vaga. Nunca imprime credenciais.
 Destino:
   * FIRESTORE_EMULATOR_HOST definido  -> emulador (nada vai para o Firebase real)
   * senao                             -> Firestore REAL, usando GOOGLE_APPLICATION_CREDENTIALS
-                                         (padrao ./credenciais.json)
+                                         (padrao ./credenciais.json) ou, sem o arquivo e com
+                                         GOOGLE_CLOUD_PROJECT definido, as Application Default
+                                         Credentials (gcloud auth application-default login)
 
 Codigo de saida: 0 = tudo certo, 1 = falhou (a mensagem diz onde).
 """
@@ -43,9 +45,10 @@ def main() -> int:
     import main as app  # noqa: E402 - depois do .env, pois o modulo le variaveis na importacao
 
     emulador = os.getenv("FIRESTORE_EMULATOR_HOST")
-    if not emulador and not os.path.exists(app.CRED_PATH):
-        print(f"FALHOU: sem emulador e sem credencial em '{app.CRED_PATH}'.")
-        print("  Baixe a chave da conta de servico no console do Firebase e salve como credenciais.json.")
+    if not emulador and not os.path.exists(app.CRED_PATH) and not os.getenv("GOOGLE_CLOUD_PROJECT"):
+        print(f"FALHOU: sem emulador, sem credencial em '{app.CRED_PATH}' e sem GOOGLE_CLOUD_PROJECT.")
+        print("  Salve a chave como credenciais.json ou defina GOOGLE_CLOUD_PROJECT=startme-9111a")
+        print("  e rode 'gcloud auth application-default login'.")
         return 1
 
     try:
