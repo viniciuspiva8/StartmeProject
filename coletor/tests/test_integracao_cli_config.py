@@ -11,13 +11,13 @@ PEPPER = "p" * 32
 
 
 def _env(**extra):
-    base = {"SESSAO_SEGREDO": SEGREDO, "CPF_PEPPER": PEPPER}
+    base = {"SESSAO_SEGREDO": SEGREDO, "CPF_PEPPER": PEPPER, "MODO_DEMONSTRACAO": "true"}
     base.update(extra)
     return base
 
 
-def test_padroes_seguros_sem_nenhuma_variavel():
-    config = Config.do_ambiente({})
+def test_padroes_do_modo_apresentacao_com_a_flag():
+    config = Config.do_ambiente({"MODO_DEMONSTRACAO": "true"})
     assert config.auth_mode == "demo" and config.provedor == "arquivo"
     assert config.sessao_ativa is False and config.simulado is True
 

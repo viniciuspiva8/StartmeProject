@@ -23,6 +23,7 @@ services:
     environment:
       FIRESTORE_EMULATOR_HOST: firestore:8080
       GOOGLE_CLOUD_PROJECT: startme-local
+      MODO_DEMONSTRACAO: "true"  # ambiente de desenvolvimento: apresentação
     ports:
       - "8000:8000"
     depends_on:
