@@ -1,9 +1,8 @@
 # CD do StartMe: depois que o CI passa na main, publica o coletor (Cloud Run) e o site (Firebase Hosting).
 #
 # Sem chave guardada: o GitHub se autentica no Google por Workload Identity Federation (OIDC).
-# Usa duas "variaveis de repositorio" (nao sao segredos): GCP_WIF_PROVIDER e GCP_DEPLOYER_SA
-# (Settings > Secrets and variables > Actions > Variables). Enquanto nao existirem, o workflow
-# nao faz nada.
+# O provedor so aceita este repositorio e a branch main, e assume a conta de servico do coletor
+# (startme-coletor-870). Os identificadores abaixo nao sao segredos.
 name: Deploy
 
 on:
@@ -28,13 +27,13 @@ env:
   SERVICE: startme-coletor
   IMAGE: southamerica-east1-docker.pkg.dev/startme-9111a/cloud-run-source-deploy/startme-coletor
   SITE_URL: https://startme-9111a.web.app
+  WIF_PROVIDER: projects/365652587763/locations/global/workloadIdentityPools/github/providers/github-oidc
+  DEPLOY_SA: startme-coletor-870@startme-9111a.iam.gserviceaccount.com
 
 jobs:
   coletor:
     name: Coletor (Cloud Run)
-    if: >-
-      vars.GCP_WIF_PROVIDER != '' &&
-      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -44,8 +43,8 @@ jobs:
 
       - uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
-          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.DEPLOY_SA }}
 
       - uses: google-github-actions/setup-gcloud@v2
 
@@ -91,8 +90,8 @@ jobs:
 
       - uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
-          service_account: ${{ vars.GCP_DEPLOYER_SA }}
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: ${{ env.DEPLOY_SA }}
 
       - name: Build
         working-directory: frontend-react
