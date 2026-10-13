@@ -1,0 +1,64 @@
+# CI do StartMe: roda em todo push na main e em todo pull request.
+# Nao usa nenhum segredo. O deploy (CD) e um workflow a parte e so roda se este passar.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# Um push novo cancela a execucao anterior da mesma branch/PR (poupa minutos do Actions).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coletor:
+    name: Coletor (pytest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: coletor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"          # a mesma do Dockerfile
+          cache: pip
+          cache-dependency-path: coletor/requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: python -m pytest -q
+        env:
+          # Os testes usam um Firestore falso: nenhuma credencial nem rede e necessaria.
+          FIRESTORE_EMULATOR_HOST: ""
+
+  frontend:
+    name: Frontend (lint e build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend-react
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend-react/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+  imagem-docker:
+    name: Imagem do coletor (build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Constroi a imagem sem publicar
+        run: docker build -t startme-coletor:ci coletor
