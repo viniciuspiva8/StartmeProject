@@ -31,7 +31,7 @@ class Servicos:
     config: Config
     repositorio: Repositorio
     provedor: ProvedorAcademico
-    autenticador: object  # tem .verificar(cpf_digitos, senha) -> bool
+    autenticador: object | None  # .verificar(cpf_digitos, senha) -> bool; None no modo OIDC
     limite: LimiteTentativas = field(default_factory=LimiteTentativas)
 
     # ------------------------------------------------------------------ identidade
@@ -48,6 +48,8 @@ class Servicos:
         except cpf_mod.CpfInvalido as erro:
             raise ErroIntegracao("cpf_invalido", 422) from erro
 
+        if self.autenticador is None:
+            raise ErroIntegracao("login_por_senha_desativado", 404)  # modo OIDC: use o login da FSA
         chave = self.chave_de(cpf_d)
         limite_chave = f"{ip}|{chave}"
         if self.limite.bloqueado(limite_chave):
@@ -61,6 +63,19 @@ class Servicos:
             self._auditar("login_falhou", chave)
             raise ErroIntegracao("credenciais_invalidas", 401)
 
+        vinculo = self._vinculo_ativo(cpf_d, chave, "login")
+        self.limite.limpar(limite_chave)
+        return vinculo, chave, cpf_mod.mascarar(cpf_d)
+
+    def entrar_oidc(self, cpf_digitos: str) -> tuple[Vinculo, str, str]:
+        """Login pela FSA: o CPF já foi comprovado pelo IdP. Mesma regra de vínculo do login por senha."""
+        if not self.config.sessao_ativa:
+            raise ErroIntegracao("sessao_desativada", 503)
+        chave = self.chave_de(cpf_digitos)
+        vinculo = self._vinculo_ativo(cpf_digitos, chave, "login_oidc")
+        return vinculo, chave, cpf_mod.mascarar(cpf_digitos)
+
+    def _vinculo_ativo(self, cpf_d: str, chave: str, evento_ok: str) -> Vinculo:
         try:
             vinculo = self.provedor.vinculo(cpf_d)
         except AcademicoIndisponivel as erro:
@@ -68,10 +83,8 @@ class Servicos:
         if vinculo is None or not vinculo.ativo:
             self._auditar("login_sem_vinculo", chave)
             raise ErroIntegracao("vinculo_inativo", 403)
-
-        self.limite.limpar(limite_chave)
-        self._auditar("login", chave)
-        return vinculo, chave, cpf_mod.mascarar(cpf_d)
+        self._auditar(evento_ok, chave)
+        return vinculo
 
     # ----------------------------------------------------------------- consentimento
     def consentimento(self, chave: str) -> dict:

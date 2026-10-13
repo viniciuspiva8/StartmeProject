@@ -13,3 +13,6 @@ Cada item: o que foi decidido provisoriamente, a alternativa e por quê. Itens m
 ## Registradas durante a execução
 
 (vazio por enquanto)
+
+6. **Login CSRF no OIDC (fase 5).** O `state` é assinado, mas não fica preso ao navegador (o Hosting só repassa o cookie `__session`). Um atacante poderia levar a vítima a concluir um login com a conta do atacante. Risco baixo para um app de vagas; a correção completa exige um cookie de amarração próprio, que o Hosting hoje não repassa.
+7. **Cobertura do CI.** Os testes do simulador (`simulador-fsa/tests`) ainda não rodam no CI. Entram na Fase 9 (e2e), junto com as dependências `cryptography` e `python-multipart`.

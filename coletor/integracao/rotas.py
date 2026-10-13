@@ -1,4 +1,4 @@
-"""Rotas HTTP da integração: /api/publico, /api/auth e /api/me.
+"""Rotas HTTP da integração: /api/publico, /api/auth (senha e OIDC) e /api/me.
 
 Tudo de aluno sai com `Cache-Control: private, no-store` (o Hosting pode cachear o que não é privado).
 O cookie `__session` é o único que o Firebase Hosting repassa ao Cloud Run.
@@ -6,11 +6,14 @@ O cookie `__session` é o único que o Firebase Hosting repassa ao Cloud Run.
 
 from typing import Callable
 
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+import requests
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
 from integracao import autenticacao, provedores, sessao
 from integracao.config import Config
+from integracao.oidc import ClienteOidc, ErroOidc
 from integracao.repositorio.firestore import RepositorioFirestore
 from integracao.seguranca import LimiteTentativas
 from integracao.servicos import ErroIntegracao, Servicos
@@ -33,13 +36,25 @@ def _erro(erro: ErroIntegracao) -> HTTPException:
     return HTTPException(status_code=erro.status, detail={"codigo": erro.codigo})
 
 
-def instalar(app: FastAPI, obter_db: Callable, config: Config | None = None, repositorio_de: Callable | None = None) -> None:
+def _erro_oidc(erro: ErroOidc) -> HTTPException:
+    return HTTPException(status_code=erro.status, detail={"codigo": erro.codigo})
+
+
+def instalar(
+    app: FastAPI,
+    obter_db: Callable,
+    config: Config | None = None,
+    repositorio_de: Callable | None = None,
+    oidc_http: tuple[Callable, Callable] | None = None,
+) -> None:
     """Liga a integração ao app. Falha na subida se a configuração não puder ser atendida."""
     cfg = config or Config.do_ambiente()
     provedor = provedores.construir(cfg)  # erro de configuração aparece aqui, não na primeira requisição
-    autenticador = autenticacao.construir(cfg)
+    autenticador = autenticacao.construir(cfg)  # None no modo OIDC
     limite = LimiteTentativas()
     fabrica_repo = repositorio_de or (lambda db: RepositorioFirestore(db))
+    get_http, post_http = oidc_http or (requests.get, requests.post)
+    oidc = ClienteOidc(cfg, get_http, post_http) if cfg.auth_mode == "oidc" else None
 
     def servicos(db=Depends(obter_db)) -> Servicos:
         return Servicos(cfg, fabrica_repo(db), provedor, autenticador, limite)
@@ -54,6 +69,14 @@ def instalar(app: FastAPI, obter_db: Callable, config: Config | None = None, rep
 
     def _cookie_kw() -> dict:
         return {"path": "/", "httponly": True, "secure": not cfg.ambiente_local, "samesite": "lax"}
+
+    def _sessao_do_aluno(resposta: Response, vinculo, chave: str, mascara: str) -> None:
+        token = sessao.emitir(
+            {"sub": chave, "mascara": mascara, "nome": vinculo.nome, "curso": vinculo.curso,
+             "semestre": vinculo.semestre, "ativo": vinculo.ativo},
+            cfg.sessao_segredo, "aluno", DURACAO_ALUNO,
+        )
+        resposta.set_cookie(COOKIE, token, max_age=DURACAO_ALUNO, **_cookie_kw())
 
     @app.middleware("http")
     async def _cache_privado(request: Request, call_next):
@@ -74,12 +97,7 @@ def instalar(app: FastAPI, obter_db: Callable, config: Config | None = None, rep
             vinculo, chave, mascara = s.entrar(corpo.cpf, corpo.senha, ip)
         except ErroIntegracao as erro:
             raise _erro(erro) from erro
-        token = sessao.emitir(
-            {"sub": chave, "mascara": mascara, "nome": vinculo.nome, "curso": vinculo.curso,
-             "semestre": vinculo.semestre, "ativo": vinculo.ativo},
-            cfg.sessao_segredo, "aluno", DURACAO_ALUNO,
-        )
-        response.set_cookie(COOKIE, token, max_age=DURACAO_ALUNO, **_cookie_kw())
+        _sessao_do_aluno(response, vinculo, chave, mascara)
         return {"vinculo": vinculo.model_dump(), "cpf_mascarado": mascara}
 
     @app.post("/api/auth/sair", status_code=204, tags=["integracao"])
@@ -87,6 +105,34 @@ def instalar(app: FastAPI, obter_db: Callable, config: Config | None = None, rep
         resposta = Response(status_code=204)
         resposta.delete_cookie(COOKIE, **_cookie_kw())
         return resposta
+
+    if oidc is not None:
+        @app.get("/api/auth/oidc/iniciar", tags=["integracao"])
+        def oidc_iniciar() -> RedirectResponse:
+            try:
+                url = oidc.iniciar()
+            except ErroOidc as erro:
+                raise _erro_oidc(erro) from erro
+            return RedirectResponse(url, status_code=302)
+
+        @app.get("/api/auth/oidc/retorno", tags=["integracao"])
+        def oidc_retorno(
+            code: str = Query(min_length=1, max_length=2048),
+            state: str = Query(min_length=1, max_length=4096),
+            s: Servicos = Depends(servicos),
+        ) -> RedirectResponse:
+            try:
+                cpf_digitos = oidc.concluir(code, state)
+            except ErroOidc as erro:
+                raise _erro_oidc(erro) from erro
+            try:
+                vinculo, chave, mascara = s.entrar_oidc(cpf_digitos)
+            except ErroIntegracao as erro:
+                raise _erro(erro) from erro
+            destino = cfg.front_url.rstrip("/") + "/#/autorizacao"
+            resposta = RedirectResponse(destino, status_code=302)
+            _sessao_do_aluno(resposta, vinculo, chave, mascara)
+            return resposta
 
     @app.get("/api/me", tags=["integracao"])
     def me(claims: dict = Depends(aluno), s: Servicos = Depends(servicos)) -> dict:

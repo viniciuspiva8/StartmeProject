@@ -66,8 +66,8 @@ def test_sem_segredo_a_sessao_fica_desligada_com_503(montar):
     assert cliente.get("/api/me").status_code == 503
 
 
-def test_modo_nao_implementado_falha_na_subida():
-    with pytest.raises(NotImplementedError):
+def test_oidc_sem_configuracao_completa_falha_na_subida():
+    with pytest.raises(ValueError):
         instalar(FastAPI(), lambda: None, _config(auth_mode="oidc"))
 
 

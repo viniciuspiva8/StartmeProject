@@ -16,3 +16,7 @@ Formato: data/hora, fase, o que foi feito, o que deu errado e como foi resolvido
 - **Fase 3 (integrada).** Suíte de contrato nos três provedores, `doctor` validado contra o Postgres simulado e contra a API simulada.
 - **Fase 4 (em andamento).** `simulador-fsa/`: Postgres com migrações (esquema e dados fictícios), API no formato da FSA (diferente do contrato, para provar o mapeamento) e IdP OIDC falso (PKCE, RS256, JWKS). Compose com limite de memória por serviço: cerca de 130 MB em uso. Validado: `doctor` com SQL e com HTTP devolvem o mesmo vínculo; o trancado é recusado nos dois. Testes do simulador (10): rodam com o venv do coletor, ainda não estão no CI (entram na Fase 9).
 - **Decisão:** dependências novas do coletor: `sqlalchemy` e `psycopg[binary]` (provedor SQL e driver do Postgres). `cryptography` e `python-multipart` só no simulador.
+
+- **Fase 4 (integrada).** `developer` = `d5701f2`.
+- **Fase 5 (em andamento).** Login único OIDC: code + PKCE S256, state assinado (jti + nonce), id_token RS256 validado (alg, assinatura pelo JWKS, iss, aud, exp, iat, nonce, CPF). 16 testes de fluxo e ataques contra o IdP falso do simulador. Verificado pela rede: discovery e redirecionamento reais. O retorno não foi exercitado no Firestore real.
+- **Limitação registrada:** o login por OIDC não está amarrado ao navegador (um atacante poderia induzir a vítima a concluir o login com a conta do atacante). Mitigação futura: cookie de amarração quando o Hosting puder repassá-lo. Aceitável para o escopo do TCC; registrado em DECISOES-PENDENTES.
