@@ -12,7 +12,7 @@ Legenda: `[ ]` aberta · `[~]` em andamento · `[x]` concluída e integrada na `
 | 2 | Núcleo da integração (config, cpf, sessão, auth demo, repositório, /api/me) | `feat/integracao-nucleo` | [x] | 2027207 (integrada na `developer`) | — |
 | 3 | Provedores `sql` e `http`, CLI `doctor`, testes de contrato | `feat/integracao-provedores` | [x] | fe41b55 (integrada na `developer`) | — |
 | 4 | Simulador da FSA (Postgres, API falsa, IdP falso) | `feat/simulador-fsa` | [~] | 39df7ce | CI verde, merge; depois a Fase 5 (login OIDC) |
-| 5 | Login único OIDC | `feat/auth-oidc` | [ ] | — | — |
+| 5 | Login único OIDC | `feat/auth-oidc` | [~] | 5a31d94 | CI verde, merge; depois a Fase 6 (front integrado) |
 | 6 | Front integrado (login real, consentimento, Perfil, Exceções, Certificados) | `feat/front-integracao` | [ ] | — | — |
 | 7 | Currículo e marcações no servidor | `feat/curriculo-servidor` | [ ] | — | — |
 | 8 | Admin (API e tela) | `feat/admin` | [ ] | — | — |
