@@ -31,6 +31,22 @@ class Repositorio(ABC):
     def marcacoes_gravar(self, chave: str, dados: dict) -> None: ...
 
     @abstractmethod
+    def admin_ler(self, email: str) -> dict | None: ...
+
+    @abstractmethod
+    def admin_gravar(self, email: str, dados: dict) -> None: ...
+
+    @abstractmethod
+    def sistema_ler(self, chave: str) -> dict | None: ...
+
+    @abstractmethod
+    def sistema_gravar(self, chave: str, dados: dict) -> None: ...
+
+    @abstractmethod
+    def estatisticas(self, mes: str) -> dict:
+        """vagas, cota_usadas, ultima_coleta, consentimentos_ativos, consentimentos_total."""
+
+    @abstractmethod
     def auditoria_registrar(self, evento: dict) -> None: ...
 
     @abstractmethod

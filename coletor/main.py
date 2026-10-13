@@ -326,4 +326,4 @@ def executar_coleta(db=Depends(get_db)) -> ResultadoColeta:
 # --------------------------------------------------------------------------
 from integracao.rotas import instalar as _instalar_integracao  # noqa: E402
 
-_instalar_integracao(app, get_db)
+_instalar_integracao(app, get_db, coleta=lambda db: executar_coleta(db=db))  # admin dispara a mesma coleta

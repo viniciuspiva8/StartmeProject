@@ -8,3 +8,5 @@ cryptography>=42
 # Integração acadêmica (ADR-002): provedor SQL (somente leitura) e driver do Postgres da simulação.
 sqlalchemy>=2.0
 psycopg[binary]>=3.1
+# Administração: hash de senha dos administradores.
+argon2-cffi>=23.1
