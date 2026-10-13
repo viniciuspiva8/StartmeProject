@@ -9,8 +9,8 @@ o melhor match com o currículo dele. A candidatura e o processo seletivo aconte
 o StartMe não acompanha etapas. O currículo que o aluno monta aqui é o centro do produto: alimenta
 o match e é exportado para os sites das empresas.
 
-`frontend/` continua no repositório como referência das 13 pranchas em HTML/CSS/JS puro.
-Perfil (9), exceções (10), sistema (11), currículo (12) e certificados (13) ainda não foram portados.
+Desde 13/10/2026 este é o único front. O código em HTML/JS puro das 13 pranchas foi removido; está na tag `legado-pre-react`.
+Perfil (9), exceções (10), currículo (12) e certificados (13) estão aqui. Candidaturas (8) saiu do produto em 07/10 (ver seção Decisões). Sistema (11) é a documentação do sistema de design do protótipo, não uma tela do produto.
 
 ## Como rodar
 
@@ -92,7 +92,7 @@ cabeçalho (`#042D5C`), então sobre fundo azul o símbolo vai num chip branco.
 src/
   config.js                URLs dos backends (variáveis VITE_*)
   index.css                tokens da marca, botões, chips, animações
-  data/mock.js             dados de demonstração (cópia de frontend/js/mock-data.js)
+  data/mock.js             dados de demonstração usados quando o servidor não responde
   lib/api.js               acesso ao coletor e ao cadastro, com timeout e fallback
   data/grade.js            grade de demonstração (disciplina → habilidades por semestre)
   data/requisitos.js       requisitos de demonstração das vagas mock

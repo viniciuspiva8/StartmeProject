@@ -28,13 +28,10 @@ coletor/              serviço de coleta (Python / FastAPI / Firestore)
   tests/              testes pytest (sem rede; fixture de resposta real da SerpApi)
   Dockerfile          imagem de execução
   .env.example        configuração de referência
-  web/                interface de listagem das vagas (legada — ver "Frontend v1.1" abaixo)
-cadastro/             API de cadastro (Node / Express / MySQL)
-  backend/            servidor e rotas REST
-  frontend/           telas de cadastro (legado)
-  database/schema.sql schema DB12 e modelagem
-frontend/             interface unificada da jornada do aluno em HTML/CSS/JS vanilla — referência das 13 pranchas
-frontend-react/      port React 18 + Vite + Tailwind do núcleo do aluno (Pranchas 1, 3, 4, 5, 6–8); ver frontend-react/README.md
+frontend-react/       interface do aluno e painel do administrador (React 18 + Vite + Tailwind); ver frontend-react/README.md
+simulador-fsa/        faculdade simulada (Postgres, API e IdP fictícios) para testar a integração; ver simulador-fsa/README.md
+e2e/                  teste de ponta a ponta do plug-and-play nos três modos (navegador de verdade)
+integracao/           (dentro de coletor/) camada de integração acadêmica: CPF, sessão, provedores e login da FSA
 design-reference/     protótipo de design de origem (StartMe.dc.html) e mapa de telas
 docs/
   arquitetura/        topologia e documentação do MVP
@@ -183,6 +180,12 @@ Todos os recursos (`empresas`, `instituicoes`, `cursos`, `vagas`, `alunos`)
 seguem o mesmo padrão REST: `GET /`, `GET /:id`, `POST /`, `PUT /:id`,
 `DELETE /:id`. Há também `GET /health`.
 
+## Histórico: frontends anteriores (removidos em 13/10/2026)
+
+Os fronts em HTML/JS puro (`frontend/`, `cadastro/frontend/`, `coletor/web/`) e o backend Node de cadastro (`cadastro/backend/`) foram substituídos pelo React e pela integração. Para consultar o código antigo: `git checkout legado-pre-react`.
+
+<details><summary>Texto original da v1.1 (referência de decisões)</summary>
+
 ## Frontend v1.1 (mesclado)
 
 O diretório `frontend/` é uma interface unificada nova, em **HTML/CSS/JS vanilla
@@ -238,6 +241,8 @@ Segue a mesma prática de `coletor/web/script.js`: todo texto vindo de dado
 coletado é escapado (`Api.esc`, em `frontend/js/api.js`) antes de ir para o
 DOM, e todo link de origem é validado para aceitar só `http`/`https`
 (`Api.linkSeguro`) antes de virar `href`.
+
+</details>
 
 ## Segurança
 

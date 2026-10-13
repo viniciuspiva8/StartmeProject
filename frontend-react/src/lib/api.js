@@ -1,7 +1,7 @@
 // Camada de acesso a dados. Nenhuma falha de rede pode quebrar a interface:
 // todo fetch tem timeout e cai para os dados de demonstração em src/data/mock.js,
 // sinalizando a origem (`fonte`) para a tela mostrar um aviso discreto.
-// Portado de frontend/js/api.js.
+// (Versão original em JS puro: tag legado-pre-react.)
 import { CONFIG } from '../config.js';
 import { VAGAS, CAMPOS_ACADEMICOS_MOCK, SEMESTRE_ALUNO_MOCK } from '../data/mock.js';
 import { enriquecerVagaReal } from './vagas.js';

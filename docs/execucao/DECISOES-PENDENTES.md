@@ -12,7 +12,13 @@ Cada item: o que foi decidido provisoriamente, a alternativa e por quê. Itens m
 
 ## Registradas durante a execução
 
-(vazio por enquanto)
+8. **Candidaturas (prancha 8) não virou tela.** Saiu do produto em 07/10 (já estava decidido no README): a marcação "Já me candidatei" continua como filtro e anotação. Nada foi perdido para o aluno.
+9. **Sistema (prancha 11) não virou tela do produto.** É a documentação do sistema de design do protótipo. Essa função é coberta pelo painel Notas de design e pelo `design-reference/`.
+10. **CRUD do `cadastro/` (Node + MySQL) foi substituído.** Alunos e cursos vêm da faculdade (camada de integração); vagas vêm da coleta (Firestore). O cadastro antigo guardava CPF, RG, idade e data de nascimento: isso saiu junto, em linha com o item 4 do ADR-002 (minimização de dados).
+11. **Legado removido com tag de recuperação.** `legado-pre-react` aponta para o último commit com os fronts antigos (`git checkout legado-pre-react` para consultar).
+12. **CORS com credenciais (correção achada pelo e2e).** Com origens explícitas (nunca `*`), o cookie de sessão passa a ser aceito em desenvolvimento. Em produção nada muda: o Hosting mantém a mesma origem.
+13. **E2E no GitHub Actions passou (Linux limpo).** O workflow `E2E` roda em push na `developer` e sob demanda, com Docker, emulador e Chrome instalados no runner.
+14. **Limitação do login da FSA por CSRF (item 6).** Continua aberta; aceitável para o escopo do TCC.
 
 6. **Login CSRF no OIDC (fase 5).** O `state` é assinado, mas não fica preso ao navegador (o Hosting só repassa o cookie `__session`). Um atacante poderia levar a vítima a concluir um login com a conta do atacante. Risco baixo para um app de vagas; a correção completa exige um cookie de amarração próprio, que o Hosting hoje não repassa.
 7. **Cobertura do CI.** Os testes do simulador (`simulador-fsa/tests`) ainda não rodam no CI. Entram na Fase 9 (e2e), junto com as dependências `cryptography` e `python-multipart`.
