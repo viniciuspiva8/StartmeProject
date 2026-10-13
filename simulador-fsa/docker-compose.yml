@@ -44,7 +44,7 @@ services:
       IDP_ISSUER: http://localhost:8102
       IDP_CLIENT_ID: startme
       IDP_CLIENT_SECRET: segredo-de-teste-do-startme
-      IDP_REDIRECT_URIS: http://localhost:8080/api/auth/oidc/retorno,http://localhost:5173/api/auth/oidc/retorno
+      IDP_REDIRECT_URIS: http://localhost:8000/api/auth/oidc/retorno,http://localhost:8080/api/auth/oidc/retorno,http://localhost:5173/api/auth/oidc/retorno
     ports:
       - "8102:8102"
     mem_limit: 160m
