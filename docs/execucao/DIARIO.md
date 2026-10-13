@@ -20,3 +20,7 @@ Formato: data/hora, fase, o que foi feito, o que deu errado e como foi resolvido
 - **Fase 4 (integrada).** `developer` = `d5701f2`.
 - **Fase 5 (em andamento).** Login único OIDC: code + PKCE S256, state assinado (jti + nonce), id_token RS256 validado (alg, assinatura pelo JWKS, iss, aud, exp, iat, nonce, CPF). 16 testes de fluxo e ataques contra o IdP falso do simulador. Verificado pela rede: discovery e redirecionamento reais. O retorno não foi exercitado no Firestore real.
 - **Limitação registrada:** o login por OIDC não está amarrado ao navegador (um atacante poderia induzir a vítima a concluir o login com a conta do atacante). Mitigação futura: cookie de amarração quando o Hosting puder repassá-lo. Aceitável para o escopo do TCC; registrado em DECISOES-PENDENTES.
+
+- **Fase 5 (integrada).** `developer` = `3b6bfd2`.
+- **Fase 6 (em andamento).** Front ligado ao servidor: `lib/apiAluno.js` (sessão por cookie, erros tipados), `lib/cpf.js` (3 testes), AppContext descobre o servidor e a sessão, login real com mensagens por código, consentimento grava no servidor, botão "Entrar com a conta da FSA" quando há OIDC, faixa simulada por configuração. Telas novas: Perfil (9), Certificados (13) e Exceções (10) com os textos do legado. Modo local conferido por comparação de DOM: idêntico. Auditoria mobile em 78 combinações: zero problemas.
+- **Pendente nesta fase:** e2e com o servidor real (vai para a Fase 9, quando os três modos forem testados juntos).
