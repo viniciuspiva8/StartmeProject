@@ -32,3 +32,7 @@ Formato: data/hora, fase, o que foi feito, o que deu errado e como foi resolvido
 - **Fase 7 (integrada).** `developer` = `7212c1c`.
 - **Fase 8 (em andamento).** Admin: argon2 para senhas (com tempo igualado quando o e-mail não existe), papéis admin/leitor, painel com resumo, coleta manual (cota mínima de 16 buscas, 1 h entre coletas) e auditoria. CLI `admin-criar` (senha sem eco). Front em `#/admin` carregado sob demanda. 233 testes no backend.
 - **Erro de processo (registrado para não repetir):** dei commit encadeado sem conferir o resultado do pytest; um teste desatualizado ficou no commit. Corrigido num commit próprio. Regra daqui em diante: rodar a suíte e só depois commitar, em comandos separados.
+
+- **Fase 8 (integrada).** `developer` = `4037dab`.
+- **Fase 9 (integrada).** E2E de ponta a ponta nos três modos (arquivo, SQL e HTTP+OIDC): 25 de 25 localmente, e verde no GitHub Actions em runner Linux limpo. Falhas achadas e corrigidas pelo e2e: CORS sem credenciais (o cookie nunca era enviado em outra origem) e PUT/DELETE fora da lista de métodos. Também foram achados problemas do próprio teste (processo antigo na porta, consentimento já dado entre modos), corrigidos no harness.
+- **Fase 10 (em andamento).** Tag `legado-pre-react` criada e publicada. Remoção de `frontend/`, `cadastro/` e `coletor/web/`, com README e comentários atualizados.

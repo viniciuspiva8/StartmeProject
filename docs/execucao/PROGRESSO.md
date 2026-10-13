@@ -15,9 +15,9 @@ Legenda: `[ ]` aberta · `[~]` em andamento · `[x]` concluída e integrada na `
 | 5 | Login único OIDC | `feat/auth-oidc` | [x] | 3233222 (integrada na `developer`) | — |
 | 6 | Front integrado (login real, consentimento, Perfil, Exceções, Certificados) | `feat/front-integracao` | [x] | feb1b9a (integrada na `developer`) | — |
 | 7 | Currículo e marcações no servidor | `feat/curriculo-servidor` | [x] | 6f7eaf3 (integrada na `developer`) | — |
-| 8 | Admin (API e tela) | `feat/admin` | [~] | afef1c7 | CI verde, merge; depois a Fase 9 (e2e) |
+| 8 | Admin (API e tela) | `feat/admin` | [x] | 4037dab (integrada na `developer`) | — |
 | 9 | e2e plug-and-play (3 modos só trocando variáveis) | `test/e2e-plug-and-play` | [ ] | — | — |
-| 10 | Remover o legado (tag `legado-pre-react`) | `chore/remover-legado` | [ ] | — | — |
+| 10 | Remover o legado (tag `legado-pre-react`) | `chore/remover-legado` | [~] | tag em 1159aba | commit da remoção, CI, merge |
 | 11 | Documentação de adoção + ADRs + atualizações do TCC | `docs/adocao-fsa` | [ ] | — | — |
 | 12 | Integração final, revisão de código e `MANHA.md` | `developer` | [ ] | — | — |
 
