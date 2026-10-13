@@ -1,10 +1,10 @@
-# CI do StartMe: roda em todo push na main e em todo pull request.
-# Nao usa nenhum segredo. O deploy (CD) e um workflow a parte e so roda se este passar.
+# CI do StartMe: roda em todo push (qualquer branch) e em todo pull request.
+# Nao usa nenhum segredo. O deploy (CD) e um workflow a parte, filtrado para a main, e so roda se este passar.
 name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
 
 permissions:
@@ -35,6 +35,10 @@ jobs:
         env:
           # Os testes usam um Firestore falso: nenhuma credencial nem rede e necessaria.
           FIRESTORE_EMULATOR_HOST: ""
+      - run: python -m pytest -q ../simulador-fsa/tests
+        env:
+          # Os testes usam um Firestore falso: nenhuma credencial nem rede e necessaria.
+          FIRESTORE_EMULATOR_HOST: ""
 
   frontend:
     name: Frontend (lint e build)
@@ -52,6 +56,7 @@ jobs:
           cache-dependency-path: frontend-react/package-lock.json
       - run: npm ci
       - run: npm run lint
+      - run: npm test
       - run: npm run build
 
   imagem-docker:

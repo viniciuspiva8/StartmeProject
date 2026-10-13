@@ -135,9 +135,9 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=False,
-    allow_methods=["GET", "POST"],
+    allow_origins=ALLOWED_ORIGINS,  # lista explícita (nunca "*"): com credenciais o navegador exige origem exata
+    allow_credentials=True,  # o cookie __session da sessão do aluno e do admin precisa ir junto
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Content-Type", "X-Scraper-Token"],
 )
 
@@ -319,3 +319,11 @@ def executar_coleta(db=Depends(get_db)) -> ResultadoColeta:
         cards_encontrados=resultado.vagas_unicas,
         serpapi=resultado,
     )
+
+
+# --------------------------------------------------------------------------
+# Integração acadêmica (ADR-002): /api/publico, /api/auth e /api/me
+# --------------------------------------------------------------------------
+from integracao.rotas import instalar as _instalar_integracao  # noqa: E402
+
+_instalar_integracao(app, get_db, coleta=lambda db: executar_coleta(db=db))  # admin dispara a mesma coleta

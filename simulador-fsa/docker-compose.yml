@@ -1,0 +1,50 @@
+# Faculdade simulada (FSA falsa) para o StartMe. Dados fictícios. Não exponha na internet.
+#
+#   cd simulador-fsa
+#   docker compose up --build -d
+#   curl -H "X-API-Key: chave-de-teste-fsa" http://localhost:8101/fsa/alunos/11144477735/vinculo
+#   curl http://localhost:8102/.well-known/openid-configuration
+#   docker compose down -v
+#
+# Cada serviço tem limite de memória (a máquina de desenvolvimento tem pouca RAM livre).
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: faculdade_sim
+      POSTGRES_USER: fsa
+      POSTGRES_PASSWORD: fsa-simulado
+    ports:
+      - "5433:5432"
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fsa -d faculdade_sim"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: ./api
+    environment:
+      DATABASE_URL: postgresql+psycopg://fsa:fsa-simulado@postgres:5432/faculdade_sim
+      FSA_API_KEY: chave-de-teste-fsa
+      MIGRATIONS_DIR: /migrations
+    volumes:
+      - ./migrations:/migrations:ro
+    ports:
+      - "8101:8101"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    mem_limit: 160m
+
+  idp:
+    build: ./idp
+    environment:
+      IDP_ISSUER: http://localhost:8102
+      IDP_CLIENT_ID: startme
+      IDP_CLIENT_SECRET: segredo-de-teste-do-startme
+      IDP_REDIRECT_URIS: http://localhost:8000/api/auth/oidc/retorno,http://localhost:8080/api/auth/oidc/retorno,http://localhost:5173/api/auth/oidc/retorno
+    ports:
+      - "8102:8102"
+    mem_limit: 160m

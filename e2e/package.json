@@ -1,0 +1,11 @@
+{
+  "name": "startme-e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "e2e": "node run.mjs"
+  },
+  "dependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}

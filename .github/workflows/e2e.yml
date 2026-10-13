@@ -1,0 +1,67 @@
+# E2E plug-and-play: a mesma aplicação em três configurações (arquivo, SQL e HTTP+OIDC), com
+# emulador do Firestore, simulador da FSA em Docker e um navegador de verdade.
+# Roda sob demanda e em pushes na developer (não a cada commit, para poupar minutos).
+name: E2E
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [developer]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Plug-and-play (3 modos)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Ambiente do coletor
+        working-directory: coletor
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install -q -r requirements-dev.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Front (build apontando para o coletor local do e2e)
+        working-directory: frontend-react
+        run: |
+          npm ci
+          VITE_COLETOR_URL=http://localhost:8000 npm run build
+
+      - name: Dependências do e2e
+        working-directory: e2e
+        run: npm ci
+
+      - uses: browser-actions/setup-chrome@v1
+        id: chrome
+        with:
+          chrome-version: stable
+
+      - name: Roda o e2e
+        working-directory: e2e
+        env:
+          CHROME_PATH: ${{ steps.chrome.outputs.chrome-path }}
+        run: node run.mjs
+
+      - name: Guarda capturas e relatório em caso de falha
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-saida
+          path: e2e/saida
+          if-no-files-found: ignore

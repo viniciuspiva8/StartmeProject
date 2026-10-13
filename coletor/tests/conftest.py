@@ -1,10 +1,14 @@
 """Fixtures compartilhadas: Firestore falso em memoria e respostas da SerpApi."""
 import copy
+import os
 import json
 from pathlib import Path
 
 import pytest
 from google.cloud.firestore_v1 import Increment
+
+# Os testes rodam no modo apresentação (a trava de entrega exige login institucional e fonte da faculdade).
+os.environ.setdefault("MODO_DEMONSTRACAO", "true")
 
 from tests.helpers import FakeResposta  # noqa: F401
 

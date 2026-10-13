@@ -18,8 +18,8 @@ export function derivarArea(texto) {
 
 export function derivarModalidade(texto) {
   const t = texto.toLowerCase();
-  if (/remoto|home ?office/.test(t)) return 'Remoto';
-  if (/híbrid|hibrid/.test(t)) return 'Híbrido';
+  if (/remot[oa]|home ?office/.test(t)) return 'Remoto';
+  if (/híbrid[oa]|hibrid[oa]/.test(t)) return 'Híbrido';
   return 'Presencial';
 }
 

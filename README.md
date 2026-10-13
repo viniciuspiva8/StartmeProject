@@ -4,6 +4,103 @@ Plataforma web de empregabilidade para discentes de Tecnologia da Informação d
 Centro Universitário Fundação Santo André. Trabalho de Conclusão de Curso de
 Engenharia de Computação — Grupo 15, 2026.
 
+## Para a equipe de TI da FSA: como ligar o StartMe ao sistema acadêmico
+
+Esta seção é para quem vai integrar o StartMe à faculdade. Resumo: **a aplicação não muda**; a faculdade informa
+uma fonte de vínculo e um login, e a configuração do serviço aponta para eles. Somente alunos da FSA com vínculo
+**ativo** no sistema acadêmico entram.
+
+### Como funciona o controle de acesso
+
+1. O aluno se identifica pelo login institucional da FSA (OpenID Connect) ou pela fonte que a FSA indicar.
+2. O StartMe consulta o **vínculo** dele na fonte acadêmica: ativo ou não, curso e semestre. Nada além disso.
+3. Sem vínculo, ou com vínculo inativo (trancado, cancelado), o acesso é **recusado** (403).
+4. Se a fonte não responder, o acesso é **recusado** (503). O sistema falha fechado, nunca aberto.
+5. O CPF não é guardado em claro: o que o StartMe guarda é um hash pseudônimo. Ele só vai à fonte da faculdade para a consulta do vínculo, e nunca é exibido inteiro (a tela mostra `***.456.789-**`).
+
+### O que a FSA precisa fornecer
+
+| Item | Para quê | Formato esperado |
+|---|---|---|
+| **Login institucional** (OpenID Connect) | identificar o aluno | `issuer`, `client_id`, `client_secret`, e um claim com o CPF no token (padrão `cpf`) |
+| **Fonte de vínculo** | saber se o aluno está ativo, curso e semestre | **uma** das duas opções abaixo |
+| Opção A: view somente leitura no banco | consulta SQL com `:cpf` | colunas `nome, curso, semestre, ativo` |
+| Opção B: API REST | `GET {url}/{cpf}/vinculo` com chave de API | JSON que o StartMe mapeia com `ACADEMICO_HTTP_MAPA` |
+
+Com a opção B, o formato da resposta da FSA não precisa ser igual ao do StartMe: basta informar onde estão os campos
+(exemplo na seção "Variáveis"). Detalhes para a conversa com a TI: `docs/ADOCAO-FSA.md`.
+
+### Variáveis que mudam na adoção
+
+Todas são configuradas no serviço (Cloud Run, variáveis de ambiente). Segredos ficam no Secret Manager.
+
+| Variável | Valor na entrega | Observação |
+|---|---|---|
+| `AUTH_MODE` | `oidc` (ou `http`) | `demo` não é permitido na entrega |
+| `ACADEMICO_PROVIDER` | `sql` (ou `http`) | `arquivo` não é permitido na entrega |
+| `OIDC_ISSUER` | URL do IdP da FSA | https |
+| `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET` | fornecidos pela FSA | segredo no Secret Manager |
+| `OIDC_REDIRECT_URI` | `https://<site>/api/auth/oidc/retorno` | a FSA deve autorizar esta URL |
+| `OIDC_CPF_CLAIM` | nome do claim com o CPF (padrão `cpf`) | |
+| `ACADEMICO_SQL_URL` | conexão somente leitura à view | **usuário de banco só leitura**, sem permissão de escrita |
+| `ACADEMICO_SQL_CONSULTA` | `SELECT nome, curso, semestre, (situacao='ATIVO') AS ativo FROM <view> WHERE cpf = :cpf` | ajustar à view real |
+| `ACADEMICO_HTTP_URL` | `https://<api-fsa>/alunos/{cpf}/vinculo` | https obrigatório |
+| `ACADEMICO_HTTP_CABECALHOS` | `{"X-API-Key":"..."}` | chave fornecida pela FSA |
+| `ACADEMICO_HTTP_MAPA` | onde estão `curso`, `semestre`, `ativo` na resposta | JSON |
+| `ACADEMICO_CPF_FORMATO` | `digitos` (padrão) ou `pontuado` | o formato que a FSA espera |
+| `SESSAO_SEGREDO`, `CPF_PEPPER` | gerados pela equipe do StartMe | 32+ bytes aleatórios; **não** são da FSA |
+| `SIMULADO` | `false` | tira a faixa "ambiente simulado" da tela de entrada |
+
+### Modo apresentação × modo de entrega (a trava)
+
+O serviço tem uma trava que impede subir em configuração de demonstração por engano.
+
+- **Modo apresentação** (hoje, em produção): `MODO_DEMONSTRACAO=true`. Aceita o login de demonstração e a fonte
+  com alunos **fictícios**. Não deve atender alunos reais.
+- **Modo de entrega**: a variável `MODO_DEMONSTRACAO` **não existe** no serviço. Sem ela, o serviço só sobe com login
+  institucional e fonte da faculdade. Se a configuração ainda estiver em demonstração, o serviço não inicia e a
+  mensagem de erro diz o que ajustar.
+
+**Para sair do modo apresentação, a única mudança é remover `MODO_DEMONSTRACAO` do serviço** (e configurar as
+variáveis da tabela acima). Nenhum código precisa ser alterado. Para conferir o modo ativo, consulte
+`GET /api/publico/config`, que devolve `modo_demonstracao`.
+
+### Checklist de entrega
+
+1. Receber da FSA: login institucional (cliente, segredo, issuer, claim do CPF) e a fonte de vínculo.
+2. Pedir a autorização da URL de retorno `https://<site>/api/auth/oidc/retorno` no IdP.
+3. Criar `SESSAO_SEGREDO` e `CPF_PEPPER` no Secret Manager (aleatórios, 32+ bytes).
+4. Configurar as variáveis da tabela, **sem** `MODO_DEMONSTRACAO`.
+5. Validar com um aluno de teste da FSA:
+   `python -m integracao.cli doctor --cpf <CPF de teste>` (não imprime dados pessoais).
+   Confirmar: vínculo ativo entra; trancado é recusado; CPF inexistente é recusado.
+6. Remover a faixa de ambiente simulado (`SIMULADO=false`).
+7. Criar o primeiro administrador: `python -m integracao.cli admin-criar --email <e-mail>` (a senha é pedida no terminal).
+8. Conferir `GET /api/publico/config`: `modo_demonstracao` deve ser `false`.
+
+### Pontos de atenção
+
+- **Não ative a fonte de arquivo com alunos reais.** Ela contém alunos fictícios; a trava existe para impedir isso.
+- **Usuário de banco somente leitura.** A validação da consulta SQL barra comandos de escrita comuns, mas não é uma
+  barreira completa. A proteção real é a permissão do usuário no banco.
+- **Dados guardados pelo StartMe:** consentimento (versionado), currículo e marcações do aluno, auditoria sem dados
+  pessoais e contas de administradores (senha em argon2). O vínculo acadêmico não é gravado: fica só na sessão.
+- **Revogação e exclusão:** o aluno revoga o consentimento (apaga currículo e marcações) ou apaga a conta (apaga tudo).
+- **Limitações conhecidas** (detalhes em `docs/ADOCAO-FSA.md`): o login institucional não fica amarrado ao navegador
+  (risco de CSRF de login, baixo para este uso); um papel de administrador revogado vale até 2 horas; o limite de
+  tentativas de login é por instância.
+- **Demonstração e testes:** `simulador-fsa/` tem uma faculdade falsa com dados fictícios para testar a integração antes
+  da FSA. Não é para a internet.
+
+### Onde está cada coisa
+
+- `docs/ADOCAO-FSA.md`: conversa com a TI, modos lado a lado e checklist detalhado.
+- `docs/SERVIDOR-FALSO-FSA.md`: a simulação e o que trocar por ser real.
+- `coletor/integracao/config.py`: a trava e a leitura das variáveis.
+- `e2e/`: teste de ponta a ponta dos três modos (rodado no GitHub Actions).
+
+---
+
 ## Baseline do projeto
 
 O código do StartMe existia em duas pastas separadas e sem versionamento comum.
@@ -28,13 +125,10 @@ coletor/              serviço de coleta (Python / FastAPI / Firestore)
   tests/              testes pytest (sem rede; fixture de resposta real da SerpApi)
   Dockerfile          imagem de execução
   .env.example        configuração de referência
-  web/                interface de listagem das vagas (legada — ver "Frontend v1.1" abaixo)
-cadastro/             API de cadastro (Node / Express / MySQL)
-  backend/            servidor e rotas REST
-  frontend/           telas de cadastro (legado)
-  database/schema.sql schema DB12 e modelagem
-frontend/             interface unificada da jornada do aluno em HTML/CSS/JS vanilla — referência das 13 pranchas
-frontend-react/      port React 18 + Vite + Tailwind do núcleo do aluno (Pranchas 1, 3, 4, 5, 6–8); ver frontend-react/README.md
+frontend-react/       interface do aluno e painel do administrador (React 18 + Vite + Tailwind); ver frontend-react/README.md
+simulador-fsa/        faculdade simulada (Postgres, API e IdP fictícios) para testar a integração; ver simulador-fsa/README.md
+e2e/                  teste de ponta a ponta do plug-and-play nos três modos (navegador de verdade)
+integracao/           (dentro de coletor/) camada de integração acadêmica: CPF, sessão, provedores e login da FSA
 design-reference/     protótipo de design de origem (StartMe.dc.html) e mapa de telas
 docs/
   arquitetura/        topologia e documentação do MVP
@@ -183,6 +277,17 @@ Todos os recursos (`empresas`, `instituicoes`, `cursos`, `vagas`, `alunos`)
 seguem o mesmo padrão REST: `GET /`, `GET /:id`, `POST /`, `PUT /:id`,
 `DELETE /:id`. Há também `GET /health`.
 
+## Documentação de adoção pela FSA
+
+- `docs/ADOCAO-FSA.md`: o que a faculdade precisa fornecer, os três modos (demonstração, SQL e HTTP+OIDC), checklist de adoção, perguntas para a TI e limitações conhecidas.
+- `docs/SERVIDOR-FALSO-FSA.md`: como a faculdade simulada funciona e o que trocar para ligar ao sistema real.
+
+## Histórico: frontends anteriores (removidos em 13/10/2026)
+
+Os fronts em HTML/JS puro (`frontend/`, `cadastro/frontend/`, `coletor/web/`) e o backend Node de cadastro (`cadastro/backend/`) foram substituídos pelo React e pela integração. Para consultar o código antigo: `git checkout legado-pre-react`.
+
+<details><summary>Texto original da v1.1 (referência de decisões)</summary>
+
 ## Frontend v1.1 (mesclado)
 
 O diretório `frontend/` é uma interface unificada nova, em **HTML/CSS/JS vanilla
@@ -238,6 +343,8 @@ Segue a mesma prática de `coletor/web/script.js`: todo texto vindo de dado
 coletado é escapado (`Api.esc`, em `frontend/js/api.js`) antes de ir para o
 DOM, e todo link de origem é validado para aceitar só `http`/`https`
 (`Api.linkSeguro`) antes de virar `href`.
+
+</details>
 
 ## Segurança
 
