@@ -319,3 +319,11 @@ def executar_coleta(db=Depends(get_db)) -> ResultadoColeta:
         cards_encontrados=resultado.vagas_unicas,
         serpapi=resultado,
     )
+
+
+# --------------------------------------------------------------------------
+# Integração acadêmica (ADR-002): /api/publico, /api/auth e /api/me
+# --------------------------------------------------------------------------
+from integracao.rotas import instalar as _instalar_integracao  # noqa: E402
+
+_instalar_integracao(app, get_db)
