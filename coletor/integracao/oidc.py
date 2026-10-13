@@ -215,7 +215,9 @@ class ClienteOidc:
         if not isinstance(exp, (int, float)) or exp < agora - SKEW:
             raise ErroOidc("expirado")
         iat = corpo.get("iat")
-        if isinstance(iat, (int, float)) and iat > agora + SKEW:
+        if not isinstance(iat, (int, float)):
+            raise ErroOidc("iat_invalido")
+        if iat > agora + SKEW:
             raise ErroOidc("iat_futuro")
         if not hmac.compare_digest(str(corpo.get("nonce", "")).encode("utf-8"), nonce.encode("utf-8")):
             raise ErroOidc("nonce_invalido")

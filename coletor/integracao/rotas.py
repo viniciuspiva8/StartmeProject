@@ -8,7 +8,8 @@ from typing import Callable
 
 import requests
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
-from fastapi.responses import RedirectResponse
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel, Field
 
 from integracao import autenticacao, provedores, sessao
@@ -49,6 +50,11 @@ class ConsentimentoIn(BaseModel):
     versao: str = Field(max_length=20)
 
 
+def _erro_validacao(_request, _exc) -> JSONResponse:
+    # Sem o eco padrão do FastAPI: a resposta padrão devolveria o CPF e a senha enviados.
+    return JSONResponse({"detail": {"codigo": "dados_invalidos"}}, status_code=422)
+
+
 def _erro(erro: ErroIntegracao) -> HTTPException:
     return HTTPException(status_code=erro.status, detail={"codigo": erro.codigo, **erro.extra})
 
@@ -67,6 +73,7 @@ def instalar(
 ) -> None:
     """Liga a integração ao app. Falha na subida se a configuração não puder ser atendida."""
     cfg = config or Config.do_ambiente()
+    app.add_exception_handler(RequestValidationError, _erro_validacao)
     provedor = provedores.construir(cfg)  # erro de configuração aparece aqui, não na primeira requisição
     autenticador = autenticacao.construir(cfg)  # None no modo OIDC
     limite = LimiteTentativas()

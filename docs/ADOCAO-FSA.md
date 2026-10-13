@@ -93,12 +93,16 @@ O exemplo completo do modo HTTP está em `e2e/run.mjs` (modo `http-oidc`), que r
   conta dele (CSRF de login). O `state` é assinado, mas não fica preso ao navegador, porque o Firebase Hosting
   só repassa o cookie `__session`. Risco baixo para um app de vagas; correção completa depende de um cookie
   próprio que o Hosting repasse.
+- **Papel e cadastro do administrador valem por até 2 horas.** A sessão de admin carrega o papel no token; rebaixar ou
+  desativar um administrador só vale quando a sessão expira. Aceitável para a equipe pequena do projeto.
+- **Revogação de sessão do aluno.** O logout remove o cookie do navegador; uma cópia do token vale até as 8 horas.
 - **Cookie único para aluno e administrador.** Ambos usam `__session`, com audiências diferentes. Quem entrar
   como administrador e depois como aluno no mesmo navegador troca a sessão. Sem risco de acesso cruzado.
 - **Limite de tentativas em memória por instância.** Com várias instâncias do Cloud Run, o limite é por instância.
   Suficiente para o escopo; trocar por armazenamento compartilhado se o tráfego crescer.
 - **Sem transação no Firestore para o currículo.** O controle de versão cobre o caso comum; a corrida só existe
   se a mesma conta editar em duas abas ao mesmo tempo.
-- **Provedor SQL:** a consulta é validada (um único SELECT com `:cpf`, sem escrita), mas quem a escreve precisa
-  conhecer o banco da FSA. Revise a consulta com a TI.
+- **Provedor SQL:** a consulta é validada (um único SELECT com `:cpf`) por uma lista de termos proibidos, que não
+  é uma barreira completa (ex.: `SELECT ... INTO` passaria). **A proteção real é um usuário de banco somente leitura**,
+  com permissão apenas na view. Exigir isso na adoção.
 - **O servidor de demonstração não é para a internet.** O `simulador-fsa` tem chaves e senhas de teste.

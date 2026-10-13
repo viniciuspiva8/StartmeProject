@@ -13,7 +13,7 @@ class CpfInvalido(ValueError):
 
 
 def digitos(valor: str | None) -> str:
-    return re.sub(r"\D", "", valor or "")
+    return re.sub(r"[^0-9]", "", valor or "")  # só ASCII: dígitos de outros alfabetos não contam
 
 
 def valido(valor: str | None) -> bool:

@@ -269,3 +269,14 @@ def test_discovery_com_issuer_divergente_e_recusado():
     with pytest.raises(ErroOidc) as erro:
         cliente.iniciar()
     assert erro.value.codigo == "issuer_divergente"
+
+
+def test_id_token_sem_iat_e_recusado():
+    base_cliente = _cliente_com_id_token("x.y.z")
+    state = _state_valido(base_cliente)
+    nonce = sessao.verificar(state, SEGREDO, "oidc-state")["nonce"]
+    claims = {k: v for k, v in _claims(nonce=nonce).items() if k != "iat"}
+    cliente = _cliente_com_id_token(_assinado(claims))
+    with pytest.raises(ErroOidc) as erro:
+        cliente.concluir("c", state)
+    assert erro.value.codigo == "iat_invalido"

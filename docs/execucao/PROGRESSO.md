@@ -17,9 +17,9 @@ Legenda: `[ ]` aberta · `[~]` em andamento · `[x]` concluída e integrada na `
 | 7 | Currículo e marcações no servidor | `feat/curriculo-servidor` | [x] | 6f7eaf3 (integrada na `developer`) | — |
 | 8 | Admin (API e tela) | `feat/admin` | [x] | 4037dab (integrada na `developer`) | — |
 | 9 | e2e plug-and-play (3 modos só trocando variáveis) | `test/e2e-plug-and-play` | [ ] | — | — |
-| 10 | Remover o legado (tag `legado-pre-react`) | `chore/remover-legado` | [~] | tag em 1159aba | commit da remoção, CI, merge |
-| 11 | Documentação de adoção + ADRs + atualizações do TCC | `docs/adocao-fsa` | [ ] | — | — |
-| 12 | Integração final, revisão de código e `MANHA.md` | `developer` | [ ] | — | — |
+| 10 | Remover o legado (tag `legado-pre-react`) | `chore/remover-legado` | [x] | c881ded (integrada; tag `legado-pre-react`) | — |
+| 11 | Documentação de adoção + ADRs + atualizações do TCC | `docs/adocao-fsa` | [x] | 9a8c54b (integrada) | — |
+| 12 | Integração final, revisão de código e `MANHA.md` | `docs/execucao-final` | [~] | — | revisão independente de segurança (em curso), achados, `MANHA.md` |
 
 ## Estado do ambiente
 
