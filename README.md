@@ -180,6 +180,11 @@ Todos os recursos (`empresas`, `instituicoes`, `cursos`, `vagas`, `alunos`)
 seguem o mesmo padrão REST: `GET /`, `GET /:id`, `POST /`, `PUT /:id`,
 `DELETE /:id`. Há também `GET /health`.
 
+## Documentação de adoção pela FSA
+
+- `docs/ADOCAO-FSA.md`: o que a faculdade precisa fornecer, os três modos (demonstração, SQL e HTTP+OIDC), checklist de adoção, perguntas para a TI e limitações conhecidas.
+- `docs/SERVIDOR-FALSO-FSA.md`: como a faculdade simulada funciona e o que trocar para ligar ao sistema real.
+
 ## Histórico: frontends anteriores (removidos em 13/10/2026)
 
 Os fronts em HTML/JS puro (`frontend/`, `cadastro/frontend/`, `coletor/web/`) e o backend Node de cadastro (`cadastro/backend/`) foram substituídos pelo React e pela integração. Para consultar o código antigo: `git checkout legado-pre-react`.
