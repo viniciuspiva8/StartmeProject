@@ -1,100 +1,12 @@
-// Estado e ações da aplicação.
-// A tela atual e a vaga aberta ficam na URL (#/vagas/v3): o botão Voltar do
-// navegador funciona, e um link para uma vaga pode ser compartilhado.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
-import { CAMPOS_ACADEMICOS_MOCK, CPF_DEMO, SEMESTRE_ALUNO_MOCK, SENHA_DEMO, VAGAS } from '../data/mock.js';
-import { CURRICULO_SEED } from '../data/curriculo-seed.js';
-import { fetchAlunoDemo, fetchVagas, gravarLocal, lerLocal } from '../lib/api.js';
+import { CPF_DEMO, SENHA_DEMO } from '../data/mock.js';
+import { fetchAlunoDemo, fetchVagas, gravarLocal } from '../lib/api.js';
 import { montarPerfil, normalizar, vagasQueMudaram } from '../lib/match.js';
+import { CHAVE_CURRICULO, CHAVE_SALVAS, CHAVE_APLICADAS, FILTROS_PADRAO, POR_LOTE, lerHash, montarHash, mascaraCpf } from './constantes.js';
+import { comTransicao, novoId, estadoInicial } from './utilitarios.js';
 
-const CHAVE_CURRICULO = 'startme:curriculo';
-const CHAVE_SALVAS = 'startme:salvas';
-const CHAVE_APLICADAS = 'startme:aplicadas';
-
-export const FILTROS_PADRAO = { q: '', faixa: 'todas', mods: [], areas: [], compatOnly: false, janela: '30', marcadas: [] };
-export const POR_LOTE = 10;
-
-/** Máscara de CPF: 000.000.000-00 */
-export function mascaraCpf(valor) {
-  const d = valor.replace(/\D/g, '').slice(0, 11);
-  if (d.length > 9) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-  if (d.length > 6) return d.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-  if (d.length > 3) return d.replace(/(\d{3})(\d{1,3})/, '$1.$2');
-  return d;
-}
-
-// --- Rotas ------------------------------------------------------------------
-const ROTAS = { portal: 'portal', autorizacao: 'consent', inicio: 'inicio', vagas: 'vagas', curriculo: 'curriculo' };
-const HASH_DA_VIEW = Object.fromEntries(Object.entries(ROTAS).map(([hash, view]) => [view, hash]));
-// Endereço antigo: a aba "Candidaturas" virou "Meu currículo" em 07/10/2026.
-ROTAS.candidaturas = 'curriculo';
-
-function lerHash() {
-  const [, rota = 'portal', sel = null] = window.location.hash.replace(/^#/, '').split('/');
-  return { view: ROTAS[rota] || 'portal', sel: rota === 'vagas' ? sel : null };
-}
-function montarHash(view, sel) {
-  return `#/${HASH_DA_VIEW[view] || 'portal'}${view === 'vagas' && sel ? `/${sel}` : ''}`;
-}
-
-/** Executa a atualização dentro de uma View Transition quando o navegador oferece. */
-function comTransicao(atualizar) {
-  if (typeof document !== 'undefined' && document.startViewTransition
-      && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.startViewTransition(() => flushSync(atualizar));
-  } else {
-    atualizar();
-  }
-}
-
-function novoId(prefixo) {
-  return `${prefixo}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-}
-
-/** Currículos salvos antes de 08/10 guardavam habilidades como texto solto. */
-function normalizarHabilidades(lista) {
-  return (lista || []).map((h) => (typeof h === 'string'
-    ? { id: novoId('h'), nome: h, nivel: '', onde: '', ano: '', arquivo: '' }
-    : h));
-}
-
-function carregarCurriculo() {
-  const cv = { ...CURRICULO_SEED, ...lerLocal(CHAVE_CURRICULO, {}) };
-  return { ...cv, habilidadesDeclaradas: normalizarHabilidades(cv.habilidadesDeclaradas) };
-}
-
-function estadoInicial() {
-  const rota = lerHash();
-  return {
-    view: rota.view,
-    sel: rota.sel,
-    menuAberto: false,
-    notasAbertas: false,
-    toast: null,
-
-    cpf: '',
-    senha: '',
-    verSenha: false,
-    erroLogin: false,
-
-    ...FILTROS_PADRAO,
-    ord: 'compat',
-    visiveis: POR_LOTE,
-
-    salvas: lerLocal(CHAVE_SALVAS, ['v4']),
-    aplicadas: lerLocal(CHAVE_APLICADAS, []),
-    curriculo: carregarCurriculo(),
-    habilidadeEmEdicao: null,
-
-    vagas: VAGAS.map((v) => ({ ...v })),
-    vagasFonte: 'mock',
-    vagasCarregando: true,
-    campos: CAMPOS_ACADEMICOS_MOCK,
-    academicoFonte: 'mock',
-    semestreAluno: SEMESTRE_ALUNO_MOCK,
-  };
-}
+// Reexportações: as telas importam daqui; a origem real está em constantes.js.
+export { FILTROS_PADRAO, POR_LOTE, mascaraCpf } from './constantes.js';
 
 const AppContext = createContext(null);
 
