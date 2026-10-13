@@ -37,6 +37,10 @@ export function estadoInicial() {
     sel: rota.sel,
     menuAberto: false,
     notasAbertas: false,
+    servidor: null,      // resposta de /api/publico/config; null = sem servidor (modo local)
+    sessao: null,        // resposta de /api/me quando o aluno tem sessão no servidor
+    entrando: false,
+    erroCodigo: null,
     toast: null,
 
     cpf: '',

@@ -4,6 +4,15 @@ import { CPF_DEMO, FERRAMENTAS, PORTAIS, SENHA_DEMO } from '../data/mock.js';
 import { useApp } from '../state/AppContext.jsx';
 import Icone from '../components/Icone.jsx';
 import Logo from '../components/Logo.jsx';
+import { apiAluno } from '../lib/apiAluno.js';
+
+// Mensagem por código de erro do servidor (sem o CPF; sem detalhe técnico).
+const MENSAGEM_ERRO = {
+  credenciais_invalidas: 'CPF ou senha não conferem. Confira os números e a senha do portal.',
+  cpf_invalido: 'Este CPF não é válido. Confira os números digitados.',
+  muitas_tentativas: 'Muitas tentativas seguidas. Aguarde alguns minutos antes de tentar de novo.',
+  rede: 'Não conseguimos falar com o serviço de login. Verifique sua conexão e tente de novo.',
+};
 
 export default function Portal() {
   const { s, a } = useApp();
@@ -33,7 +42,7 @@ export default function Portal() {
           <h1 className="mt-8 font-serif text-[30px] leading-tight font-bold text-tinta">Portais FSA</h1>
           <p className="mt-1 text-[15px] text-tinta-3">Entre com o seu CPF e a senha do portal.</p>
 
-          <form className="mt-6 flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); if (podeEntrar) a.entrar(); }}>
+          <form className="mt-6 flex flex-col gap-3" onSubmit={(e) => { e.preventDefault(); if (podeEntrar && !s.entrando) a.entrar(); }}>
             <Campo icone="pessoa" rotulo="CPF" htmlFor="cpf">
               <input id="cpf" type="text" inputMode="numeric" autoComplete="off" placeholder="000.000.000-00"
                 value={s.cpf} onChange={(e) => a.setCpf(e.target.value)}
@@ -58,11 +67,16 @@ export default function Portal() {
             {s.erroLogin && (
               <p role="alert" className="flex items-start gap-2 rounded-xl bg-erro-fundo px-3.5 py-3 text-sm text-erro">
                 <Icone nome="alerta" size={17} className="mt-px" />
-                CPF ou senha não conferem. Use as credenciais de demonstração abaixo.
+                {MENSAGEM_ERRO[s.erroCodigo] || 'CPF ou senha não conferem. Use as credenciais de demonstração abaixo.'}
               </p>
             )}
 
-            <button type="submit" disabled={!podeEntrar} className="btn-primario mt-1 min-h-12 text-[15px]">Entrar</button>
+            <button type="submit" disabled={!podeEntrar || s.entrando} className="btn-primario mt-1 min-h-12 text-[15px]">
+              {s.entrando ? 'Entrando…' : 'Entrar'}
+            </button>
+            {s.servidor?.oidc && (
+              <a href={apiAluno.urlLoginFsa()} className="btn-claro min-h-12 text-[15px]">Entrar com a conta da FSA</a>
+            )}
             <button type="button" onClick={a.nadaAinda} className="min-h-11 cursor-pointer self-center px-3 text-[13px] font-semibold text-azul-700 hover:underline">
               Esqueci ou quero trocar a senha
             </button>
