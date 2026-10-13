@@ -4,6 +4,7 @@ As rotas só traduzem HTTP para estas funções. Erros de negócio viram ErroInt
 código estável (o front usa o código, não a mensagem).
 """
 
+import json
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
@@ -15,11 +16,15 @@ from integracao.repositorio.base import Repositorio
 from integracao.seguranca import LimiteTentativas
 
 
+LIMITE_CURRICULO = 64 * 1024  # bytes do JSON do currículo
+
+
 class ErroIntegracao(Exception):
-    def __init__(self, codigo: str, status: int):
+    def __init__(self, codigo: str, status: int, extra: dict | None = None):
         super().__init__(codigo)
         self.codigo = codigo
         self.status = status
+        self.extra = extra or {}
 
 
 def _agora() -> str:
@@ -103,6 +108,33 @@ class Servicos:
         )
         self._auditar("consentimento_aceito", chave, versao)
         return self.consentimento(chave)
+
+    # ------------------------------------------------------------ currículo e marcações
+    def curriculo_obter(self, chave: str) -> dict:
+        salvo = self.repositorio.curriculo_ler(chave) or {}
+        return {"dados": salvo.get("dados") or {}, "versao": int(salvo.get("versao", 0))}
+
+    def curriculo_salvar(self, chave: str, dados: dict, versao: int) -> int:
+        """Grava com controle de versão otimista: a versão enviada tem que ser a atual.
+
+        Sem transação: a janela de corrida é de milissegundos e só existe se a mesma conta editar em duas
+        abas ao mesmo tempo. A versão evita sobrescrever em silêncio na quase totalidade dos casos.
+        """
+        atual = self.curriculo_obter(chave)
+        if versao != atual["versao"]:
+            raise ErroIntegracao("versao_conflito", 409, extra={"versao_atual": atual["versao"]})
+        if len(json.dumps(dados, ensure_ascii=False).encode("utf-8")) > LIMITE_CURRICULO:
+            raise ErroIntegracao("curriculo_grande", 413)
+        nova = atual["versao"] + 1
+        self.repositorio.curriculo_gravar(chave, {"dados": dados, "versao": nova, "atualizado_em": _agora()})
+        return nova
+
+    def marcacoes_obter(self, chave: str) -> dict:
+        salvo = self.repositorio.marcacoes_ler(chave) or {}
+        return {"salvas": list(salvo.get("salvas") or []), "aplicadas": list(salvo.get("aplicadas") or [])}
+
+    def marcacoes_salvar(self, chave: str, salvas: list[str], aplicadas: list[str]) -> None:
+        self.repositorio.marcacoes_gravar(chave, {"salvas": salvas, "aplicadas": aplicadas, "atualizado_em": _agora()})
 
     def revogar(self, chave: str) -> None:
         """Revoga o consentimento e apaga currículo e marcações. O registro de consentimento fica, com a data."""

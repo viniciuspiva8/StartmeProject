@@ -3,6 +3,7 @@ import { CPF_DEMO, SENHA_DEMO } from '../data/mock.js';
 import { fetchAlunoDemo, fetchVagas, gravarLocal } from '../lib/api.js';
 import { apiAluno } from '../lib/apiAluno.js';
 import { digitos } from '../lib/cpf.js';
+import { useSincronizacaoServidor } from './sincronizaServidor.js';
 import { montarPerfil, normalizar, vagasQueMudaram } from '../lib/match.js';
 import { CHAVE_CURRICULO, CHAVE_SALVAS, CHAVE_APLICADAS, FILTROS_PADRAO, POR_LOTE, lerHash, montarHash, mascaraCpf } from './constantes.js';
 import { comTransicao, novoId, estadoInicial } from './utilitarios.js';
@@ -284,6 +285,8 @@ export function AppProvider({ children }) {
       restaurarCurriculo: () => mudarCurriculo(() => CURRICULO_SEED, 'Currículo de demonstração restaurado.'),
     };
   }, [set]);
+
+  useSincronizacaoServidor(s, actions.mostrarToast, set);
 
   const valor = useMemo(() => ({ s, a: actions, perfil }), [s, actions, perfil]);
   return <AppContext.Provider value={valor}>{children}</AppContext.Provider>;

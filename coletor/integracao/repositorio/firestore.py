@@ -19,6 +19,20 @@ class RepositorioFirestore(Repositorio):
     def consentimento_gravar(self, chave, dados):
         self._db.collection(COL_CONSENTIMENTOS).document(chave).set(dados)
 
+    def curriculo_ler(self, chave):
+        snap = self._db.collection(COL_CURRICULOS).document(chave).get()
+        return snap.to_dict() if snap.exists else None
+
+    def curriculo_gravar(self, chave, dados):
+        self._db.collection(COL_CURRICULOS).document(chave).set(dados)
+
+    def marcacoes_ler(self, chave):
+        snap = self._db.collection(COL_MARCACOES).document(chave).get()
+        return snap.to_dict() if snap.exists else None
+
+    def marcacoes_gravar(self, chave, dados):
+        self._db.collection(COL_MARCACOES).document(chave).set(dados)
+
     def dados_apagar(self, chave, *, incluir_consentimento):
         self._db.collection(COL_CURRICULOS).document(chave).delete()
         self._db.collection(COL_MARCACOES).document(chave).delete()
