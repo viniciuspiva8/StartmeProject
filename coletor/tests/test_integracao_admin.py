@@ -138,11 +138,12 @@ def test_auditoria_registra_login_e_coleta_sem_dados_de_aluno(cliente):
     assert all(set(e) == {"quando", "evento", "ator", "detalhe"} for e in eventos)
 
 
-def test_resumo_so_traz_contagens(cliente):
+def test_resumo_so_traz_contagens_e_a_identidade_do_admin(cliente):
     entrar(cliente, ADMIN)
     corpo = cliente.get("/api/admin/resumo").json()
-    assert set(corpo) == {"vagas", "cota", "ultima_coleta", "consentimentos"}
+    assert set(corpo) == {"vagas", "cota", "ultima_coleta", "consentimentos", "email", "papel"}
     assert set(corpo["consentimentos"]) == {"ativos", "total"}
+    assert corpo["email"] == ADMIN and corpo["papel"] == "admin"  # identidade do próprio admin, nada de aluno
 
 
 # --------------------------------------------------------------- CLI
