@@ -25,7 +25,7 @@ uma fonte de vínculo e um login, e a configuração do serviço aponta para ele
 | **Login institucional** (OpenID Connect) | identificar o aluno | `issuer`, `client_id`, `client_secret`, e um claim com o CPF no token (padrão `cpf`) |
 | **Fonte de vínculo** | saber se o aluno está ativo, curso e semestre | **uma** das duas opções abaixo |
 | Opção A: view somente leitura no banco | consulta SQL com `:cpf` | colunas `nome, curso, semestre, ativo` |
-| Opção B: API REST | `GET {url}/{cpf}/vinculo` com chave de API | JSON que o StartMe mapeia com `ACADEMICO_HTTP_MAPA` |
+| Opção B: API REST | `GET` numa URL com `{cpf}` (ex.: `.../alunos/{cpf}/vinculo`), com chave de API | JSON que o StartMe mapeia com `ACADEMICO_HTTP_MAPA` |
 
 Com a opção B, o formato da resposta da FSA não precisa ser igual ao do StartMe: basta informar onde estão os campos
 (exemplo na seção "Variáveis"). Detalhes para a conversa com a TI: `docs/ADOCAO-FSA.md`.
@@ -47,6 +47,7 @@ Todas são configuradas no serviço (Cloud Run, variáveis de ambiente). Segredo
 | `ACADEMICO_HTTP_URL` | `https://<api-fsa>/alunos/{cpf}/vinculo` | https obrigatório |
 | `ACADEMICO_HTTP_CABECALHOS` | `{"X-API-Key":"..."}` | chave fornecida pela FSA |
 | `ACADEMICO_HTTP_MAPA` | onde estão `curso`, `semestre`, `ativo` na resposta | JSON |
+| `AUTH_HTTP_URL` | só com `AUTH_MODE=http`: endpoint da FSA que valida CPF e senha (`POST`, responde 200 ou 401) | https obrigatório; o caminho recomendado é o `oidc` |
 | `ACADEMICO_CPF_FORMATO` | `digitos` (padrão) ou `pontuado` | o formato que a FSA espera |
 | `SESSAO_SEGREDO`, `CPF_PEPPER` | gerados pela equipe do StartMe | 32+ bytes aleatórios; **não** são da FSA |
 | `SIMULADO` | `false` | tira a faixa "ambiente simulado" da tela de entrada |
@@ -71,11 +72,12 @@ variáveis da tabela acima). Nenhum código precisa ser alterado. Para conferir 
 2. Pedir a autorização da URL de retorno `https://<site>/api/auth/oidc/retorno` no IdP.
 3. Criar `SESSAO_SEGREDO` e `CPF_PEPPER` no Secret Manager (aleatórios, 32+ bytes).
 4. Configurar as variáveis da tabela, **sem** `MODO_DEMONSTRACAO`.
-5. Validar com um aluno de teste da FSA:
+5. Validar com um aluno de teste da FSA, na pasta `coletor` e com as mesmas variáveis do serviço:
    `python -m integracao.cli doctor --cpf <CPF de teste>` (não imprime dados pessoais).
    Confirmar: vínculo ativo entra; trancado é recusado; CPF inexistente é recusado.
 6. Remover a faixa de ambiente simulado (`SIMULADO=false`).
-7. Criar o primeiro administrador: `python -m integracao.cli admin-criar --email <e-mail>` (a senha é pedida no terminal).
+7. Criar o primeiro administrador: `python -m integracao.cli admin-criar --email <e-mail>` (papel `admin` por padrão,
+   ou `--papel leitor`; a senha é pedida no terminal, mínimo de 12 caracteres).
 8. Conferir `GET /api/publico/config`: `modo_demonstracao` deve ser `false`.
 
 ### Pontos de atenção
@@ -101,262 +103,214 @@ variáveis da tabela acima). Nenhum código precisa ser alterado. Para conferir 
 
 ---
 
-## Baseline do projeto
+## Como o StartMe está montado
 
-O código do StartMe existia em duas pastas separadas e sem versionamento comum.
-Em 02/09/2026 as duas foram consolidadas neste repositório:
+```
+Navegador ──► Firebase Hosting (front React)
+                 │  /api/** e /health são repassados ao Cloud Run (mesma origem)
+                 ▼
+              Cloud Run "startme-coletor" (Python/FastAPI, southamerica-east1)
+                 ├─ coleta de vagas (SerpApi) ◄── Cloud Scheduler: terça e sexta, 6h (Brasília)
+                 ├─ integração acadêmica: login, vínculo do aluno, consentimento, currículo, painel admin
+                 │     └─ fonte da faculdade (view SQL ou API) e login institucional (OIDC), por variável
+                 └─ Firestore: vagas, cota da SerpApi, consentimentos, currículos, marcações, auditoria, administradores
+```
 
-| Módulo | Origem | Papel |
-|---|---|---|
-| `coletor/` | pasta "MVP" | **Tronco do projeto.** Python + FastAPI, coleta vagas de estágio, trainee e júnior em TI pela SerpApi (Google Jobs) e persiste no Google Cloud Firestore. É o módulo que implementa a arquitetura descrita na monografia. |
-| `cadastro/` | pasta "startme-projeto-v1" | Node.js + Express sobre MySQL. Modelo relacional de Instituição, Curso, Aluno, Empresa e Vaga. |
-
-Os dois módulos juntos materializam a **persistência poliglota** (Sadalage;
-Fowler, 2013) que a monografia justifica: dados de vagas são voláteis e de
-esquema variável, e ficam no Firestore; dados cadastrais acadêmicos têm
-integridade referencial, e ficam no relacional.
+Todos os dados do StartMe ficam no Firestore e só o backend os acessa (as regras em `coletor/firestore.rules`
+negam o acesso direto dos navegadores). O PostgreSQL do repositório existe **apenas** na faculdade simulada
+(`simulador-fsa/`), para testar a integração; o StartMe não usa banco relacional em produção.
 
 ## Estrutura
 
 ```
-coletor/              serviço de coleta (Python / FastAPI / Firestore)
-  main.py             rotas da API e limpeza de vagas expiradas
-  fontes/serpapi.py   fonte de vagas: busca, filtro, normalização, cota e upsert
-  tests/              testes pytest (sem rede; fixture de resposta real da SerpApi)
-  Dockerfile          imagem de execução
-  .env.example        configuração de referência
-frontend-react/       interface do aluno e painel do administrador (React 18 + Vite + Tailwind); ver frontend-react/README.md
-simulador-fsa/        faculdade simulada (Postgres, API e IdP fictícios) para testar a integração; ver simulador-fsa/README.md
-e2e/                  teste de ponta a ponta do plug-and-play nos três modos (navegador de verdade)
-integracao/           (dentro de coletor/) camada de integração acadêmica: CPF, sessão, provedores e login da FSA
-design-reference/     protótipo de design de origem (StartMe.dc.html) e mapa de telas
+coletor/                  backend (Python / FastAPI), publicado no Cloud Run
+  main.py                 vagas, coleta, saúde, CORS e acesso ao Firestore
+  fontes/serpapi.py       fonte de vagas: busca, filtro, normalização, cota e gravação
+  integracao/             camada de integração acadêmica
+    config.py             leitura e validação das variáveis, incluindo a trava de entrega
+    provedores/           fontes de vínculo: arquivo (fictício), sql e http
+    autenticacao.py, oidc.py, sessao.py, cpf.py     login, sessão e CPF pseudonimizado
+    servicos.py, admin.py, rotas.py                 regras e rotas do aluno e do administrador
+    repositorio/          persistência (Firestore em produção, memória nos testes)
+    cli.py                `doctor` (diagnóstico) e `admin-criar`
+  tests/                  testes pytest (sem rede, sem SerpApi e sem Firebase reais)
+  scripts/testar_firestore.py   teste de conexão com o Firestore
+  Dockerfile, docker-compose.local.yml (emulador), docker-compose.real.yml (Firestore real)
+  .env.example            todas as variáveis, comentadas
+frontend-react/           interface do aluno e painel do administrador (React 18 + Vite + Tailwind); ver o README da pasta
+simulador-fsa/            faculdade simulada (Postgres, API e login fictícios); ver o README da pasta
+e2e/                      teste de ponta a ponta com navegador, nos três modos de integração
+.github/workflows/        ci.yml (testes), e2e.yml (ponta a ponta), deploy.yml (publicação)
+design-reference/         protótipo de design de origem e mapa de telas
 docs/
-  arquitetura/        topologia e documentação do MVP
-  historico/          rascunhos antigos, mantidos só como referência
+  ADOCAO-FSA.md           guia de adoção pela faculdade
+  SERVIDOR-FALSO-FSA.md   a faculdade simulada e o que trocar pelo sistema real
+  arquitetura/            topologia e documentação do MVP
+  historico/              rascunhos antigos, só como referência
 ```
 
-## Como rodar
+## Como rodar localmente
 
-### Coletor
+### Coletor (backend)
 
 ```bash
 cd coletor
-cp .env.example .env            # preencha SCRAPER_TOKEN, SERPAPI_KEY e o caminho da credencial
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements.txt -r requirements-dev.txt
+cp .env.example .env
+```
+
+No `.env`, preencha `SCRAPER_TOKEN` e, se for coletar vagas, `SERPAPI_KEY`. Para rodar com `uvicorn`, **descomente
+também `MODO_DEMONSTRACAO=true`**: sem ela, a trava de entrega impede o serviço de subir com o login de demonstração
+e os alunos fictícios (é o comportamento esperado em produção, não um erro). O compose local já define essa variável.
+
+Para acessar o Firestore, há três caminhos:
+
+| Caminho | Como | Quando usar |
+|---|---|---|
+| Emulador (recomendado) | `docker compose -f docker-compose.local.yml up --build -d` | desenvolvimento: nada vai para o Firebase real |
+| Credencial do gcloud | `gcloud auth application-default login` e `GOOGLE_CLOUD_PROJECT=<projeto>` | testar contra o Firestore real sem arquivo de chave |
+| Arquivo de chave | `GOOGLE_APPLICATION_CREDENTIALS` apontando para o JSON da conta de serviço | só se a organização permitir criar chaves; o arquivo nunca é versionado |
+
+Sem o compose, configure antes o segundo ou o terceiro caminho da tabela (sem acesso ao Firestore, o serviço não sobe):
+
+```bash
 uvicorn main:app --reload --env-file .env
-```
-
-A credencial da conta de serviço do Firebase (`credenciais.json`) **não é
-versionada**. Baixe do console do Firebase e aponte
-`GOOGLE_APPLICATION_CREDENTIALS` para ela. O mesmo vale para `SERPAPI_KEY`: só
-por variável de ambiente, nunca em código (a chave vai na query string das
-chamadas, então o coletor redige qualquer `api_key` antes de logar).
-
-Rotas:
-
-| Método | Rota | Autenticação |
-|---|---|---|
-| GET | `/health` | — |
-| GET | `/api/vagas` | — |
-| POST | `/api/coleta` | header `X-Scraper-Token` |
-
-`GET /api/vagas` devolve `id, titulo, empresa, link, data_coleta, descricao,
-salario` e, como campos extras, `fonte` e `via` (portal onde o Google achou a vaga).
-
-**Fonte de vagas: SerpApi.** `POST /api/coleta` remove as vagas expiradas e roda
-`SERPAPI_QUERIES` × `SERPAPI_LOCALIZACOES` (até `SERPAPI_MAX_PAGINAS` páginas
-cada). Entram só vagas de **estágio, trainee e júnior** (regra em
-`fontes/serpapi.py`, constantes `REGRA_*`; "aprendiz" e níveis pleno/sênior ficam
-fora). O upsert usa o `htidocid` do Google (o `job_id` muda a cada busca). Uma
-execução faz no máximo `SERPAPI_MAX_BUSCAS_EXEC` (16) buscas, e o contador mensal
-(coleção `controle_serpapi`) bloqueia novas chamadas ao atingir
-`SERPAPI_LIMITE_MENSAL` (240 do plano gratuito de 250). Falha ou cota esgotada
-não derrubam a rota: o motivo vem em `serpapi.erro` na resposta. Falhas transitórias
-(rede, timeout de `SERPAPI_TIMEOUT`, 5xx) têm 1 nova tentativa; se persistirem, só aquela
-busca é pulada e as demais seguem (3 falhas seguidas interrompem). Chave inválida (401/403)
-e limite de taxa (429) param tudo na hora. O contador local conta também buscas repetidas
-que o SerpApi serviu do cache (grátis), então marca um pouco acima do uso real.
-
-**Região.** Só entram vagas de São Paulo (capital e zonas) e do Grande ABC (Santo
-André, São Bernardo do Campo, São Caetano do Sul, Diadema, Mauá, Ribeirão Pires e
-Rio Grande da Serra), conferidas pelo campo `location` do Google (lista
-`CIDADES_ALVO`). Vagas remotas ("Qualquer lugar") ficam de fora, a menos que
-`SERPAPI_ACEITAR_REMOTO=true`. Salários em "mil" (`R$ 2 mil`) são gravados como
-número (`R$ 2.000`), formato que o frontend lê corretamente.
-
-**Logo da empresa.** O Google Jobs traz um `thumbnail` (56 px) em parte das vagas.
-O coletor baixa a imagem e grava na vaga como data URI no campo `logo` de
-`GET /api/vagas`, então o navegador do aluno não depende da SerpApi, e a imagem
-não expira. Só baixa de `serpapi.com`, só aceita PNG/JPEG/GIF/WebP (nunca SVG, por
-assinatura de bytes), limita o tamanho a 20 KB e descarta o ícone cinza genérico
-de "sem logo" do Google. Sem logo, o campo vai vazio e a interface mostra a letra
-da empresa. Baixar a imagem não gasta a cota de buscas.
-
-**CORS.** Lista explícita em `ALLOWED_ORIGINS` (nunca `*`; barra final é removida).
-O padrão cobre o Vite (`5173` dev, `4173` preview) e o Live Server (`5500`), em
-`localhost` e `127.0.0.1`, e vale para o coletor e para o `cadastro`. Em produção,
-defina só o domínio real do frontend.
-
-**Rodar localmente sem Firebase.** O `docker-compose.local.yml` sobe o coletor
-junto de um emulador do Firestore (nada vai para o Firebase real, sem
-`credenciais.json`):
-
-```bash
-cd coletor
-cp .env.example .env            # preencha SERPAPI_KEY e SCRAPER_TOKEN
-docker compose -f docker-compose.local.yml up --build -d
 curl http://localhost:8000/health
-curl -X POST http://localhost:8000/api/coleta -H "X-Scraper-Token: $SCRAPER_TOKEN"
-docker compose -f docker-compose.local.yml down      # os dados do emulador somem
 ```
 
-Os padrões buscam em São Paulo (a busca na capital cobre todas as zonas) e nas 7 cidades do
-Grande ABC: 2 consultas × 8 localidades = **16 buscas por coleta**. Isso não cabe em coleta
-diária (16 × 30 = 480, contra 240 de teto mensal): rode no máximo 2 vezes por semana
-(~128 buscas/mês) ou menos. Para
-testar gastando 1, defina `SERPAPI_QUERIES` e `SERPAPI_LOCALIZACOES` com um único
-valor. Fora do compose, `FIRESTORE_EMULATOR_HOST` também ativa o emulador;
-em produção essa variável deve estar ausente.
+O teste de conexão com o Firestore real grava, lê e apaga um documento temporário:
+`python scripts/testar_firestore.py` (com `FIRESTORE_EMULATOR_HOST` ausente).
 
-**Cache de `GET /api/vagas`.** A lista fica em memória por `VAGAS_CACHE_TTL` segundos (padrão 120),
-então uma rajada de requisições custa uma única leitura do Firestore (ADR-001: a cota gratuita é de
-50 mil leituras por dia, e sem cache cada requisição lê a coleção inteira). Uma coleta invalida o cache;
-se o Firestore falhar (rede, cota), serve a cópia vencida. Os cabeçalhos `X-Cache` (HIT, MISS ou STALE) e
-`Cache-Control` permitem medir o efeito nos ensaios de carga.
-
-**Conectar ao Firestore real** (passos que só quem tem a conta pode fazer):
-
-1. No [console do Firebase](https://console.firebase.google.com), crie um projeto (de preferência na
-   conta do grupo) e ative o **Firestore** em modo de produção, região `southamerica-east1`, no plano
-   gratuito (sem faturamento).
-2. Em *Configurações do projeto → Contas de serviço → Gerar nova chave privada*, salve o JSON como
-   `coletor/credenciais.json`. O arquivo é ignorado pelo git e pelo Docker; **nunca o envie por chat, e-mail ou commit**.
-3. Em *Firestore → Regras*, cole o conteúdo de `coletor/firestore.rules` (negar tudo a clientes: só o backend,
-   com a conta de serviço, lê e escreve) e publique.
-4. Rode o teste de conexão (grava, lê e apaga um documento temporário; deixe `FIRESTORE_EMULATOR_HOST` ausente):
+### Front
 
 ```bash
-cd coletor
-python scripts/testar_firestore.py     # esperado: "Destino: Firestore REAL | projeto: <id>" e "OK: ..."
-```
-
-Em produção, `FIRESTORE_EMULATOR_HOST` deve estar ausente, o `credenciais.json` entra por volume ou segredo
-(nunca na imagem) e `ALLOWED_ORIGINS` lista só o domínio real do frontend.
-
-Testes (não chamam a SerpApi nem o Firebase):
-
-```bash
-pip install -r requirements-dev.txt
-pytest
-```
-
-Com Docker:
-
-```bash
-docker build -t startme-coletor coletor/
-docker run --env-file coletor/.env \
-  -v "$(pwd)/coletor/credenciais.json:/app/credenciais.json:ro" \
-  -p 8000:8000 startme-coletor
-```
-
-A interface em `coletor/web/` é estática. Ajuste `window.STARTME_API_URL` em
-`index.html` conforme o ambiente e sirva a pasta (Live Server ou equivalente).
-
-### Cadastro
-
-```bash
-mysql -u root -p < cadastro/database/schema.sql
-cd cadastro/backend
-cp .env.example .env            # preencha DB_PASSWORD
+cd frontend-react
 npm install
-npm start
+cp .env.example .env.local     # VITE_COLETOR_URL=http://localhost:8000
+npm run dev                    # http://localhost:5173
 ```
 
-Todos os recursos (`empresas`, `instituicoes`, `cursos`, `vagas`, `alunos`)
-seguem o mesmo padrão REST: `GET /`, `GET /:id`, `POST /`, `PUT /:id`,
-`DELETE /:id`. Há também `GET /health`.
+Sem o backend no ar, o front funciona com vagas de demonstração e avisa na tela. Login de demonstração: CPF
+`000.000.000-00`, senha `senha`.
 
-## Documentação de adoção pela FSA
-
-- `docs/ADOCAO-FSA.md`: o que a faculdade precisa fornecer, os três modos (demonstração, SQL e HTTP+OIDC), checklist de adoção, perguntas para a TI e limitações conhecidas.
-- `docs/SERVIDOR-FALSO-FSA.md`: como a faculdade simulada funciona e o que trocar para ligar ao sistema real.
-
-## Histórico: frontends anteriores (removidos em 13/10/2026)
-
-Os fronts em HTML/JS puro (`frontend/`, `cadastro/frontend/`, `coletor/web/`) e o backend Node de cadastro (`cadastro/backend/`) foram substituídos pelo React e pela integração. Para consultar o código antigo: `git checkout legado-pre-react`.
-
-<details><summary>Texto original da v1.1 (referência de decisões)</summary>
-
-## Frontend v1.1 (mesclado)
-
-O diretório `frontend/` é uma interface unificada nova, em **HTML/CSS/JS vanilla
-(sem framework, sem build step)**, que reimplementa a jornada completa do aluno
-a partir do protótipo de design em `design-reference/StartMe.dc.html`. Esse
-protótipo foi produzido no formato proprietário do Claude Design (sintaxe
-`{{ expr }}` / `sc-if` / `sc-for`, com um runtime injetado por `support.js`) e
-só é executável dentro do editor de canvas da Anthropic — não abre em um
-navegador comum. `frontend/` é a versão portada dessas 13 pranchas para código
-que roda de verdade, preservando o conteúdo em português, os dados mockados e
-as notas de decisão de projeto do design original.
-
-Essa decisão — substituir a experiência de listagem de `coletor/web/` por uma
-interface única para a jornada do aluno — vem da **Prancha 11** do novo design
-("Sistema de design StartMe" / `design-reference/github.md`, linha "Prancha 11
-— Sistema de design ... substitui `coletor/web/estilo.css` + Bootstrap"). Os
-diretórios legados `cadastro/frontend/` e `coletor/web/` **não foram apagados**
-— continuam como referência histórica do projeto.
-
-### O que é real e o que é mockado
-
-| Dado | Origem | Observação |
-|---|---|---|
-| Vagas coletadas (`id, titulo, empresa, link, data_coleta, descricao, salario`) | `GET {STARTME_COLETOR_URL}/api/vagas` (coletor, Firestore) | Se o coletor responder, os campos acima são reais; se estiver fora do ar (cenário mais provável em ambiente de teste), o frontend cai para o array `VAGAS` mockado em `js/mock-data.js` e sinaliza isso na tela ("Dados de demonstração — coletor indisponível"). |
-| Compatibilidade (`modalidade, area, semestreMin, pct, criterios, razao`) | **Inteiramente mockada/derivada no cliente** | Esses campos não existem na coleta real. Quando a coleta real responde, `js/api.js` deriva `area`/`modalidade` por palavra-chave do título e atribui um percentual neutro com aviso explícito; quando cai no mock, usa os valores ilustrativos do design original. A Prancha 6 (`views.js:renderDetalhe`) mantém o aviso "Regra de cálculo pendente de definição pelo time" — é uma pendência real do projeto, não um placeholder a esconder. |
-| Dados acadêmicos (nome, curso, semestre, situação do vínculo) | `GET {STARTME_CADASTRO_URL}/alunos/{ID_ALUNO_DEMO}` (cadastro, MySQL) | `ID_ALUNO_DEMO = 1`, constante em `js/config.js` — não há autenticação de usuário final (ver "Pendências conhecidas"), então a Prancha 9 sempre lê um aluno fixo. Se o cadastro estiver fora do ar, cai para `CAMPOS_ACADEMICOS_MOCK` com aviso discreto na tela. |
-| Dados de contato (e-mail, telefone, GitHub, LinkedIn, disponibilidade) | **Mock editável, persistido em `localStorage`** (`startme:perfil`) | A tabela `Aluno` do schema relacional não tem colunas para esses campos; não há onde gravá-los de verdade. |
-| Minhas candidaturas | **Mock, persistido em `localStorage`** (`startme:candidaturas`) | Não existe endpoint de candidaturas em nenhum backend (ver `design-reference/github.md`). A lista combina uma seed de demonstração com as candidaturas que o usuário cria ao marcar "já me candidatei" na Prancha 6, gerando um protocolo `SM-2026-XXXX`. |
-| Currículo e certificados | **100% mock** | Sem backend para isso. Os toggles de "incluir certificado no currículo" são persistidos em `localStorage` (`startme:certificados`) para a demo ficar coerente entre recarregamentos. |
-| Login (fundido na Prancha 1, junto do portal) e consentimento (Prancha 3) | **Mock fixo, intencional** | Credenciais de demonstração `123.456.789-00` / `demo2026`. Não é um corte de escopo: o README já lista "Não há autenticação de usuário final em nenhum dos módulos" como pendência conhecida. |
-
-### Como rodar o frontend novo
-
-Nenhum dos dois backends é obrigatório — o frontend funciona 100% com os dados
-mock se `coletor` e `cadastro/backend` estiverem fora do ar.
+### Faculdade simulada e teste de ponta a ponta
 
 ```bash
-# opcional, mas recomendado para ver os dados reais de vagas/aluno:
-cd coletor && uvicorn main:app --reload            # ver seção "Coletor" acima
-cd cadastro/backend && npm start                    # ver seção "Cadastro" acima
-
-# o frontend em si, servido como arquivos estáticos:
-npx serve frontend -l 5500
-# ou: abra frontend/index.html com a extensão Live Server do VS Code
+cd simulador-fsa && docker compose up --build -d       # Postgres 5433, API 8101, login 8102
 ```
 
-Ajuste `window.STARTME_COLETOR_URL` e `window.STARTME_CADASTRO_URL` no topo de
-`frontend/index.html` conforme o ambiente (mesmo padrão de `coletor/web/index.html`).
+O teste de ponta a ponta (`e2e/`) sobe o emulador do Firestore, o simulador, o coletor e o front, e percorre a jornada
+do aluno e do administrador nos três modos (arquivo + login demo, SQL + login demo, API + login da FSA). Requer
+Docker, Node 22, Chrome e o `coletor/.venv` instalado:
 
-### Segurança no frontend novo
+```bash
+cd frontend-react && VITE_COLETOR_URL=http://localhost:8000 npm run build
+cd ../e2e && npm install && npm run e2e
+```
 
-Segue a mesma prática de `coletor/web/script.js`: todo texto vindo de dado
-coletado é escapado (`Api.esc`, em `frontend/js/api.js`) antes de ir para o
-DOM, e todo link de origem é validado para aceitar só `http`/`https`
-(`Api.linkSeguro`) antes de virar `href`.
+### Testes
 
-</details>
+```bash
+cd coletor && pytest                                  # backend
+cd frontend-react && npm run lint && npm test         # front (oxlint e Vitest)
+cd coletor && pytest ../simulador-fsa/tests          # faculdade simulada (usa o ambiente do coletor)
+```
+
+## API
+
+| Método | Rota | Acesso |
+|---|---|---|
+| GET | `/health` | público |
+| GET | `/api/vagas` | público |
+| POST | `/api/coleta` | cabeçalho `X-Scraper-Token` (usado pelo Cloud Scheduler) |
+| GET | `/api/publico/config` | público: modo de login, fonte, `simulado`, `sessao_ativa`, `modo_demonstracao` |
+| POST | `/api/auth/entrar`, `/api/auth/sair` | login demo ou por senha validada pela faculdade |
+| GET | `/api/auth/oidc/iniciar`, `/api/auth/oidc/retorno` | login institucional (só com `AUTH_MODE=oidc`) |
+| GET, DELETE | `/api/me` | aluno com sessão: dados do vínculo; `DELETE` apaga a conta |
+| PUT, DELETE | `/api/me/consentimento` | aluno: aceitar ou revogar (revogar apaga currículo e marcações) |
+| GET, PUT | `/api/me/curriculo`, `/api/me/marcacoes` | aluno com consentimento |
+| POST | `/api/admin/entrar`, `/api/admin/sair` | administrador |
+| GET | `/api/admin/resumo`, `/api/admin/auditoria` | administrador (`admin` ou `leitor`) |
+| POST | `/api/admin/coleta` | só `admin`, com trava de cota e intervalo |
+
+As rotas de aluno e administrador respondem 503 enquanto `SESSAO_SEGREDO` e `CPF_PEPPER` não estiverem
+configurados; nesse caso o front segue no modo local de demonstração.
+
+`GET /api/vagas` devolve `id, titulo, empresa, link, data_coleta, descricao, salario` e, como campos extras,
+`fonte`, `via` (portal onde o Google achou a vaga) e `logo`.
+
+## Coleta de vagas (SerpApi)
+
+`POST /api/coleta` remove as vagas expiradas e roda `SERPAPI_QUERIES` × `SERPAPI_LOCALIZACOES` (até
+`SERPAPI_MAX_PAGINAS` páginas cada). Entram só vagas de **estágio, trainee e júnior** (regra em
+`fontes/serpapi.py`, constantes `REGRA_*`; "aprendiz" e níveis pleno/sênior ficam fora). O upsert usa o `htidocid`
+do Google (o `job_id` muda a cada busca).
+
+**Cota.** Uma execução faz no máximo `SERPAPI_MAX_BUSCAS_EXEC` (16) buscas, e o contador mensal (coleção
+`controle_serpapi`) bloqueia novas chamadas ao atingir `SERPAPI_LIMITE_MENSAL` (240 do plano gratuito de 250). Os
+padrões buscam em São Paulo e nas 7 cidades do Grande ABC: 2 consultas × 8 localidades = 16 buscas por coleta. Por
+isso a coleta roda **duas vezes por semana** (cerca de 128 buscas por mês). Para testar gastando 1 busca, defina
+`SERPAPI_QUERIES` e `SERPAPI_LOCALIZACOES` com um único valor.
+
+**Falhas.** Falha ou cota esgotada não derrubam a rota: o motivo vem em `serpapi.erro` na resposta. Falhas
+transitórias (rede, timeout de `SERPAPI_TIMEOUT`, 5xx) têm 1 nova tentativa; se persistirem, só aquela busca é
+pulada (3 falhas seguidas interrompem). Chave inválida (401/403) e limite de taxa (429) param tudo na hora. O
+contador local conta também buscas que a SerpApi serviu do cache (grátis), então marca um pouco acima do uso real.
+
+**Região.** Só entram vagas de São Paulo (capital e zonas) e do Grande ABC (Santo André, São Bernardo do Campo, São
+Caetano do Sul, Diadema, Mauá, Ribeirão Pires e Rio Grande da Serra), conferidas pelo campo `location` do Google
+(lista `CIDADES_ALVO`). Vagas remotas ficam de fora, a menos que `SERPAPI_ACEITAR_REMOTO=true`. Salários em "mil"
+(`R$ 2 mil`) são gravados como número (`R$ 2.000`).
+
+**Logo da empresa.** O coletor baixa o `thumbnail` do Google Jobs e grava na vaga como data URI no campo `logo`, então
+o navegador do aluno não depende da SerpApi. Só baixa de `serpapi.com`, só aceita PNG/JPEG/GIF/WebP (nunca SVG,
+conferido pela assinatura dos bytes), limita a 20 KB e descarta o ícone genérico de "sem logo". Não gasta cota.
+
+**Cache de `GET /api/vagas`.** A lista fica em memória por `VAGAS_CACHE_TTL` segundos (padrão 120), então uma rajada de
+requisições custa uma única leitura do Firestore. Uma coleta invalida o cache; se o Firestore falhar, serve a cópia
+vencida. O cabeçalho `X-Cache` (HIT, MISS ou STALE) permite medir o efeito nos ensaios de carga.
+
+**CORS.** Lista explícita em `ALLOWED_ORIGINS` (nunca `*`; barra final é removida). O padrão cobre o Vite (`5173` e
+`4173`) e o Live Server (`5500`), em `localhost` e `127.0.0.1`. Em produção não é necessário: o site e a API estão na
+mesma origem pelo Firebase Hosting.
+
+## Publicação (CI/CD)
+
+- **`ci.yml`**: em todo push e pull request, roda os testes do coletor e do simulador, o lint, os testes e o build do
+  front, e constrói a imagem Docker do coletor.
+- **`e2e.yml`**: em push na `developer` (ou manualmente), roda o teste de ponta a ponta nos três modos.
+- **`deploy.yml`**: quando o CI passa na `main`, publica o coletor no Cloud Run e o front no Firebase Hosting. A
+  autenticação é por Workload Identity Federation (sem chave guardada no GitHub), restrita a este repositório e à `main`.
+
+As variáveis do serviço (incluindo `MODO_DEMONSTRACAO`) ficam na configuração do Cloud Run e não são alteradas pelo
+deploy. Fluxo de trabalho: alterações entram por branch, são integradas na `developer` e só chegam à `main` (produção)
+depois de testadas.
 
 ## Segurança
 
-- Nenhum segredo no repositório. Credenciais e senhas vêm de `.env`, que está no `.gitignore`.
+- Nenhum segredo no repositório. Em produção, segredos ficam no Secret Manager e nas variáveis do Cloud Run; o `.env`
+  é só para desenvolvimento e está no `.gitignore` (e fora da imagem Docker).
 - A rota de coleta exige token; sem `SCRAPER_TOKEN` configurado ela responde 503 em vez de operar aberta.
-- CORS com lista explícita de origens, sem curinga.
-- Conteúdo coletado é escapado antes de ir para o DOM.
+- CPF pseudonimizado (HMAC com `CPF_PEPPER`), nunca devolvido nem gravado em claro; sessão em cookie `HttpOnly`.
+- Senhas de administrador em argon2; auditoria sem dados pessoais.
+- Conteúdo coletado é tratado como texto pelo React e links de vagas só aceitam `http`/`https`.
+- Trava de entrega: sem `MODO_DEMONSTRACAO=true`, o serviço não sobe com login de demonstração ou alunos fictícios.
+- Limitações conhecidas e o que já foi revisado: `docs/ADOCAO-FSA.md`.
 
 ## Pendências conhecidas
 
-1. Conferir os Termos de Uso da SerpApi/Google Jobs para o uso acadêmico e registrar a decisão de trocar o scraping direto do portal Companhia de Estágios pela SerpApi (a fonte antiga foi removida do coletor).
-2. Não há autenticação de usuário final em nenhum dos módulos.
-3. Os dois módulos ainda não se integram: o `cadastro` não conhece as vagas do `coletor`.
-4. Não há testes automatizados nem esteira de CI.
-5. `ON DELETE CASCADE` no schema relacional apaga Instituição → Curso → Aluno em cascata; confirmar se é o comportamento desejado.
+1. Conferir os Termos de Uso da SerpApi/Google Jobs para o uso acadêmico e registrar a decisão de trocar o scraping
+   direto do portal Companhia de Estágios pela SerpApi.
+2. Os requisitos das vagas e a grade do curso usados no match são de demonstração. O match real depende de extrair
+   requisitos estruturados dos anúncios e de a faculdade fornecer a matriz curricular.
+3. A interface foi testada em emulação de dispositivos móveis, não em aparelhos reais nem com leitor de tela.
+4. O ensaio de carga (C4) ainda não foi executado.
+5. A integração com a FSA foi validada só contra a faculdade simulada; falta o teste com o sistema real (checklist acima).
+
+## Histórico
+
+O código começou em duas pastas separadas (o coletor em Python e um cadastro em Node.js com MySQL), consolidadas
+neste repositório em 02/09/2026. Em 13/10/2026 os fronts em HTML/JS puro (`frontend/`, `cadastro/frontend/`,
+`coletor/web/`) e o backend de cadastro (`cadastro/backend/`, MySQL) foram substituídos pelo front React e pela camada
+de integração acadêmica. Para consultar o código antigo: `git checkout legado-pre-react`.
