@@ -52,7 +52,11 @@ class Servicos:
         limite_chave = f"{ip}|{chave}"
         if self.limite.bloqueado(limite_chave):
             raise ErroIntegracao("muitas_tentativas", 429)
-        if not self.autenticador.verificar(cpf_d, senha):
+        try:
+            autenticado = self.autenticador.verificar(cpf_d, senha)
+        except AcademicoIndisponivel as erro:
+            raise ErroIntegracao("autenticacao_indisponivel", 503) from erro
+        if not autenticado:
             self.limite.falha(limite_chave)
             self._auditar("login_falhou", chave)
             raise ErroIntegracao("credenciais_invalidas", 401)

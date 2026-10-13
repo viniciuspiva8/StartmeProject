@@ -9,8 +9,8 @@ Legenda: `[ ]` aberta · `[~]` em andamento · `[x]` concluída e integrada na `
 |---|---|---|---|---|---|
 | 0 | Documentação da execução + CI em todas as branches | `docs/execucao` | [x] | 775f8dd | commitar, push, CI verde, merge na `developer` |
 | 1 | Organização do front + Vitest | `refactor/front-organizacao` | [x] | 56da119 (integrada na `developer`) | — |
-| 2 | Núcleo da integração (config, cpf, sessão, auth demo, repositório, /api/me) | `feat/integracao-nucleo` | [~] | ec42bcd | aguardando CI verde na branch, depois merge na `developer` |
-| 3 | Provedores `sql` e `http`, CLI `doctor`, testes de contrato | `feat/integracao-provedores` | [ ] | — | — |
+| 2 | Núcleo da integração (config, cpf, sessão, auth demo, repositório, /api/me) | `feat/integracao-nucleo` | [x] | 2027207 (integrada na `developer`) | — |
+| 3 | Provedores `sql` e `http`, CLI `doctor`, testes de contrato | `feat/integracao-provedores` | [~] | 84ba3cb | aguardando CI verde, depois merge na `developer` |
 | 4 | Simulador da FSA (Postgres, API falsa, IdP falso) | `feat/simulador-fsa` | [ ] | — | — |
 | 5 | Login único OIDC | `feat/auth-oidc` | [ ] | — | — |
 | 6 | Front integrado (login real, consentimento, Perfil, Exceções, Certificados) | `feat/front-integracao` | [ ] | — | — |

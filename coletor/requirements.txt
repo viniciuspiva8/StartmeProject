@@ -3,3 +3,6 @@ uvicorn[standard]>=0.27.0
 pydantic>=2.7.0
 firebase-admin>=6.5.0
 requests>=2.31.0
+# Integração acadêmica (ADR-002): provedor SQL (somente leitura) e driver do Postgres da simulação.
+sqlalchemy>=2.0
+psycopg[binary]>=3.1
