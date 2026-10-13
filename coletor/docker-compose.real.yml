@@ -1,0 +1,26 @@
+# Coletor LOCAL contra o Firestore REAL (projeto startme-9111a). Sem emulador.
+#
+# Usa a credencial do gcloud ("gcloud auth application-default login"), pois a organizacao
+# bloqueia chaves de conta de servico. O arquivo e montado SOMENTE LEITURA no caminho padrao
+# que a biblioteca do Google procura; nao aponte GOOGLE_APPLICATION_CREDENTIALS para ele
+# (o coletor leria como chave de conta de servico e falharia).
+#
+#   docker compose -f docker-compose.local.yml down      # libera a porta 8000
+#   docker compose -f docker-compose.real.yml up --build -d
+#   curl http://localhost:8000/health
+#   docker compose -f docker-compose.real.yml down
+#
+# Le SERPAPI_KEY e SCRAPER_TOKEN de ./.env. Isto e para a maquina do desenvolvedor; em
+# producao a identidade vem da propria maquina (ver o plano de deploy).
+services:
+  coletor:
+    build: .
+    image: startme-coletor
+    env_file: .env
+    environment:
+      GOOGLE_CLOUD_PROJECT: startme-9111a
+    volumes:
+      - ${APPDATA}/gcloud/application_default_credentials.json:/home/startme/.config/gcloud/application_default_credentials.json:ro
+    ports:
+      - "8000:8000"
+    mem_limit: 256m
