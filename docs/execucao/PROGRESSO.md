@@ -7,7 +7,7 @@ Legenda: `[ ]` aberta · `[~]` em andamento · `[x]` concluída e integrada na `
 
 | # | Fase | Branch | Estado | Último commit | Próximo passo |
 |---|---|---|---|---|---|
-| 0 | Documentação da execução + CI em todas as branches | `docs/execucao` | [~] | — | commitar, push, CI verde, merge na `developer` |
+| 0 | Documentação da execução + CI em todas as branches | `docs/execucao` | [x] | 775f8dd | commitar, push, CI verde, merge na `developer` |
 | 1 | Organização do front + Vitest | `refactor/front-organizacao` | [ ] | — | dividir `Curriculo.jsx` e `AppContext.jsx` |
 | 2 | Núcleo da integração (config, cpf, sessão, auth demo, repositório, /api/me) | `feat/integracao-nucleo` | [ ] | — | — |
 | 3 | Provedores `sql` e `http`, CLI `doctor`, testes de contrato | `feat/integracao-provedores` | [ ] | — | — |
