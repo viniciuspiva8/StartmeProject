@@ -19,6 +19,20 @@ class RepositorioMemoria(Repositorio):
     def consentimento_gravar(self, chave, dados):
         self._consentimentos[chave] = copy.deepcopy(dados)
 
+    def curriculo_ler(self, chave):
+        dados = self._curriculos.get(chave)
+        return copy.deepcopy(dados) if dados is not None else None
+
+    def curriculo_gravar(self, chave, dados):
+        self._curriculos[chave] = copy.deepcopy(dados)
+
+    def marcacoes_ler(self, chave):
+        dados = self._marcacoes.get(chave)
+        return copy.deepcopy(dados) if dados is not None else None
+
+    def marcacoes_gravar(self, chave, dados):
+        self._marcacoes[chave] = copy.deepcopy(dados)
+
     def dados_apagar(self, chave, *, incluir_consentimento):
         self._curriculos.pop(chave, None)
         self._marcacoes.pop(chave, None)

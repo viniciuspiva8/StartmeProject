@@ -27,13 +27,23 @@ class EntrarIn(BaseModel):
     senha: str = Field(max_length=200)
 
 
+class CurriculoIn(BaseModel):
+    dados: dict
+    versao: int = Field(ge=0, le=1_000_000)
+
+
+class MarcacoesIn(BaseModel):
+    salvas: list[str] = Field(default_factory=list, max_length=500)
+    aplicadas: list[str] = Field(default_factory=list, max_length=500)
+
+
 class ConsentimentoIn(BaseModel):
     aceito: bool
     versao: str = Field(max_length=20)
 
 
 def _erro(erro: ErroIntegracao) -> HTTPException:
-    return HTTPException(status_code=erro.status, detail={"codigo": erro.codigo})
+    return HTTPException(status_code=erro.status, detail={"codigo": erro.codigo, **erro.extra})
 
 
 def _erro_oidc(erro: ErroOidc) -> HTTPException:
@@ -151,6 +161,26 @@ def instalar(
             return s.aceitar(claims["sub"], corpo.versao)
         except ErroIntegracao as erro:
             raise _erro(erro) from erro
+
+    @app.get("/api/me/curriculo", tags=["integracao"])
+    def curriculo_ler(claims: dict = Depends(aluno), s: Servicos = Depends(servicos)) -> dict:
+        return s.curriculo_obter(claims["sub"])
+
+    @app.put("/api/me/curriculo", tags=["integracao"])
+    def curriculo_gravar(corpo: CurriculoIn, claims: dict = Depends(aluno), s: Servicos = Depends(servicos)) -> dict:
+        try:
+            return {"versao": s.curriculo_salvar(claims["sub"], corpo.dados, corpo.versao)}
+        except ErroIntegracao as erro:
+            raise _erro(erro) from erro
+
+    @app.get("/api/me/marcacoes", tags=["integracao"])
+    def marcacoes_ler(claims: dict = Depends(aluno), s: Servicos = Depends(servicos)) -> dict:
+        return s.marcacoes_obter(claims["sub"])
+
+    @app.put("/api/me/marcacoes", tags=["integracao"])
+    def marcacoes_gravar(corpo: MarcacoesIn, claims: dict = Depends(aluno), s: Servicos = Depends(servicos)) -> dict:
+        s.marcacoes_salvar(claims["sub"], corpo.salvas, corpo.aplicadas)
+        return {"salvas": corpo.salvas, "aplicadas": corpo.aplicadas}
 
     @app.delete("/api/me/consentimento", status_code=204, tags=["integracao"])
     def revogar(claims: dict = Depends(aluno), s: Servicos = Depends(servicos)) -> Response:
