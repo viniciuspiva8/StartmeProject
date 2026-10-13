@@ -20,10 +20,12 @@ export default function Portal() {
 
   return (
     <main className="min-h-dvh bg-[linear-gradient(to_bottom,var(--color-nevoa)_0,var(--color-nevoa)_340px,var(--color-papel)_340px)]">
-      <p role="note" className="flex items-center justify-center gap-2 bg-ressalva-fundo px-4 py-2.5 text-center text-[13px] font-semibold text-ressalva">
-        <Icone nome="alerta" size={16} />
-        Ambiente simulado para o TCC, inspirado no portal.fsa.br. Não use credenciais reais.
-      </p>
+      {(s.servidor?.simulado ?? true) && (
+        <p role="note" className="flex items-center justify-center gap-2 bg-ressalva-fundo px-4 py-2.5 text-center text-[13px] font-semibold text-ressalva">
+          <Icone nome="alerta" size={16} />
+          Ambiente simulado para o TCC, inspirado no portal.fsa.br. Não use credenciais reais.
+        </p>
+      )}
 
       <div className="mx-auto max-w-[920px] px-4 pt-10 pb-16 sm:px-6">
         <div className="mx-auto max-w-[440px] rounded-3xl bg-white p-6 shadow-painel sm:p-8">
