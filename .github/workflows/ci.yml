@@ -35,6 +35,10 @@ jobs:
         env:
           # Os testes usam um Firestore falso: nenhuma credencial nem rede e necessaria.
           FIRESTORE_EMULATOR_HOST: ""
+      - run: python -m pytest -q ../simulador-fsa/tests
+        env:
+          # Os testes usam um Firestore falso: nenhuma credencial nem rede e necessaria.
+          FIRESTORE_EMULATOR_HOST: ""
 
   frontend:
     name: Frontend (lint e build)
