@@ -14,6 +14,7 @@ from integracao.autenticacao import construir as construir_autenticador
 from integracao.config import Config
 from integracao.provedores import construir as construir_provedor
 from integracao.provedores.base import AcademicoIndisponivel
+from integracao.servicos import ErroIntegracao
 
 
 def _linha(ok: bool, texto: str) -> str:
@@ -63,13 +64,47 @@ def doctor(env, cpf_bruto: str | None) -> int:
     return 1 if falhas else 0
 
 
-def main(argv=None, env=None) -> int:
+def admin_criar(env, email: str, papel: str, repo=None) -> int:
+    """Cria um administrador. A senha é pedida sem eco (nunca como argumento, que fica no histórico)."""
+    import getpass
+
+    from integracao.admin import criar_admin
+
+    if repo is None:
+        projeto = env.get("GOOGLE_CLOUD_PROJECT", "").strip()
+        if not projeto:
+            print(_linha(False, "defina GOOGLE_CLOUD_PROJECT antes de criar um administrador"))
+            return 1
+        from google.cloud import firestore
+
+        from integracao.repositorio.firestore import RepositorioFirestore
+        repo = RepositorioFirestore(firestore.Client(project=projeto))
+    senha = getpass.getpass("Senha do administrador (mínimo 12 caracteres): ")
+    if getpass.getpass("Repita a senha: ") != senha:
+        print(_linha(False, "as senhas não conferem"))
+        return 1
+    try:
+        criado = criar_admin(repo, email, senha, papel)
+    except (ValueError, ErroIntegracao) as erro:
+        print(_linha(False, f"não foi possível criar: {erro}"))
+        return 1
+    print(_linha(True, f"administrador {criado} criado com o papel '{papel}'"))
+    return 0
+
+
+def main(argv=None, env=None, repo=None) -> int:
     parser = argparse.ArgumentParser(prog="integracao.cli", description="Ferramentas da integração acadêmica.")
     sub = parser.add_subparsers(dest="comando", required=True)
     diag = sub.add_parser("doctor", help="verifica a configuração e, opcionalmente, um aluno")
     diag.add_argument("--cpf", help="CPF de um aluno de teste (não é guardado nem impresso)")
+    adm = sub.add_parser("admin-criar", help="cria um administrador (a senha é pedida sem eco)")
+    adm.add_argument("--email", required=True)
+    adm.add_argument("--papel", choices=["admin", "leitor"], default="admin")
     args = parser.parse_args(argv)
-    return doctor(env if env is not None else os.environ, args.cpf)
+    ambiente = env if env is not None else os.environ
+    if args.comando == "admin-criar":
+        return admin_criar(ambiente, args.email, args.papel, repo)
+    return doctor(ambiente, args.cpf)
 
 
 if __name__ == "__main__":

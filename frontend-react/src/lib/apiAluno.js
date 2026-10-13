@@ -11,7 +11,7 @@ export class ErroApi extends Error {
   }
 }
 
-async function chamar(caminho, { metodo = 'GET', corpo, timeout = 6000 } = {}) {
+export async function chamar(caminho, { metodo = 'GET', corpo, timeout = 6000 } = {}) {
   const controle = new AbortController();
   const relogio = setTimeout(() => controle.abort(), timeout);
   try {

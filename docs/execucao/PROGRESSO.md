@@ -14,8 +14,8 @@ Legenda: `[ ]` aberta · `[~]` em andamento · `[x]` concluída e integrada na `
 | 4 | Simulador da FSA (Postgres, API falsa, IdP falso) | `feat/simulador-fsa` | [~] | 39df7ce | CI verde, merge; depois a Fase 5 (login OIDC) |
 | 5 | Login único OIDC | `feat/auth-oidc` | [x] | 3233222 (integrada na `developer`) | — |
 | 6 | Front integrado (login real, consentimento, Perfil, Exceções, Certificados) | `feat/front-integracao` | [x] | feb1b9a (integrada na `developer`) | — |
-| 7 | Currículo e marcações no servidor | `feat/curriculo-servidor` | [~] | b75b8c4 | CI verde, merge; depois a Fase 8 (admin) |
-| 8 | Admin (API e tela) | `feat/admin` | [ ] | — | — |
+| 7 | Currículo e marcações no servidor | `feat/curriculo-servidor` | [x] | 6f7eaf3 (integrada na `developer`) | — |
+| 8 | Admin (API e tela) | `feat/admin` | [~] | afef1c7 | CI verde, merge; depois a Fase 9 (e2e) |
 | 9 | e2e plug-and-play (3 modos só trocando variáveis) | `test/e2e-plug-and-play` | [ ] | — | — |
 | 10 | Remover o legado (tag `legado-pre-react`) | `chore/remover-legado` | [ ] | — | — |
 | 11 | Documentação de adoção + ADRs + atualizações do TCC | `docs/adocao-fsa` | [ ] | — | — |

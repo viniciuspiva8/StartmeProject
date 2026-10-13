@@ -42,6 +42,7 @@ class Config:
     oidc_redirect_uri: str | None = None
     oidc_cpf_claim: str = "cpf"
     front_url: str = "/"  # para onde o aluno volta depois do login (mesma origem, por padrão)
+    serpapi_limite_mensal: int = 240  # buscas por mês que o painel mostra e que a coleta respeita
 
     def __post_init__(self):
         if self.auth_mode not in MODOS_AUTH:
@@ -108,6 +109,7 @@ class Config:
             oidc_redirect_uri=env.get("OIDC_REDIRECT_URI", "").strip() or None,
             oidc_cpf_claim=env.get("OIDC_CPF_CLAIM", "cpf").strip() or "cpf",
             front_url=env.get("FRONT_URL", "/").strip() or "/",
+            serpapi_limite_mensal=int(env.get("SERPAPI_LIMITE_MENSAL", "240") or 240),
         )
 
     def publico(self) -> dict:

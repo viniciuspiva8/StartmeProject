@@ -28,3 +28,7 @@ Formato: data/hora, fase, o que foi feito, o que deu errado e como foi resolvido
 - **Fase 6 (integrada).** `developer` = `feb1b9a`.
 - **Fase 7 (em andamento).** Currículo e marcações no servidor com versão otimista (409 em conflito, 413 acima de 64 KB). Testes: isolamento entre alunos, sessão obrigatória, limites. Front: sincronização com atraso de 800 ms, migração do navegador para o servidor no primeiro login, aviso de conflito sem sobrescrever. Modo local conferido: a única diferença é a data e a saudação da tela de início (muda com o relógio). 218 testes no backend.
 - **Limitação registrada:** sem transação do Firestore (ver `DECISOES-PENDENTES.md`).
+
+- **Fase 7 (integrada).** `developer` = `7212c1c`.
+- **Fase 8 (em andamento).** Admin: argon2 para senhas (com tempo igualado quando o e-mail não existe), papéis admin/leitor, painel com resumo, coleta manual (cota mínima de 16 buscas, 1 h entre coletas) e auditoria. CLI `admin-criar` (senha sem eco). Front em `#/admin` carregado sob demanda. 233 testes no backend.
+- **Erro de processo (registrado para não repetir):** dei commit encadeado sem conferir o resultado do pytest; um teste desatualizado ficou no commit. Corrigido num commit próprio. Regra daqui em diante: rodar a suíte e só depois commitar, em comandos separados.
