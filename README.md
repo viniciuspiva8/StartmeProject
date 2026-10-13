@@ -16,7 +16,7 @@ uma fonte de vínculo e um login, e a configuração do serviço aponta para ele
 2. O StartMe consulta o **vínculo** dele na fonte acadêmica: ativo ou não, curso e semestre. Nada além disso.
 3. Sem vínculo, ou com vínculo inativo (trancado, cancelado), o acesso é **recusado** (403).
 4. Se a fonte não responder, o acesso é **recusado** (503). O sistema falha fechado, nunca aberto.
-5. Nenhum CPF é guardado em claro, enviado a outro serviço ou exibido inteiro. A tela mostra `***.456.789-**`.
+5. O CPF não é guardado em claro: o que o StartMe guarda é um hash pseudônimo. Ele só vai à fonte da faculdade para a consulta do vínculo, e nunca é exibido inteiro (a tela mostra `***.456.789-**`).
 
 ### O que a FSA precisa fornecer
 
