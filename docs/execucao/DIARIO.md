@@ -12,3 +12,7 @@ Formato: data/hora, fase, o que foi feito, o que deu errado e como foi resolvido
 
 - **Fase 2 (integrada).** `developer` = `e53d627`, CI verde nos três jobs.
 - **Fase 3 (em andamento).** Provedores `sql` (SQLAlchemy, consulta validada: um SELECT com :cpf, sem escrita) e `http` (mapa de caminhos, 404 = sem vínculo, erro = indisponível, https obrigatório) e autenticação `http`. Suíte de contrato: a mesma bateria roda em arquivo, SQLite e HTTP simulado. `python -m integracao.cli doctor` verifica a configuração sem imprimir dados. 195 testes na suíte completa.
+
+- **Fase 3 (integrada).** Suíte de contrato nos três provedores, `doctor` validado contra o Postgres simulado e contra a API simulada.
+- **Fase 4 (em andamento).** `simulador-fsa/`: Postgres com migrações (esquema e dados fictícios), API no formato da FSA (diferente do contrato, para provar o mapeamento) e IdP OIDC falso (PKCE, RS256, JWKS). Compose com limite de memória por serviço: cerca de 130 MB em uso. Validado: `doctor` com SQL e com HTTP devolvem o mesmo vínculo; o trancado é recusado nos dois. Testes do simulador (10): rodam com o venv do coletor, ainda não estão no CI (entram na Fase 9).
+- **Decisão:** dependências novas do coletor: `sqlalchemy` e `psycopg[binary]` (provedor SQL e driver do Postgres). `cryptography` e `python-multipart` só no simulador.
