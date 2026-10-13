@@ -1,8 +1,8 @@
 # StartMe — frontend React
 
-Interface do aluno em React 18 + Vite + Tailwind CSS 4, sem outras dependências de execução.
-Cobre o núcleo da jornada: portal simulado (Prancha 1), consentimento (3), início (4),
-busca com triagem e detalhe (5 a 7) e meu currículo.
+Interface do aluno e painel do administrador em React 18 + Vite + Tailwind CSS 4, sem outras dependências de execução.
+Cobre a jornada completa: portal (Prancha 1), consentimento (3), início (4), busca com triagem e detalhe (5 a 7),
+perfil (9), exceções (10), currículo (12), certificados (13) e o painel do administrador (`#/admin`).
 
 **O que o StartMe é:** reúne num só portal as vagas coletadas em portais definidos e indica ao aluno
 o melhor match com o currículo dele. A candidatura e o processo seletivo acontecem no site de origem;
@@ -17,12 +17,18 @@ Perfil (9), exceções (10), currículo (12) e certificados (13) estão aqui. Ca
 ```bash
 cd frontend-react
 npm install
-cp .env.example .env.local     # ajuste as URLs dos backends, se necessário
+cp .env.example .env.local     # VITE_COLETOR_URL: endereço do coletor (padrão http://localhost:8000)
 npm run dev                    # http://localhost:5173
 npm run build                  # gera dist/
+npm run lint && npm test       # oxlint e Vitest
 ```
 
-Sem os backends no ar, a busca usa as vagas de demonstração de `src/data/mock.js` e avisa na tela.
+Em produção o front é publicado no Firebase Hosting, que repassa `/api/**` ao coletor no Cloud Run (mesma origem).
+
+**Com o servidor e sessão ativos** (`GET /api/publico/config` com `sessao_ativa: true`), o login, o consentimento,
+os dados acadêmicos (do vínculo informado pela faculdade), o currículo e as marcações vêm do servidor. **Sem servidor
+ou sem sessão**, o front segue no modo local de demonstração: vagas de `src/data/mock.js` quando o coletor não
+responde, dados acadêmicos fictícios e currículo no navegador, com aviso na tela.
 Credenciais de demonstração: CPF `000.000.000-00` (pode digitar só os zeros), senha `senha`.
 
 ## Currículo e match (v3, 07/10/2026)
@@ -90,34 +96,33 @@ cabeçalho (`#042D5C`), então sobre fundo azul o símbolo vai num chip branco.
 
 ```
 src/
-  config.js                URLs dos backends (variáveis VITE_*)
+  config.js                URL do coletor (VITE_COLETOR_URL)
   index.css                tokens da marca, botões, chips, animações
-  data/mock.js             dados de demonstração usados quando o servidor não responde
-  lib/api.js               acesso ao coletor e ao cadastro, com timeout e fallback
+  App.jsx                  troca de telas por rota; o painel admin é carregado sob demanda
+  data/mock.js             dados de demonstração (vagas, dados acadêmicos fictícios)
   data/grade.js            grade de demonstração (disciplina → habilidades por semestre)
   data/requisitos.js       requisitos de demonstração das vagas mock
   data/curriculo-seed.js   currículo inicial do aluno de demonstração
+  lib/api.js               vagas do coletor, com timeout e fallback; links seguros; localStorage
+  lib/apiAluno.js          rotas do aluno e do admin (/api/auth, /api/me, /api/admin), com cookie de sessão
+  lib/cpf.js               validação e máscara de CPF
   lib/match.js             perfil de habilidades, triagem, lacunas, vagas que mudaram
   lib/vagas.js             filtros, ordenação, formatação de salário
   lib/useMedia.js          hook de media query
-  state/AppContext.jsx     estado, ações e sincronização com a URL
-  components/Shell.jsx     barra superior, navegação inferior, toast
-  components/Filtros.jsx   barra de filtros com popovers
-  components/Triagem.jsx   medidor e veredito (compacto e completo)
-  components/VagaCard.jsx  item de vaga
-  components/Notas.jsx     painel de notas de design
-  components/Icone.jsx     ícones de linha próprios
-  views/                   Portal, Consent, Home, Lista (busca), Detalhe, Curriculo
+  lib/*.test.js            testes Vitest (cpf, match, vagas)
+  state/AppContext.jsx     estado, ações, descoberta do servidor e sincronização com a URL
+  state/constantes.js      rotas, chaves de armazenamento, filtros
+  state/utilitarios.js     estado inicial e dados acadêmicos de demonstração
+  state/sincronizaServidor.js   envia currículo e marcações ao servidor (versão otimista)
+  components/              Shell (barra, navegação, toast), Filtros, Triagem, VagaCard, Notas, Logo, Icone
+  views/                   Portal, Consent, Home, Lista, Detalhe, Perfil, Excecoes, Certificados, Admin
+  views/Curriculo.jsx      tela do currículo; partes em views/curriculo/
 ```
-
-Arquivos sem uso que podem ser apagados: `src/App.css` e `src/assets/` (modelo do Vite) e
-`src/views/Candidaturas.jsx` (tela de acompanhamento removida em 07/10/2026).
 
 ## Pendências
 
 - Os requisitos das vagas e a grade do curso são de demonstração. O match real depende de o coletor extrair
   requisitos estruturados dos anúncios e de a instituição fornecer a matriz curricular.
-- Currículo, salvas e marcações ficam no navegador (localStorage). Faltam os endpoints
-  `GET/PATCH /api/aluno/me` e `POST /api/aluno/curriculo`, e o envio real do arquivo de certificado.
+- O envio real do arquivo de certificado não existe: os certificados ficam só na tela e no navegador.
 - Importar currículo de PDF e exportar em outros formatos ficaram para depois.
-- A tela de exceções (Prancha 10) não existe nesta versão: "Não autorizar" volta ao portal com aviso.
+- Testado em emulação de dispositivos móveis, não em aparelhos reais nem com leitor de tela.

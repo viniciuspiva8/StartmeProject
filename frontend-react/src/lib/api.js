@@ -3,7 +3,7 @@
 // sinalizando a origem (`fonte`) para a tela mostrar um aviso discreto.
 // (Versão original em JS puro: tag legado-pre-react.)
 import { CONFIG } from '../config.js';
-import { VAGAS, CAMPOS_ACADEMICOS_MOCK, SEMESTRE_ALUNO_MOCK } from '../data/mock.js';
+import { VAGAS } from '../data/mock.js';
 import { enriquecerVagaReal } from './vagas.js';
 
 /** Só aceita links http(s): evita javascript: vindo de dado coletado. */
@@ -34,48 +34,6 @@ export async function fetchVagas() {
   } catch (erro) {
     console.warn('StartMe: coletor indisponível, usando dados de demonstração.', erro);
     return { fonte: 'mock', vagas: VAGAS.map((v) => ({ ...v })) };
-  }
-}
-
-/** GET {CADASTRO_URL}/alunos/:id e /cursos/:id — dados acadêmicos da Prancha 9. */
-export async function fetchAlunoDemo() {
-  try {
-    const respAluno = await comTimeout(fetch(`${CONFIG.CADASTRO_URL}/alunos/${CONFIG.ID_ALUNO_DEMO}`), 5000);
-    if (!respAluno.ok) throw new Error(`servidor respondeu ${respAluno.status}`);
-    const linhas = await respAluno.json();
-    const aluno = Array.isArray(linhas) ? linhas[0] : linhas;
-    if (!aluno || !aluno.Nome) throw new Error('aluno de demonstração não encontrado');
-
-    let nomeCurso = `Curso #${aluno.Id_Curso}`;
-    let qtdSemestre = null;
-    try {
-      const respCurso = await comTimeout(fetch(`${CONFIG.CADASTRO_URL}/cursos/${aluno.Id_Curso}`), 5000);
-      if (respCurso.ok) {
-        const linhasCurso = await respCurso.json();
-        const curso = Array.isArray(linhasCurso) ? linhasCurso[0] : linhasCurso;
-        if (curso && curso.Nome) {
-          nomeCurso = curso.Nome;
-          qtdSemestre = curso.Qtd_Semestre || null;
-        }
-      }
-    } catch (erroCurso) {
-      console.warn('StartMe: não foi possível carregar o curso do aluno de demonstração.', erroCurso);
-    }
-
-    const semestre = Number(aluno.Semestre) || SEMESTRE_ALUNO_MOCK;
-    return {
-      fonte: 'cadastro',
-      semestreAluno: semestre,
-      campos: [
-        { rotulo: 'Nome completo', valor: aluno.Nome },
-        { rotulo: 'Curso', valor: nomeCurso },
-        { rotulo: 'Semestre', valor: qtdSemestre ? `${semestre}º de ${qtdSemestre}` : `${semestre}º semestre` },
-        { rotulo: 'Situação do vínculo', valor: 'Ativo' },
-      ],
-    };
-  } catch (erro) {
-    console.warn('StartMe: cadastro indisponível, usando dados acadêmicos de demonstração.', erro);
-    return { fonte: 'mock', semestreAluno: SEMESTRE_ALUNO_MOCK, campos: CAMPOS_ACADEMICOS_MOCK };
   }
 }
 

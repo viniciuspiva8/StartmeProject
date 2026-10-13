@@ -1,5 +1,5 @@
 // Currículo inicial do aluno de demonstração. Nome, curso e semestre não ficam
-// aqui: vêm do Portal Acadêmico (ou do cadastro) e não são editáveis.
+// aqui: vêm do vínculo informado pela faculdade e não são editáveis.
 export const CURRICULO_SEED = {
   contato: {
     email: 'vinicius.pereira@aluno.fsa.br',

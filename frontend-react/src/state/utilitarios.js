@@ -60,8 +60,11 @@ export function estadoInicial() {
     vagas: VAGAS.map((v) => ({ ...v })),
     vagasFonte: 'mock',
     vagasCarregando: true,
-    campos: CAMPOS_ACADEMICOS_MOCK,
-    academicoFonte: 'mock',
-    semestreAluno: SEMESTRE_ALUNO_MOCK,
+    ...academicoDemo(),
   };
+}
+
+/** Dados acadêmicos de demonstração: usados sem sessão e ao sair (não sobra o vínculo de quem saiu). */
+export function academicoDemo() {
+  return { campos: CAMPOS_ACADEMICOS_MOCK, academicoFonte: 'mock', semestreAluno: SEMESTRE_ALUNO_MOCK };
 }

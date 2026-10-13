@@ -125,8 +125,8 @@ export const CANDIDATURAS_SEED = [
     etapas: [{ nome: 'Candidatura enviada', quando: '10/07/2026', feita: true }, { nome: 'Entrevista realizada', quando: '22/07/2026', feita: true }, { nome: 'Contratado', quando: '01/08/2026', feita: true }] }
 ];
 
-// Prancha 9 — dados acadêmicos usados quando GET {STARTME_CADASTRO_URL}/alunos/1 falha
-// (backend fora do ar é o cenário mais provável no ambiente de teste).
+// Prancha 9 — dados acadêmicos do aluno de demonstração (sem sessão no servidor).
+// Com sessão, os dados vêm do vínculo informado pela faculdade.
 export const CAMPOS_ACADEMICOS_MOCK = [
   { rotulo: 'Nome completo', valor: 'Vinicius Pereira' },
   { rotulo: 'Curso', valor: 'Engenharia de Computação' },

@@ -5,6 +5,7 @@ import { useApp } from '../state/AppContext.jsx';
 import { AREAS, INTERESSES_PADRAO, PERFIL_PADRAO } from '../data/mock.js';
 import { gravarLocal, lerLocal } from '../lib/api.js';
 import { apiAluno } from '../lib/apiAluno.js';
+import { academicoDemo } from '../state/utilitarios.js';
 import Icone from '../components/Icone.jsx';
 
 const CHAVE_PERFIL = 'startme:perfil';
@@ -60,7 +61,7 @@ export default function Perfil() {
     try {
       if (s.sessao) await apiAluno.apagarConta();
       gravarLocal(CHAVE_PERFIL, null);
-      a.set({ view: 'portal', sessao: null, cpf: '', senha: '' });
+      a.set({ view: 'portal', sessao: null, cpf: '', senha: '', ...academicoDemo() });
       a.mostrarToast('Sua conta foi apagada.');
     } catch {
       a.mostrarToast('Não conseguimos apagar sua conta agora. Tente de novo em instantes.');
@@ -68,7 +69,7 @@ export default function Perfil() {
   };
 
   const fonteAcademica = s.academicoFonte === 'mock'
-    ? 'Dados de demonstração: cadastro indisponível'
+    ? 'Dados de demonstração'
     : 'Dados da faculdade';
 
   return (

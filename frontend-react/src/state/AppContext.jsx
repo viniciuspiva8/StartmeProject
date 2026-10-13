@@ -1,12 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { CPF_DEMO, SENHA_DEMO } from '../data/mock.js';
-import { fetchAlunoDemo, fetchVagas, gravarLocal } from '../lib/api.js';
+import { fetchVagas, gravarLocal } from '../lib/api.js';
 import { apiAluno } from '../lib/apiAluno.js';
 import { digitos } from '../lib/cpf.js';
 import { useSincronizacaoServidor } from './sincronizaServidor.js';
 import { montarPerfil, normalizar, vagasQueMudaram } from '../lib/match.js';
 import { CHAVE_CURRICULO, CHAVE_SALVAS, CHAVE_APLICADAS, FILTROS_PADRAO, POR_LOTE, lerHash, montarHash, mascaraCpf } from './constantes.js';
-import { comTransicao, novoId, estadoInicial } from './utilitarios.js';
+import { academicoDemo, comTransicao, novoId, estadoInicial } from './utilitarios.js';
 
 // Reexportações: as telas importam daqui; a origem real está em constantes.js.
 export { FILTROS_PADRAO, POR_LOTE, mascaraCpf } from './constantes.js';
@@ -49,11 +49,10 @@ export function AppProvider({ children }) {
     setS((prev) => ({ ...prev, ...(typeof patch === 'function' ? patch(prev) : patch) }));
   }, []);
 
-  // Dados: começa com o mock e troca se os backends responderem.
+  // Vagas: começa com o mock e troca se o coletor responder. Os dados acadêmicos vêm da sessão (daSessao).
   useEffect(() => {
     let ativo = true;
     fetchVagas().then((r) => { if (ativo) set({ vagas: r.vagas, vagasFonte: r.fonte, vagasCarregando: false }); });
-    fetchAlunoDemo().then((r) => { if (ativo) set({ campos: r.campos, academicoFonte: r.fonte, semestreAluno: r.semestreAluno }); });
     return () => { ativo = false; };
   }, [set]);
 
@@ -159,7 +158,7 @@ export function AppProvider({ children }) {
         if (estadoAtual.current.sessao) {
           try { await apiAluno.sair(); } catch { /* a sessão pode já ter expirado */ }
         }
-        set({ view: 'portal', sel: null, menuAberto: false, cpf: '', senha: '', erroLogin: false, erroCodigo: null, sessao: null });
+        set({ view: 'portal', sel: null, menuAberto: false, cpf: '', senha: '', erroLogin: false, erroCodigo: null, sessao: null, ...academicoDemo() });
       },
 
       // Portal + login
