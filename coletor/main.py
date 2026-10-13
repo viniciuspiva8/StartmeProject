@@ -135,9 +135,9 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=False,
-    allow_methods=["GET", "POST"],
+    allow_origins=ALLOWED_ORIGINS,  # lista explícita (nunca "*"): com credenciais o navegador exige origem exata
+    allow_credentials=True,  # o cookie __session da sessão do aluno e do admin precisa ir junto
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["Content-Type", "X-Scraper-Token"],
 )
 
