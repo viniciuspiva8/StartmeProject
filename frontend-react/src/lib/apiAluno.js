@@ -3,10 +3,11 @@
 import { CONFIG } from '../config.js';
 
 export class ErroApi extends Error {
-  constructor(codigo, status) {
+  constructor(codigo, status, extra = {}) {
     super(codigo);
     this.codigo = codigo;
     this.status = status;
+    this.extra = extra;
   }
 }
 
@@ -23,7 +24,7 @@ async function chamar(caminho, { metodo = 'GET', corpo, timeout = 6000 } = {}) {
     });
     if (resposta.status === 204) return null;
     const dados = await resposta.json().catch(() => null);
-    if (!resposta.ok) throw new ErroApi(dados?.detail?.codigo || 'erro', resposta.status);
+    if (!resposta.ok) throw new ErroApi(dados?.detail?.codigo || 'erro', resposta.status, dados?.detail || {});
     return dados;
   } catch (erro) {
     if (erro instanceof ErroApi) throw erro;
@@ -39,6 +40,10 @@ export const apiAluno = {
   entrar: (cpf, senha) => chamar('/api/auth/entrar', { metodo: 'POST', corpo: { cpf, senha }, timeout: 10000 }),
   sair: () => chamar('/api/auth/sair', { metodo: 'POST' }),
   aceitarConsentimento: (versao) => chamar('/api/me/consentimento', { metodo: 'PUT', corpo: { aceito: true, versao } }),
+  curriculoObter: () => chamar('/api/me/curriculo'),
+  curriculoSalvar: (dados, versao) => chamar('/api/me/curriculo', { metodo: 'PUT', corpo: { dados, versao }, timeout: 10000 }),
+  marcacoesObter: () => chamar('/api/me/marcacoes'),
+  marcacoesSalvar: (salvas, aplicadas) => chamar('/api/me/marcacoes', { metodo: 'PUT', corpo: { salvas, aplicadas } }),
   revogarConsentimento: () => chamar('/api/me/consentimento', { metodo: 'DELETE' }),
   apagarConta: () => chamar('/api/me', { metodo: 'DELETE' }),
   // Login pela FSA: navegação de página inteira (o IdP precisa do navegador, não de fetch).
