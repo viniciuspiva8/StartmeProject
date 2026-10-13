@@ -32,7 +32,7 @@ def emitir(claims: dict, segredo: bytes, aud: str, duracao: int, agora: int | No
 
 
 def verificar(token: str | None, segredo: bytes, aud: str, agora: int | None = None) -> dict:
-    if not token or token.count(".") != 2:
+    if not token or token.count(".") != 2 or not token.isascii():
         raise SessaoInvalida()
     cabecalho, payload, assinatura = token.split(".")
     esperada = hmac.new(segredo, f"{cabecalho}.{payload}".encode("ascii"), hashlib.sha256).digest()
