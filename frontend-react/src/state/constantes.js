@@ -15,15 +15,18 @@ export function mascaraCpf(valor) {
 }
 
 // --- Rotas ------------------------------------------------------------------
-export const ROTAS = { portal: 'portal', autorizacao: 'consent', inicio: 'inicio', vagas: 'vagas', curriculo: 'curriculo' };
+export const ROTAS = {
+  portal: 'portal', autorizacao: 'consent', inicio: 'inicio', vagas: 'vagas', curriculo: 'curriculo',
+  perfil: 'perfil', certificados: 'certificados', excecao: 'excecao',
+};
 export const HASH_DA_VIEW = Object.fromEntries(Object.entries(ROTAS).map(([hash, view]) => [view, hash]));
 // Endereço antigo: a aba "Candidaturas" virou "Meu currículo" em 07/10/2026.
 ROTAS.candidaturas = 'curriculo';
 
 export function lerHash() {
   const [, rota = 'portal', sel = null] = window.location.hash.replace(/^#/, '').split('/');
-  return { view: ROTAS[rota] || 'portal', sel: rota === 'vagas' ? sel : null };
+  return { view: ROTAS[rota] || 'portal', sel: rota === 'vagas' || rota === 'excecao' ? sel : null };
 }
 export function montarHash(view, sel) {
-  return `#/${HASH_DA_VIEW[view] || 'portal'}${view === 'vagas' && sel ? `/${sel}` : ''}`;
+  return `#/${HASH_DA_VIEW[view] || 'portal'}${(view === 'vagas' || view === 'excecao') && sel ? `/${sel}` : ''}`;
 }

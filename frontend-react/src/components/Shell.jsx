@@ -11,7 +11,7 @@ const ABAS = [
   { view: 'vagas', rotulo: 'Vagas', icone: 'lista' },
   { view: 'curriculo', rotulo: 'Meu currículo', icone: 'historico' },
 ];
-const VIEWS_LOGADAS = ABAS.map((x) => x.view);
+const VIEWS_LOGADAS = [...ABAS.map((x) => x.view), 'perfil', 'certificados'];
 
 export default function Shell({ children }) {
   const { s } = useApp();
@@ -106,6 +106,12 @@ function BarraSuperior() {
                   <p className="text-sm font-bold">Vinicius Pereira</p>
                   <p className="text-[13px] text-tinta-3">Engenharia de Computação, {s.semestreAluno}º semestre</p>
                 </div>
+                <button type="button" role="menuitem" onClick={() => a.irView('perfil')} className="flex min-h-11 w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 text-left text-sm font-semibold text-tinta-2 hover:bg-nevoa hover:text-azul">
+                  <Icone nome="pessoa" size={18} /> Meu perfil
+                </button>
+                <button type="button" role="menuitem" onClick={() => a.irView('certificados')} className="flex min-h-11 w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 text-left text-sm font-semibold text-tinta-2 hover:bg-nevoa hover:text-azul">
+                  <Icone nome="certificado" size={18} /> Certificados
+                </button>
                 <button type="button" role="menuitem" onClick={a.sair} className="flex min-h-11 w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 text-left text-sm font-semibold text-erro hover:bg-erro-fundo">
                   <Icone nome="sair" size={18} /> Sair do StartMe
                 </button>
