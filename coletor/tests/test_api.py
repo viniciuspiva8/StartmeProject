@@ -9,7 +9,8 @@ from tests.helpers import CHAVE_FALSA, FakeResposta
 
 TOKEN = "token-de-teste"
 # Contrato anterior ao SerpApi. Nao pode perder nenhum destes campos.
-CAMPOS_ORIGINAIS = {"id", "titulo", "empresa", "link", "data_coleta", "descricao", "salario"}
+# Agora inclui 'requisitos' (skills extraidos do titulo e descricao).
+CAMPOS_ORIGINAIS = {"id", "titulo", "empresa", "link", "data_coleta", "descricao", "salario", "requisitos"}
 
 
 @pytest.fixture
@@ -45,10 +46,11 @@ def test_vagas_mantem_o_formato_anterior_com_fonte_e_via_extras(client, fake_db)
     assert vagas["antiga"] == {
         "id": "antiga", "titulo": "Estágio TI", "empresa": "ACME", "link": "https://acme.test/1",
         "data_coleta": "2026-09-01", "descricao": "d", "salario": "A combinar",
-        "fonte": "companhia_estagios", "via": "", "logo": "",
+        "fonte": "companhia_estagios", "via": "", "logo": "", "requisitos": [],
     }
     assert (vagas["nova"]["fonte"], vagas["nova"]["via"]) == ("serpapi", "Catho")
     assert vagas["nova"]["logo"] == "data:image/png;base64,AAAA"
+    assert isinstance(vagas["nova"]["requisitos"], list)  # pode ter requisitos extraidos
 
 
 def test_vagas_vazio_devolve_lista(client):

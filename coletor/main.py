@@ -158,6 +158,8 @@ class Vaga(BaseModel):
     via: str = ""
     # Logo da empresa como data URI (vazio = a interface mostra a letra da empresa).
     logo: str = ""
+    # Requisitos (skills) extraidos do titulo e descricao (criterios do frontend).
+    requisitos: list = []
 
 
 class ResultadoColeta(BaseModel):
@@ -211,6 +213,7 @@ def _ler_vagas(db) -> List[Vaga]:
                 fonte=dados.get("fonte") or "companhia_estagios",
                 via=dados.get("via") or "",
                 logo=dados.get("logo") or "",
+                requisitos=dados.get("requisitos", []),
             )
         )
     return vagas
