@@ -1,142 +1,99 @@
-"""Testes de extração de requisitos de vagas."""
+"""Extração de requisitos (requisitos.py): formato do front, vocabulário da grade e zonas da descrição."""
+import re
+from pathlib import Path
+
 import pytest
-from requisitos import extrair_requisitos, enriquecer_vaga_com_requisitos
+
+from requisitos import _VOCABULARIO, LIMITE_POR_LISTA, extrair_requisitos
+
+VAZIO = {"obrigatorios": [], "desejaveis": []}
 
 
-class TestExtrairRequisitos:
-    """Testes da extração de skills."""
-
-    def test_extrai_skills_basicos(self):
-        """Extrai Python, JavaScript, React."""
-        titulo = "Estágio em Python e JavaScript"
-        descricao = "Procuramos candidato com React para frontend."
-        requisitos = extrair_requisitos(titulo, descricao)
-
-        textos = [r['texto'] for r in requisitos]
-        assert 'Python' in textos
-        assert 'JavaScript' in textos
-        assert 'React' in textos
-
-    def test_extrai_multiplos_skills(self):
-        """Extrai vários skills da descrição."""
-        titulo = "Dev Junior"
-        descricao = """
-        Procuramos desenvolvedor com experiência em:
-        - Python e Django
-        - PostgreSQL e Redis
-        - Docker e Linux
-        - REST API
-        """
-        requisitos = extrair_requisitos(titulo, descricao)
-
-        textos = [r['texto'] for r in requisitos]
-        assert 'Python' in textos
-        assert 'Django' in textos
-        assert 'PostgreSQL' in textos
-        assert 'Docker' in textos
-
-    def test_sem_duplicatas(self):
-        """Não retorna skills duplicados."""
-        titulo = "Python Python"
-        descricao = "Python e mais Python"
-        requisitos = extrair_requisitos(titulo, descricao)
-
-        assert len(requisitos) == 1
-        assert requisitos[0]['texto'] == 'Python'
-
-    def test_case_insensitive(self):
-        """Detecta skills independente de maiúsculas."""
-        titulo = "PYTHON e javascript"
-        descricao = "React, FASTAPI"
-        requisitos = extrair_requisitos(titulo, descricao)
-
-        textos = [r['texto'] for r in requisitos]
-        assert 'Python' in textos
-        assert 'JavaScript' in textos
-        assert 'React' in textos
-        assert 'FastAPI' in textos
-
-    def test_vazio(self):
-        """Retorna lista vazia quando sem skills."""
-        titulo = "Estagiário"
-        descricao = "Procuramos alguém interessado em aprender."
-        requisitos = extrair_requisitos(titulo, descricao)
-
-        assert requisitos == []
-
-    def test_estrutura_do_criterio(self):
-        """Cada requisito tem tipo, texto e termo."""
-        titulo = "Estágio em Python"
-        descricao = "Procuramos dev com Python"
-        requisitos = extrair_requisitos(titulo, descricao)
-
-        assert len(requisitos) > 0
-        r = requisitos[0]
-        assert r['tipo'] == 'requisito'
-        assert r['texto'] == 'Python'
-        assert r['termo'] == 'Python'
-
-    def test_limite(self):
-        """Respeita o limite de requisitos retornados."""
-        titulo = ""
-        descricao = """
-        Python Django React Vue Angular Node.js Express
-        Firebase MongoDB PostgreSQL AWS Google Cloud Docker
-        Kubernetes Git Linux Agile TDD HTML CSS
-        """
-        requisitos = extrair_requisitos(titulo, descricao, limite=5)
-
-        assert len(requisitos) <= 5
-
-    def test_ordem_alfabetica(self):
-        """Retorna skills em ordem alfabética."""
-        titulo = "React Python"
-        descricao = "Django"
-        requisitos = extrair_requisitos(titulo, descricao)
-
-        textos = [r['texto'] for r in requisitos]
-        assert textos == sorted(textos)
+def obrigatorios(titulo, descricao=""):
+    return extrair_requisitos(titulo, descricao)["obrigatorios"]
 
 
-class TestEnriquecerVaga:
-    """Testes de adição de requisitos a uma vaga."""
+def test_formato_consumido_pelo_match_do_front():
+    assert extrair_requisitos("Estágio em Python", "Requisitos: SQL. Diferenciais: Docker.") == {
+        "obrigatorios": ["Python", "SQL"], "desejaveis": ["Docker"],
+    }
 
-    def test_adiciona_requisitos_se_faltar(self):
-        """Adiciona campo requisitos se não existir."""
-        vaga = {
-            'titulo': 'Python Developer',
-            'descricao': 'Procuramos dev Python com Django',
-        }
-        resultado = enriquecer_vaga_com_requisitos(vaga)
 
-        assert 'requisitos' in resultado
-        assert len(resultado['requisitos']) > 0
-        textos = [r['texto'] for r in resultado['requisitos']]
-        assert 'Python' in textos
-        assert 'Django' in textos
+def test_nomes_canonicos_sao_os_da_grade():
+    texto = "Conhecimento em REST, POO, Scrum, testes unitários, lógica de programação e banco de dados."
+    assert obrigatorios("", texto) == [
+        "APIs REST", "Orientação a objetos", "Metodologias ágeis", "Testes",
+        "Lógica de programação", "Banco de dados relacional",
+    ]
 
-    def test_preserva_requisitos_existentes(self):
-        """Não sobrescreve requisitos já presentes."""
-        requisitos_originais = [
-            {'tipo': 'requisito', 'texto': 'Habilidade Customizada', 'termo': 'Habilidade Customizada'}
-        ]
-        vaga = {
-            'titulo': 'Python Dev',
-            'descricao': 'Dev Python',
-            'requisitos': requisitos_originais,
-        }
-        resultado = enriquecer_vaga_com_requisitos(vaga)
 
-        assert resultado['requisitos'] == requisitos_originais
+def test_toda_habilidade_da_grade_do_front_e_conhecida():
+    # O match do front compara termo a termo: um nome diferente do da grade nunca casaria.
+    grade = Path(__file__).resolve().parents[2] / "frontend-react" / "src" / "data" / "grade.js"
+    if not grade.exists():
+        pytest.skip("frontend-react fora deste checkout")
+    habilidades = set()
+    for lista in re.findall(r"habilidades:\s*\[([^\]]*)\]", grade.read_text(encoding="utf-8")):
+        habilidades.update(re.findall(r"'([^']+)'", lista))
+    conhecidos = {termo for termo, _ in _VOCABULARIO}
+    assert habilidades and habilidades <= conhecidos, sorted(habilidades - conhecidos)
 
-    def test_enriquece_vaga_vazia(self):
-        """Enriquece vaga sem requisitos (lista vazia)."""
-        vaga = {
-            'titulo': 'React',
-            'descricao': 'Dev React',
-            'requisitos': [],
-        }
-        resultado = enriquecer_vaga_com_requisitos(vaga)
 
-        assert len(resultado['requisitos']) > 0
-        assert resultado['requisitos'][0]['texto'] == 'React'
+@pytest.mark.parametrize("texto, esperado", [
+    ("backend em C#/.NET e/ou Node.js + TypeScript", {"C#", ".NET", "Node.js", "TypeScript"}),
+    ("Experiência com C/C++ e ASP.NET Core", {"C", "C++", ".NET"}),
+    ("React Native e React.js", {"React Native", "React"}),
+    ("Esteira de CI/CD com GitHub Actions", {"CI/CD", "Git"}),
+])
+def test_termos_com_simbolos(texto, esperado):
+    assert esperado <= set(obrigatorios("", texto))
+
+
+def test_vagas_de_suporte_e_redes():
+    texto = "Atendimento e suporte a usuários. Suporte a rede WAN e LAN, impressoras e periféricos."
+    assert {"Suporte técnico", "Redes", "Hardware"} <= set(obrigatorios("", texto))
+    assert obrigatorios("Analista de Redes Junior") == ["Redes"]
+
+
+def test_sem_falso_positivo_em_texto_comum():
+    texto = ("Excelente ambiente, uma das maiores redes de varejo do país, perto do restaurante. Processo "
+             "seletivo com testes online e dinâmica. Perfil ágil: vamos juntos! Como você pode crescer aqui.")
+    assert extrair_requisitos("Estágio administrativo", texto) == VAZIO
+
+
+def test_diferenciais_viram_desejaveis():
+    assert extrair_requisitos("Estágio", "Requisitos: Python e SQL. Diferenciais: Docker e Git.") == {
+        "obrigatorios": ["Python", "SQL"], "desejaveis": ["Docker", "Git"],
+    }
+
+
+def test_termo_nas_duas_zonas_fica_so_em_obrigatorios():
+    assert extrair_requisitos("", "Python e SQL. Desejável: Python avançado e Docker.") == {
+        "obrigatorios": ["Python", "SQL"], "desejaveis": ["Docker"],
+    }
+
+
+def test_nao_obrigatorio_e_desejavel_e_novo_requisitos_volta_a_obrigatorio():
+    assert extrair_requisitos("", "Diferenciais: Docker. Não é obrigatório: Git. Requisitos: Java.") == {
+        "obrigatorios": ["Java"], "desejaveis": ["Docker", "Git"],
+    }
+
+
+def test_titulo_conta_como_obrigatorio_e_vem_primeiro():
+    assert extrair_requisitos("Estágio em Python", "Desejável: Python e SQL.") == {
+        "obrigatorios": ["Python"], "desejaveis": ["SQL"],
+    }
+
+
+def test_ordem_de_aparicao_sem_repeticao():
+    assert obrigatorios("", "SQL, Python, Git e de novo SQL e Python.") == ["SQL", "Python", "Git"]
+
+
+def test_texto_vazio_ou_ausente():
+    assert extrair_requisitos("", "") == VAZIO
+    assert extrair_requisitos(None, None) == VAZIO
+
+
+def test_limite_por_lista():
+    todos = " ".join(termo for termo, _ in _VOCABULARIO)
+    assert len(obrigatorios("", todos)) == LIMITE_POR_LISTA

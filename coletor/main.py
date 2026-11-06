@@ -20,10 +20,11 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import credentials, firestore
 from google.cloud.firestore_v1.base_query import FieldFilter
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from fontes import serpapi
 from fontes.serpapi import ResultadoSerpapi
+from requisitos import extrair_requisitos
 
 # --------------------------------------------------------------------------
 # Configuracao
@@ -145,6 +146,12 @@ app.add_middleware(
 # --------------------------------------------------------------------------
 # Modelos
 # --------------------------------------------------------------------------
+class Requisitos(BaseModel):
+    """Formato consumido por frontend-react/src/lib/match.js (ver requisitos.py)."""
+    obrigatorios: List[str] = Field(default_factory=list)
+    desejaveis: List[str] = Field(default_factory=list)
+
+
 class Vaga(BaseModel):
     id: str
     titulo: str
@@ -158,8 +165,8 @@ class Vaga(BaseModel):
     via: str = ""
     # Logo da empresa como data URI (vazio = a interface mostra a letra da empresa).
     logo: str = ""
-    # Requisitos (skills) extraidos do titulo e descricao (criterios do frontend).
-    requisitos: list = []
+    # Extraidos do titulo e da descricao a cada leitura (requisitos.py); nao sao gravados.
+    requisitos: Requisitos = Field(default_factory=Requisitos)
 
 
 class ResultadoColeta(BaseModel):
@@ -201,19 +208,22 @@ def _ler_vagas(db) -> List[Vaga]:
     vagas: List[Vaga] = []
     for doc in db.collection(COLECAO).stream():
         dados = doc.to_dict() or {}
+        titulo = dados.get("titulo", "")
+        descricao = dados.get("descricao", "")
         vagas.append(
             Vaga(
                 id=doc.id,
-                titulo=dados.get("titulo", ""),
+                titulo=titulo,
                 empresa=dados.get("empresa", ""),
                 link=dados.get("link", ""),
                 data_coleta=str(dados.get("data_coleta", "")),
-                descricao=dados.get("descricao", ""),
+                descricao=descricao,
                 salario=dados.get("salario", ""),
                 fonte=dados.get("fonte") or "companhia_estagios",
                 via=dados.get("via") or "",
                 logo=dados.get("logo") or "",
-                requisitos=dados.get("requisitos", []),
+                # Sempre do texto gravado: um campo "requisitos" antigo no documento e ignorado.
+                requisitos=extrair_requisitos(titulo, descricao),
             )
         )
     return vagas

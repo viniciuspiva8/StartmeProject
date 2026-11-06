@@ -238,7 +238,13 @@ As rotas de aluno e administrador respondem 503 enquanto `SESSAO_SEGREDO` e `CPF
 configurados; nesse caso o front segue no modo local de demonstração.
 
 `GET /api/vagas` devolve `id, titulo, empresa, link, data_coleta, descricao, salario` e, como campos extras,
-`fonte`, `via` (portal onde o Google achou a vaga) e `logo`.
+`fonte`, `via` (portal onde o Google achou a vaga), `logo` e `requisitos` (`{obrigatorios, desejaveis}`).
+
+**Requisitos das vagas.** `coletor/requisitos.py` reconhece no título e na descrição as tecnologias e competências
+mais pedidas, com os mesmos nomes das habilidades do currículo (`frontend-react/src/data/grade.js`; um teste garante
+isso). O que vem depois de "Diferenciais" ou "Desejável" conta como desejável. A extração roda a cada leitura, sobre o
+texto já gravado, e não é salva: uma melhoria no vocabulário vale para todas as vagas sem nova coleta (sem gastar cota
+da SerpApi).
 
 ## Coleta de vagas (SerpApi)
 
@@ -302,8 +308,10 @@ depois de testadas.
 
 1. Conferir os Termos de Uso da SerpApi/Google Jobs para o uso acadêmico e registrar a decisão de trocar o scraping
    direto do portal Companhia de Estágios pela SerpApi.
-2. Os requisitos das vagas e a grade do curso usados no match são de demonstração. O match real depende de extrair
-   requisitos estruturados dos anúncios e de a faculdade fornecer a matriz curricular.
+2. A grade do curso usada no match é de demonstração: o match real depende de a faculdade fornecer a matriz
+   curricular. Os requisitos das vagas reais saem do texto do anúncio por vocabulário: termo fora da lista não entra na
+   conta, e a descrição é gravada resumida (1.500 caracteres), então anúncios que abrem com texto institucional longo
+   podem ficar em "sem dados para avaliar" (10 de 81 em 06/11/2026).
 3. A interface foi testada em emulação de dispositivos móveis, não em aparelhos reais nem com leitor de tela.
 4. O ensaio de carga (C4) ainda não foi executado.
 5. A integração com a FSA foi validada só contra a faculdade simulada; falta o teste com o sistema real (checklist acima).

@@ -9,8 +9,8 @@ from tests.helpers import CHAVE_FALSA, FakeResposta
 
 TOKEN = "token-de-teste"
 # Contrato anterior ao SerpApi. Nao pode perder nenhum destes campos.
-# Agora inclui 'requisitos' (skills extraidos do titulo e descricao).
-CAMPOS_ORIGINAIS = {"id", "titulo", "empresa", "link", "data_coleta", "descricao", "salario", "requisitos"}
+CAMPOS_ORIGINAIS = {"id", "titulo", "empresa", "link", "data_coleta", "descricao", "salario"}
+CAMPOS_EXTRAS = {"fonte", "via", "logo", "requisitos"}
 
 
 @pytest.fixture
@@ -42,15 +42,33 @@ def test_vagas_mantem_o_formato_anterior_com_fonte_e_via_extras(client, fake_db)
     assert resposta.status_code == 200
     vagas = {v["id"]: v for v in resposta.json()}
     for v in vagas.values():
-        assert set(v) == CAMPOS_ORIGINAIS | {"fonte", "via", "logo"}
+        assert set(v) == CAMPOS_ORIGINAIS | CAMPOS_EXTRAS
     assert vagas["antiga"] == {
         "id": "antiga", "titulo": "Estágio TI", "empresa": "ACME", "link": "https://acme.test/1",
         "data_coleta": "2026-09-01", "descricao": "d", "salario": "A combinar",
-        "fonte": "companhia_estagios", "via": "", "logo": "", "requisitos": [],
+        "fonte": "companhia_estagios", "via": "", "logo": "",
+        "requisitos": {"obrigatorios": [], "desejaveis": []},
     }
     assert (vagas["nova"]["fonte"], vagas["nova"]["via"]) == ("serpapi", "Catho")
     assert vagas["nova"]["logo"] == "data:image/png;base64,AAAA"
-    assert isinstance(vagas["nova"]["requisitos"], list)  # pode ter requisitos extraidos
+
+
+def test_requisitos_saem_do_texto_gravado_em_toda_leitura(client, fake_db):
+    # Vaga gravada sem o campo e vaga com o formato antigo (lista): as duas sao calculadas do
+    # titulo e da descricao na leitura, sem nova coleta (que gastaria cota da SerpApi).
+    fake_db.collection("vagas").document("sem_campo").set({
+        "titulo": "Estágio em Python", "empresa": "ACME", "link": "https://acme.test/1",
+        "data_coleta": "2026-11-06", "descricao": "Requisitos: SQL e Git. Diferenciais: Docker.",
+    })
+    fake_db.collection("vagas").document("formato_antigo").set({
+        "titulo": "Dev Júnior", "empresa": "Beta", "link": "https://beta.test/2", "data_coleta": "2026-11-06",
+        "descricao": "React e TypeScript.", "requisitos": [{"tipo": "requisito", "texto": "React", "termo": "React"}],
+    })
+
+    vagas = {v["id"]: v for v in client.get("/api/vagas").json()}
+
+    assert vagas["sem_campo"]["requisitos"] == {"obrigatorios": ["Python", "SQL", "Git"], "desejaveis": ["Docker"]}
+    assert vagas["formato_antigo"]["requisitos"] == {"obrigatorios": ["React", "TypeScript"], "desejaveis": []}
 
 
 def test_vagas_vazio_devolve_lista(client):
