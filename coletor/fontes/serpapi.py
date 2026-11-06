@@ -36,6 +36,8 @@ import requests
 from google.cloud.firestore_v1 import Increment
 from pydantic import BaseModel
 
+from requisitos import extrair_requisitos
+
 log = logging.getLogger("startme.coletor.serpapi")
 
 SERPAPI_URL = "https://serpapi.com/search.json"
@@ -347,6 +349,7 @@ def normalizar(vaga: dict, hoje: str, validade: datetime) -> Optional[dict]:
     """Converte um item de `jobs_results` em documento da colecao "vagas".
 
     Devolve None se faltar identificador, titulo ou link utilizavel.
+    Extrai requisitos (skills) da descrição e título.
     """
     chave = _htidocid(vaga)
     titulo = (vaga.get("title") or vaga.get("job_title") or "").strip()
@@ -354,18 +357,22 @@ def normalizar(vaga: dict, hoje: str, validade: datetime) -> Optional[dict]:
     if not (chave and titulo and link):
         return None
 
+    descricao = resumir_descricao(vaga.get("description") or "")
+    requisitos = extrair_requisitos(titulo, descricao)
+
     return {
         "id": f"serpapi_{hashlib.sha1(chave.encode('utf-8')).hexdigest()}",
         "serpapi_job_id": chave,
         "titulo": titulo,
         "empresa": (vaga.get("company_name") or "").strip() or "Empresa nao informada",
         "link": link,
-        "descricao": resumir_descricao(vaga.get("description") or ""),
+        "descricao": descricao,
         "salario": extrair_salario(vaga),
         "fonte": FONTE,
         "via": (vaga.get("via") or "").strip(),
         "logo": "",  # preenchido por _resolver_logos (data URI)
         "_thumbnail": vaga.get("thumbnail") or "",  # auxiliar: nunca vai para o Firestore
+        "requisitos": requisitos,  # skills extraidos do titulo e descricao
         "data_coleta": hoje,
         "data_ultima_verificacao": hoje,
         "data_expiracao": validade,
