@@ -1,8 +1,9 @@
 // REQUISITOS DE DEMONSTRAÇÃO das vagas mock (v1 a v8).
-// É o formato que a extração do coletor precisa produzir a partir do texto do
-// anúncio: requisitos obrigatórios, desejáveis e condições da vaga (horário,
-// local, salário) que pesam na decisão mas não estão no currículo.
-// Vagas reais ainda não têm requisitos extraídos: aparecem como "sem dados".
+// É o formato que a extração do coletor produz a partir do texto do anúncio:
+// requisitos obrigatórios, desejáveis e condições da vaga (horário, local,
+// salário) que pesam na decisão mas não estão no currículo.
+// Vagas reais trazem `requisitos` em GET /api/vagas (coletor/requisitos.py), no
+// mesmo formato e ainda sem `condicoes`; ver requisitosDoColetor em lib/vagas.js.
 export const REQUISITOS = {
   v1: {
     obrigatorios: ['Python', 'SQL'],

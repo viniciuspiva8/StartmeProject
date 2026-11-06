@@ -23,7 +23,7 @@ function comTimeout(promessa, ms) {
   ]);
 }
 
-/** GET {COLETOR_URL}/api/vagas — contrato real: id, titulo, empresa, link, data_coleta, descricao, salario. */
+/** GET {COLETOR_URL}/api/vagas — contrato real: id, titulo, empresa, link, data_coleta, descricao, salario (+ fonte, via, logo, requisitos). */
 export async function fetchVagas() {
   try {
     const resposta = await comTimeout(fetch(`${CONFIG.COLETOR_URL}/api/vagas`), 6000);

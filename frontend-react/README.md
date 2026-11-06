@@ -36,7 +36,8 @@ Credenciais de demonstração: CPF `000.000.000-00` (pode digitar só os zeros),
 **Match currículo × vaga, recalculado ao vivo.** `src/lib/match.js` monta o perfil do aluno a partir de quatro
 fontes, guardando a origem de cada habilidade: disciplinas cursadas até o semestre atual (grade de demonstração
 em `src/data/grade.js`), certificações, atividades acadêmicas e voluntariado, e habilidades declaradas. Cada vaga
-tem requisitos obrigatórios, desejáveis e condições (`src/data/requisitos.js`, de demonstração). O detalhe mostra
+tem requisitos obrigatórios, desejáveis e condições: as reais trazem os extraídos pelo coletor em `GET /api/vagas`
+(`requisitosDoColetor` em `src/lib/vagas.js`); as de demonstração usam `src/data/requisitos.js`. O detalhe mostra
 de onde vem cada requisito atendido ("pelo certificado Fundamentos de SQL") e oferece "Eu sei Excel" para o que
 falta. "Eu sei X" não grava direto: leva ao currículo com o formulário da habilidade aberto e o nome preenchido,
 onde o aluno informa nível (básico, intermediário, avançado), onde aprendeu, ano e, se quiser, anexa o certificado
@@ -61,7 +62,8 @@ e o que falta para ele ficar completo.
 um medidor em que cada segmento é um requisito (verde-água quando bate com o curso e o semestre,
 âmbar quando é ressalva), o veredito em texto ("Vale o seu tempo", "Vale, com ressalvas",
 "Provavelmente não") e a principal ressalva. O percentual de compatibilidade saiu: era um número
-sem regra definida. Vagas reais do coletor, que não trazem requisitos, ficam como "Sem dados para avaliar".
+sem regra definida. Vaga real em que o coletor não reconhece nenhum requisito obrigatório fica como "Sem dados
+para avaliar", em vez de estimar.
 
 **Lista no centro, detalhe sob demanda** (ajuste de 08/10/2026). A lista ocupa o centro da tela e cada
 cartão mostra o necessário para decidir: veredito, principal ressalva, salário, modalidade, data de coleta e os
@@ -121,8 +123,9 @@ src/
 
 ## Pendências
 
-- Os requisitos das vagas e a grade do curso são de demonstração. O match real depende de o coletor extrair
-  requisitos estruturados dos anúncios e de a instituição fornecer a matriz curricular.
+- A grade do curso é de demonstração: o match real depende de a instituição fornecer a matriz curricular. Os
+  requisitos das vagas reais vêm do coletor (`coletor/requisitos.py`, por vocabulário) e ainda sem condições da vaga
+  (horário, local).
 - O envio real do arquivo de certificado não existe: os certificados ficam só na tela e no navegador.
 - Importar currículo de PDF e exportar em outros formatos ficaram para depois.
 - Testado em emulação de dispositivos móveis, não em aparelhos reais nem com leitor de tela.

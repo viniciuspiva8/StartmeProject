@@ -40,7 +40,7 @@ const NOTAS = {
       ['O match reage na hora.', 'Ao salvar a habilidade ou uma certificação, a avaliação é recalculada no navegador, o aviso diz quantas vagas mudaram e oferece voltar para a vaga de onde o aluno saiu.'],
       ['Lista no centro; detalhe só quando o aluno pede.', 'A triagem acontece na lista: cada cartão mostra veredito, a principal ressalva e o que a vaga pede marcado contra o currículo, sem precisar abrir. Ao clicar, a lista vira coluna e o detalhe abre ao lado, para comparar sem perder o lugar; fechar (botão, Esc ou Voltar) devolve a lista ao centro e o foco ao cartão. No celular, o detalhe abre em tela cheia.'],
       ['A candidatura acontece fora.', 'O StartMe reúne as vagas e indica o melhor match; o processo seletivo é no site de origem. "Já me candidatei" é só uma anotação do aluno, sem acompanhamento de etapas.'],
-      ['Vaga real sem requisitos extraídos.', 'Fica em "sem dados para avaliar" em vez de estimar. A extração de requisitos dos anúncios é trabalho do coletor.'],
+      ['Requisitos lidos do anúncio, sem estimar.', 'O coletor reconhece no título e na descrição as tecnologias e competências mais pedidas, com os mesmos nomes do currículo; o que vem depois de "Diferenciais" ou "Desejável" conta como diferencial. Se nenhum requisito obrigatório for reconhecido, a vaga fica em "sem dados para avaliar" em vez de estimar.'],
       ['"Coletada", nunca "publicada".', 'data_coleta é a data da captura, não da empresa.'],
     ],
   },

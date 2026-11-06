@@ -39,9 +39,28 @@ export function logoSeguro(logo) {
   return typeof logo === 'string' && logo.length <= 40000 && LOGO_VALIDO.test(logo) ? logo : '';
 }
 
+function listaDeTermos(lista) {
+  if (!Array.isArray(lista)) return [];
+  return lista
+    .filter((t) => typeof t === 'string' && t.trim())
+    .map((t) => t.trim().slice(0, 60))
+    .slice(0, 20);
+}
+
+/**
+ * Requisitos extraídos pelo coletor (coletor/requisitos.py): { obrigatorios, desejaveis }, no
+ * formato de data/requisitos.js. Qualquer outra coisa (inclusive a lista da versão anterior) vira
+ * listas vazias. Condições da vaga (horário, local) ainda não são extraídas.
+ */
+export function requisitosDoColetor(r) {
+  const obj = r && typeof r === 'object' && !Array.isArray(r) ? r : {};
+  return { obrigatorios: listaDeTermos(obj.obrigatorios), desejaveis: listaDeTermos(obj.desejaveis), condicoes: [] };
+}
+
 /** Converte um registro REAL do coletor (Firestore) no formato da interface. */
 export function enriquecerVagaReal(v) {
   const base = `${v.titulo || ''} ${v.descricao || ''}`;
+  const requisitos = requisitosDoColetor(v.requisitos);
   return {
     id: v.id,
     titulo: v.titulo || 'Vaga sem título na origem',
@@ -56,7 +75,9 @@ export function enriquecerVagaReal(v) {
     area: derivarArea(base),
     semestreMin: 1,
     pct: 0,
-    avaliavel: false,
+    // Só dá para avaliar com pelo menos um requisito obrigatório reconhecido no anúncio.
+    avaliavel: requisitos.obrigatorios.length > 0,
+    requisitos,
     razao: '',
     criterios: [],
   };

@@ -35,7 +35,7 @@ export function Medidor({ triagem, grande = false }) {
 
 function resumoTexto(t) {
   return t.estado === 'sem-dados'
-    ? 'A coleta não trouxe os requisitos desta vaga'
+    ? 'O StartMe não reconheceu requisitos obrigatórios neste anúncio'
     : `${t.atendidos} de ${t.total} pontos batem com o seu currículo`;
 }
 
@@ -95,8 +95,8 @@ export function TriagemCompleta({ triagem, vagaId }) {
           <Icone nome="info" size={22} className="text-tinta-3" /> Sem dados para avaliar
         </h2>
         <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-tinta-3">
-          A coleta ainda não extraiu os requisitos deste anúncio, então o StartMe não consegue comparar com o seu currículo.
-          Leia o anúncio original antes de decidir.
+          O StartMe não reconheceu requisitos obrigatórios no texto deste anúncio, então não consegue comparar com o seu
+          currículo. Leia o anúncio original antes de decidir.
         </p>
       </section>
     );
@@ -164,8 +164,9 @@ export function TriagemCompleta({ triagem, vagaId }) {
           Os requisitos do anúncio são comparados com o seu currículo no StartMe: as disciplinas cursadas até o semestre
           atual (vindas do Portal Acadêmico), suas certificações, atividades e as habilidades que você declarou.
           Requisitos obrigatórios e condições da vaga contam; com três quartos ou mais atendidos, a vaga vale o seu tempo,
-          com metade, vale com ressalvas. Diferenciais aparecem, mas não pesam contra. Nesta versão, os requisitos das
-          vagas e a grade do curso são de demonstração.
+          com metade, vale com ressalvas. Diferenciais aparecem, mas não pesam contra. Nas vagas reais, os requisitos são
+          lidos do texto do anúncio: o StartMe reconhece as tecnologias e competências mais pedidas, e o que ele não
+          reconhece não entra na conta. A grade do curso ainda é de demonstração.
         </p>
       </details>
     </section>

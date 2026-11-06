@@ -78,26 +78,32 @@ const VEREDITOS = {
 };
 export const ORDEM_ESTADO = { vale: 0, ressalvas: 1, nao: 2, 'sem-dados': 3 };
 
+function semDados() {
+  return {
+    estado: 'sem-dados', veredito: VEREDITOS['sem-dados'], atendidos: 0, total: 0,
+    criterios: [], desejaveis: [], ressalvas: [], principalRessalva: null, acimaDoSemestre: false, faltantes: [],
+  };
+}
+
 /** Avalia a vaga contra o perfil. Formato consumido por components/Triagem.jsx. */
 export function triagem(v, perfil) {
-  const req = v.avaliavel === false ? null : REQUISITOS[v.id];
-  if (!req) {
-    return {
-      estado: 'sem-dados', veredito: VEREDITOS['sem-dados'], atendidos: 0, total: 0,
-      criterios: [], desejaveis: [], ressalvas: [], principalRessalva: null, acimaDoSemestre: false, faltantes: [],
-    };
-  }
+  // Vaga real: requisitos extraídos pelo coletor (lib/vagas.js). Vaga de demonstração: data/requisitos.js.
+  const req = v.avaliavel === false ? null : (v.requisitos || REQUISITOS[v.id]);
+  const obrigatorios = req?.obrigatorios || [];
+  const condicoes = req?.condicoes || [];
+  // Sem nenhum ponto que conte para o veredito não há o que avaliar (e não é "Provavelmente não").
+  if (!req || obrigatorios.length + condicoes.length === 0) return semDados();
 
   const criterios = [
-    ...req.obrigatorios.map((termo) => {
+    ...obrigatorios.map((termo) => {
       const fonte = fonteDe(perfil, termo);
       return fonte
         ? { tipo: 'requisito', termo, positivo: true, texto: `Pede ${termo}: você tem, ${ROTULO_FONTE[fonte.tipo](fonte)}`, fonte }
         : { tipo: 'requisito', termo, positivo: false, texto: `Pede ${termo}: ainda não está no seu currículo` };
     }),
-    ...req.condicoes.map((c) => ({ tipo: 'condicao', positivo: c.ok, texto: c.texto })),
+    ...condicoes.map((c) => ({ tipo: 'condicao', positivo: c.ok, texto: c.texto })),
   ];
-  const desejaveis = req.desejaveis.map((termo) => {
+  const desejaveis = (req.desejaveis || []).map((termo) => {
     const fonte = fonteDe(perfil, termo);
     return { termo, positivo: !!fonte, fonte };
   });

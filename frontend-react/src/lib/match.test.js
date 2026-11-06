@@ -21,6 +21,19 @@ describe('triagem e perfil', () => {
     expect(triagem({ id: 'x', titulo: 'Vaga sem dados', requisitos: null }, perfil).estado).toBe('sem-dados');
   });
 
+  it('vaga real é avaliada com os requisitos extraídos pelo coletor', () => {
+    const v = { id: 'serpapi_1', titulo: 'Estágio', semestreMin: 1, requisitos: { obrigatorios: ['Python', 'SQL'], desejaveis: ['Docker'], condicoes: [] } };
+    const t = triagem(v, perfil);
+    expect(t.estado).toBe('vale');
+    expect(t.total).toBe(2);
+    expect(t.desejaveis.map((d) => d.termo)).toEqual(['Docker']);
+  });
+
+  it('só diferenciais, sem obrigatório nem condição: sem-dados, não "provavelmente não"', () => {
+    const v = { id: 'serpapi_2', titulo: 'Estágio', semestreMin: 1, requisitos: { obrigatorios: [], desejaveis: ['Docker'], condicoes: [] } };
+    expect(triagem(v, perfil).estado).toBe('sem-dados');
+  });
+
   it('lacunas retorna no máximo o limite pedido, sem repetir termos', () => {
     const lista = lacunas(VAGAS, perfil, 3);
     expect(lista.length).toBeLessThanOrEqual(3);
