@@ -523,7 +523,7 @@ def _resolver_logos(vagas: Dict[str, dict], precisam: List[str]) -> int:
 # --------------------------------------------------------------------------
 # Persistencia
 # --------------------------------------------------------------------------
-_CAMPOS_ATUALIZAVEIS = ("titulo", "empresa", "link", "descricao", "salario", "via")
+_CAMPOS_ATUALIZAVEIS = ("titulo", "empresa", "link", "descricao", "salario", "via", "requisitos")
 
 
 def existentes_no_firestore(db, ids: List[str]) -> Dict[str, dict]:
