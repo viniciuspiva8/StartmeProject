@@ -311,7 +311,7 @@ depois de testadas.
 2. A grade do curso usada no match é de demonstração: o match real depende de a faculdade fornecer a matriz
    curricular. Os requisitos das vagas reais saem do texto do anúncio por vocabulário: termo fora da lista não entra na
    conta, e a descrição é gravada resumida (1.500 caracteres), então anúncios que abrem com texto institucional longo
-   podem ficar em "sem dados para avaliar" (10 de 81 em 06/11/2026).
+   podem ficar em "sem dados para avaliar" (8 de 81 em 06/11/2026).
 3. A interface foi testada em emulação de dispositivos móveis, não em aparelhos reais nem com leitor de tela.
 4. O ensaio de carga (C4) ainda não foi executado.
 5. A integração com a FSA foi validada só contra a faculdade simulada; falta o teste com o sistema real (checklist acima).
